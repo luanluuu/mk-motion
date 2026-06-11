@@ -1,0 +1,135 @@
+/* ========== Fade ========== */
+@keyframes mk-fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes mk-fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+/* ========== Slide ========== */
+@keyframes mk-slideInUp {
+  from { opacity: 0; transform: translate3d(0, 30px, 0); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+@keyframes mk-slideInDown {
+  from { opacity: 0; transform: translate3d(0, -30px, 0); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+@keyframes mk-slideInLeft {
+  from { opacity: 0; transform: translate3d(-30px, 0, 0); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+@keyframes mk-slideInRight {
+  from { opacity: 0; transform: translate3d(30px, 0, 0); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+@keyframes mk-slideOutUp {
+  from { opacity: 1; transform: translate3d(0, 0, 0); }
+  to { opacity: 0; transform: translate3d(0, -30px, 0); }
+}
+
+@keyframes mk-slideOutDown {
+  from { opacity: 1; transform: translate3d(0, 0, 0); }
+  to { opacity: 0; transform: translate3d(0, 30px, 0); }
+}
+
+/* ========== Zoom ========== */
+@keyframes mk-zoomIn {
+  from { opacity: 0; transform: scale3d(0.85, 0.85, 0.85); }
+  to { opacity: 1; transform: scale3d(1, 1, 1); }
+}
+
+@keyframes mk-zoomOut {
+  from { opacity: 1; transform: scale3d(1, 1, 1); }
+  to { opacity: 0; transform: scale3d(0.85, 0.85, 0.85); }
+}
+
+/* ========== Bounce ========== */
+@keyframes mk-bounceIn {
+  0% { opacity: 0; transform: scale3d(0.3, 0.3, 0.3); }
+  20% { transform: scale3d(1.1, 1.1, 1.1); }
+  40% { transform: scale3d(0.9, 0.9, 0.9); }
+  60% { opacity: 1; transform: scale3d(1.03, 1.03, 1.03); }
+  80% { transform: scale3d(0.97, 0.97, 0.97); }
+  100% { opacity: 1; transform: scale3d(1, 1, 1); }
+}
+
+@keyframes mk-bounceOut {
+  20% { transform: scale3d(0.9, 0.9, 0.9); }
+  50%, 55% { opacity: 1; transform: scale3d(1.1, 1.1, 1.1); }
+  100% { opacity: 0; transform: scale3d(0.3, 0.3, 0.3); }
+}
+
+/* ========== Flip ========== */
+@keyframes mk-flipInX {
+  from { opacity: 0; transform: perspective(400px) rotate3d(1, 0, 0, 90deg); }
+  40% { transform: perspective(400px) rotate3d(1, 0, 0, -20deg); }
+  60% { opacity: 1; transform: perspective(400px) rotate3d(1, 0, 0, 10deg); }
+  80% { transform: perspective(400px) rotate3d(1, 0, 0, -5deg); }
+  to { transform: perspective(400px); }
+}
+
+@keyframes mk-flipInY {
+  from { opacity: 0; transform: perspective(400px) rotate3d(0, 1, 0, 90deg); }
+  40% { transform: perspective(400px) rotate3d(0, 1, 0, -20deg); }
+  60% { opacity: 1; transform: perspective(400px) rotate3d(0, 1, 0, 10deg); }
+  80% { transform: perspective(400px) rotate3d(0, 1, 0, -5deg); }
+  to { transform: perspective(400px); }
+}
+
+/* ========== Shake ========== */
+@keyframes mk-shake {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  10%, 30%, 50%, 70%, 90% { transform: translate3d(-8px, 0, 0); }
+  20%, 40%, 60%, 80% { transform: translate3d(8px, 0, 0); }
+}
+
+/* ========== Pulse ========== */
+@keyframes mk-pulse {
+  0% { transform: scale3d(1, 1, 1); }
+  50% { transform: scale3d(1.05, 1.05, 1.05); }
+  100% { transform: scale3d(1, 1, 1); }
+}
+
+/* ========== Rotate ========== */
+@keyframes mk-rotateIn {
+  from { opacity: 0; transform: rotate3d(0, 0, 1, -200deg); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+/* ========== Base animation class ========== */
+.mk-animated {
+  animation-duration: var(--mk-duration, 0.5s);
+  animation-timing-function: var(--mk-easing, ease);
+  animation-fill-mode: both;
+}
+
+.mk-animated.mk-infinite {
+  animation-iteration-count: infinite;
+}
+
+/* ========== Animation presets ========== */
+.mk-fadeIn { animation-name: mk-fadeIn; }
+.mk-fadeOut { animation-name: mk-fadeOut; }
+.mk-slideInUp { animation-name: mk-slideInUp; }
+.mk-slideInDown { animation-name: mk-slideInDown; }
+.mk-slideInLeft { animation-name: mk-slideInLeft; }
+.mk-slideInRight { animation-name: mk-slideInRight; }
+.mk-slideOutUp { animation-name: mk-slideOutUp; }
+.mk-slideOutDown { animation-name: mk-slideOutDown; }
+.mk-zoomIn { animation-name: mk-zoomIn; }
+.mk-zoomOut { animation-name: mk-zoomOut; }
+.mk-bounceIn { animation-name: mk-bounceIn; }
+.mk-bounceOut { animation-name: mk-bounceOut; }
+.mk-flipInX { animation-name: mk-flipInX; }
+.mk-flipInY { animation-name: mk-flipInY; }
+.mk-shake { animation-name: mk-shake; }
+.mk-pulse { animation-name: mk-pulse; }
+.mk-rotateIn { animation-name: mk-rotateIn; }

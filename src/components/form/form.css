@@ -1,0 +1,130 @@
+.mk-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+.mk-form--horizontal .mk-form__item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.mk-form--horizontal .mk-form__label {
+  padding-top: 8px;
+  text-align: right;
+}
+
+.mk-form--inline {
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 16px 24px;
+}
+
+.mk-form--inline .mk-form__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mk-form--inline .mk-form__actions {
+  display: inline-flex;
+  align-items: center;
+  margin-top: 0;
+}
+
+.mk-form__item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.mk-form__item.is-error .mk-input,
+.mk-form__item.is-error .mk-form__textarea {
+  border-color: var(--mk-danger);
+}
+
+.mk-form__label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--mk-text-secondary);
+}
+
+.mk-form__content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+}
+
+.mk-form__textarea {
+  width: 100%;
+  padding: 8px 12px;
+  font-size: 13px;
+  color: var(--mk-text);
+  background: var(--mk-surface);
+  border: 1px solid var(--mk-border);
+  border-radius: var(--mk-radius);
+  outline: none;
+  transition: var(--mk-transition);
+  resize: vertical;
+  font-family: inherit;
+}
+
+.mk-form__textarea::placeholder {
+  color: var(--mk-text-tertiary);
+}
+
+.mk-form__textarea:hover {
+  border-color: var(--mk-border-hover);
+}
+
+.mk-form__textarea:focus {
+  border-color: var(--mk-primary);
+}
+
+.mk-form__error {
+  font-size: 12px;
+  color: var(--mk-danger);
+  min-height: 16px;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.mk-form__error.is-visible {
+  opacity: 1;
+}
+
+.mk-form__actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.mk-form__submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 20px;
+  height: 36px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #fff;
+  background: var(--mk-primary);
+  border: none;
+  border-radius: var(--mk-radius);
+  cursor: pointer;
+  transition: var(--mk-transition);
+  user-select: none;
+}
+
+.mk-form__submit:hover {
+  background: var(--mk-primary-hover);
+}
+
+.mk-form__submit:active {
+  transform: translateY(0.5px);
+}

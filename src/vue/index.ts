@@ -1,0 +1,67 @@
+import type { App, Component, Plugin } from 'vue'
+import * as components from '../components-vue/index.js'
+
+// Vue 3 SFC Components (re-exported from the new declarative layer)
+export {
+  MkButton,
+  MkInput,
+  MkSwitch,
+  MkRadio,
+  MkRadioGroup,
+  MkCheckbox,
+  MkCheckboxGroup,
+  MkSlider,
+  MkCard,
+  MkTag,
+  MkAlert,
+  MkProgress,
+  MkEmpty,
+  MkAvatar,
+  MkDivider,
+  MkSpace,
+  MkRow,
+  MkCol,
+  MkContainer,
+  MkLayout,
+  MkHeader,
+  MkAside,
+  MkMain,
+  MkFooter,
+  MkDialog,
+  MkDrawer,
+  MkMenu,
+  MkMenuItem,
+  MkTabs,
+  MkPopover,
+  MkDropdown,
+  MkTooltip,
+  MkBreadcrumb,
+  MkSteps,
+  MkLoading,
+  MkMessage,
+  MkCollapse,
+  MkSelect,
+  MkTable,
+  MkPagination,
+  MkTree,
+  MkDatePicker,
+  MkTimePicker,
+  MkUpload,
+  MkForm,
+  MkFormItem,
+} from '../components-vue/index.js'
+
+// Composables
+export { useMkTheme, useMkMotion, useMkLoading, useMkMessage } from './composables/index.js'
+
+const componentEntries = Object.entries(components).filter(([name]) => name.startsWith('Mk'))
+
+export const MkMotionVue: Plugin = {
+  install(app: App) {
+    for (const [name, component] of componentEntries) {
+      app.component(name, component as Component)
+    }
+  },
+}
+
+export default MkMotionVue

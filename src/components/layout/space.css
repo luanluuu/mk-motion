@@ -1,0 +1,14 @@
+.mk-space {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.mk-space--vertical { flex-direction: column; }
+
+.mk-space--small { gap: 4px; }
+.mk-space--default { gap: 8px; }
+.mk-space--large { gap: 16px; }
+
+.mk-space--wrap { flex-wrap: wrap; }
+.mk-space--nowrap { flex-wrap: nowrap; }

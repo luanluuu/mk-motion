@@ -1,0 +1,19 @@
+[data-mk-theme="light"] {
+  --mk-bg: #ffffff;
+  --mk-surface: #f8fafc;
+  --mk-surface-hover: #f1f5f9;
+  --mk-border: #e2e8f0;
+  --mk-border-hover: #cbd5e1;
+
+  --mk-primary: #6366f1;
+  --mk-primary-hover: #4f46e5;
+  --mk-primary-active: #4338ca;
+
+  --mk-success: #22c55e;
+  --mk-warning: #f59e0b;
+  --mk-danger: #ef4444;
+
+  --mk-text: #0f172a;
+  --mk-text-secondary: #475569;
+  --mk-text-tertiary: #94a3b8;
+}

@@ -1,0 +1,8 @@
+/* MotionKit Legacy Variables
+   These variables supplement tokens.css with shorthand conveniences.
+   Full design tokens are defined in tokens.css.
+*/
+
+:root {
+  --mk-transition: 0.15s ease;
+}

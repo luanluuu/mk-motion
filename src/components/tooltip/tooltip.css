@@ -1,0 +1,66 @@
+.mk-tooltip {
+  display: none;
+  pointer-events: none;
+  opacity: 0;
+  transform: scale(0.96) translateY(2px);
+  transition: opacity var(--mk-duration-fast) var(--mk-ease-default),
+              transform var(--mk-duration-fast) var(--mk-ease-out);
+  filter: drop-shadow(var(--mk-shadow-md));
+  max-width: 280px;
+}
+
+.mk-tooltip.is-visible {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+}
+
+.mk-tooltip__content {
+  padding: 6px 10px;
+  font-size: var(--mk-text-xs);
+  font-weight: var(--mk-font-medium);
+  line-height: var(--mk-leading-snug);
+  color: var(--mk-text);
+  background: var(--mk-surface-raised);
+  border: 1px solid var(--mk-border-hover);
+  border-radius: var(--mk-radius-md);
+}
+
+.mk-tooltip__arrow {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: var(--mk-surface-raised);
+  border: 1px solid var(--mk-border-hover);
+}
+
+.mk-tooltip__arrow.is-top {
+  top: -4px;
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+  border-right: none;
+  border-bottom: none;
+}
+
+.mk-tooltip__arrow.is-bottom {
+  bottom: -4px;
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+  border-left: none;
+  border-top: none;
+}
+
+.mk-tooltip__arrow.is-left {
+  left: -4px;
+  top: 50%;
+  transform: translateY(-50%) rotate(45deg);
+  border-right: none;
+  border-top: none;
+}
+
+.mk-tooltip__arrow.is-right {
+  right: -4px;
+  top: 50%;
+  transform: translateY(-50%) rotate(45deg);
+  border-left: none;
+  border-bottom: none;
+}

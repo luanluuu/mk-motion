@@ -1,0 +1,6 @@
+@import './styles/animations.css';
+@import './styles/element-plus.css';
+@import './components/styles/variables.css';
+@import './components/styles/tokens.css';
+@import './components/styles/reset.css';
+@import './components/styles/components.css';

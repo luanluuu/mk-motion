@@ -1,0 +1,107 @@
+{
+  "name": "@luanlu/mk-motion",
+  "version": "1.2.2",
+  "description": "A lightweight, modern frontend animation library",
+  "type": "module",
+  "main": "./dist/mk-motion.umd.cjs",
+  "module": "./dist/mk-motion.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/mk-motion.js"
+      },
+      "require": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/mk-motion.umd.cjs"
+      }
+    },
+    "./css": "./dist/style.css",
+    "./motion": {
+      "import": {
+        "types": "./dist/motion-entry.d.ts",
+        "default": "./dist/motion.js"
+      }
+    },
+    "./vue": {
+      "import": {
+        "types": "./dist/vue/index.d.ts",
+        "default": "./dist/vue.js"
+      }
+    },
+    "./nuxt": {
+      "import": {
+        "types": "./dist/nuxt/module.d.ts",
+        "default": "./dist/nuxt.js"
+      }
+    },
+    "./vite": {
+      "import": {
+        "types": "./dist/vite/plugin.d.ts",
+        "default": "./dist/vite.js"
+      }
+    },
+    "./resolver": {
+      "import": {
+        "types": "./dist/vite/resolver.d.ts",
+        "default": "./dist/resolver.js"
+      }
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build && vite build --config vite.entries.config.ts",
+    "preview": "vite preview",
+    "docs:dev": "vite --config docs/vite.config.ts",
+    "build:docs": "vite build --config docs/vite.config.ts",
+    "check": "npm run test && npm run build && npm run build:docs",
+    "pack:check": "npm --cache /tmp/mk-motion-npm-cache pack --dry-run",
+    "prepublishOnly": "npm run check && npm run pack:check",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest run --coverage"
+  },
+  "keywords": [
+    "animation",
+    "motion",
+    "frontend",
+    "css",
+    "typescript",
+    "library"
+  ],
+  "author": "luanlu",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/luanluuu/mk-motion.git"
+  },
+  "bugs": {
+    "url": "https://github.com/luanluuu/mk-motion/issues"
+  },
+  "homepage": "https://github.com/luanluuu/mk-motion#readme",
+  "peerDependencies": {
+    "vue": "^3.0.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.2.4",
+    "@vitest/ui": "^4.1.8",
+    "jsdom": "^29.1.1",
+    "typescript": "^5.4.0",
+    "vite": "^5.2.0",
+    "vite-plugin-dts": "^3.8.0",
+    "vitest": "^4.1.8",
+    "vue": "^3.5.35",
+    "vue-router": "^4.6.4"
+  }
+}

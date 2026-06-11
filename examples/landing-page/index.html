@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MotionKit Landing — mk-motion</title>
+  <link rel="stylesheet" href="../../dist/style.css">
+  <style>
+    body { margin: 0; background: var(--mk-bg); color: var(--mk-text); font-family: system-ui, -apple-system, sans-serif; overflow-x: hidden; }
+    .hero { position: relative; min-height: 80vh; display: flex; align-items: center; justify-content: center; text-align: center; padding: 80px 24px; overflow: hidden; }
+    .hero-bg { position: absolute; inset: 0; z-index: 0; background: radial-gradient(ellipse at 50% 0%, var(--mk-primary-soft) 0%, transparent 60%); }
+    .hero-content { position: relative; z-index: 1; max-width: 720px; }
+    .hero h1 { font-size: clamp(2.5rem, 6vw, 4rem); font-weight: 800; margin: 0 0 16px; line-height: 1.1; }
+    .hero p { font-size: 1.125rem; color: var(--mk-text-secondary); margin: 0 0 32px; }
+    .cta { display: inline-flex; gap: 12px; }
+    .section { padding: 80px 24px; max-width: 1100px; margin: 0 auto; }
+    .section h2 { font-size: 2rem; font-weight: 700; margin: 0 0 40px; text-align: center; }
+    .features { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; }
+    .feature { background: var(--mk-surface); border: 1px solid var(--mk-border); border-radius: var(--mk-radius); padding: 28px; }
+    .feature .icon { font-size: 2rem; margin-bottom: 12px; }
+    .feature h3 { font-size: 1.1rem; margin: 0 0 8px; }
+    .feature p { font-size: 0.875rem; color: var(--mk-text-secondary); margin: 0; }
+    .stats-bar { display: flex; justify-content: center; gap: 48px; flex-wrap: wrap; padding: 60px 24px; background: var(--mk-surface); border-top: 1px solid var(--mk-border); border-bottom: 1px solid var(--mk-border); }
+    .stat { text-align: center; }
+    .stat .num { font-size: 2.5rem; font-weight: 800; color: var(--mk-primary); }
+    .stat .label { font-size: 0.875rem; color: var(--mk-text-secondary); }
+    .parallax-wrap { position: relative; height: 400px; overflow: hidden; border-radius: var(--mk-radius); margin-top: 40px; }
+    .parallax-wrap img { position: absolute; inset: -10% 0; width: 100%; height: 120%; object-fit: cover; will-change: transform; }
+    .parallax-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.35); color: #fff; font-size: 1.5rem; font-weight: 700; }
+    footer { padding: 40px 24px; text-align: center; color: var(--mk-text-tertiary); font-size: 0.875rem; border-top: 1px solid var(--mk-border); }
+  </style>
+</head>
+<body>
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+      <h1 id="hero-title">Build Motion Faster</h1>
+      <p id="hero-desc">A lightweight, modern animation library for web apps. Spring physics, gestures, scroll triggers, and more.</p>
+      <div class="cta" id="cta"></div>
+    </div>
+  </section>
+
+  <section class="stats-bar">
+    <div class="stat"><div class="num" data-target="120">0</div><div class="label">Components</div></div>
+    <div class="stat"><div class="num" data-target="50">0</div><div class="label">Presets</div></div>
+    <div class="stat"><div class="num" data-target="8">0</div><div class="label">Gesture types</div></div>
+    <div class="stat"><div class="num" data-target="99.9">0</div><div class="label">Lighthouse</div></div>
+  </section>
+
+  <section class="section">
+    <h2>Features</h2>
+    <div class="features" id="features"></div>
+  </section>
+
+  <section class="section">
+    <h2>Parallax Demo</h2>
+    <div class="parallax-wrap" id="parallax">
+      <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=1200&q=80" alt="landscape" id="parallax-img">
+      <div class="parallax-overlay">Scroll to see the effect</div>
+    </div>
+  </section>
+
+  <footer>© 2024 MotionKit. Built with mk-motion.</footer>
+
+  <script type="module">
+    import { createButton, countUp, parallax } from '../../dist/mk-motion.js'
+
+    // Hero CTA
+    const ctaEl = document.getElementById('cta')
+    const startBtn = createButton({ text: 'Get Started', type: 'primary', size: 'large' })
+    const demoBtn = createButton({ text: 'View Demo', type: 'default', size: 'large' })
+    ctaEl.appendChild(startBtn)
+    ctaEl.appendChild(demoBtn)
+
+    // Typewriter effect for hero title
+    const titleEl = document.getElementById('hero-title')
+    const fullText = titleEl.textContent
+    titleEl.textContent = ''
+    let i = 0
+    const typeInterval = setInterval(() => {
+      titleEl.textContent += fullText[i++]
+      if (i >= fullText.length) clearInterval(typeInterval)
+    }, 60)
+
+    // Stagger feature cards
+    const featuresEl = document.getElementById('features')
+    const features = [
+      { icon: '⚡', title: 'Spring Physics', desc: 'Natural motion with stiffness, damping, and mass.' },
+      { icon: '👆', title: 'Gestures', desc: 'Pan, swipe, pinch, tap, and long press out of the box.' },
+      { icon: '📜', title: 'Scroll Triggers', desc: 'Animate elements as they enter the viewport.' },
+      { icon: '🎨', title: 'Design Tokens', desc: 'Consistent colors, spacing, and radius via CSS vars.' },
+      { icon: '♿', title: 'Accessible', desc: 'Respects reduced-motion and focus management.' },
+      { icon: '🧩', title: 'Vue Ready', desc: 'Composable API and Vue adapter included.' },
+    ]
+
+    features.forEach((f, idx) => {
+      const card = document.createElement('div')
+      card.className = 'feature'
+      card.innerHTML = `
+        <div class="icon">${f.icon}</div>
+        <h3>${f.title}</h3>
+        <p>${f.desc}</p>
+      `
+      card.style.opacity = '0'
+      card.style.transform = 'translateY(24px)'
+      featuresEl.appendChild(card)
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setTimeout(() => {
+              entry.target.style.transition = 'opacity 0.6s ease, transform 0.6s ease'
+              entry.target.style.opacity = '1'
+              entry.target.style.transform = 'translateY(0)'
+            }, idx * 100)
+            observer.unobserve(entry.target)
+          }
+        })
+      }, { threshold: 0.2 })
+      observer.observe(card)
+    })
+
+    // Count up stats
+    document.querySelectorAll<HTMLElement>('.stat .num').forEach((el, idx) => {
+      const target = parseFloat(el.dataset.target || '0')
+      const isInt = Number.isInteger(target)
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setTimeout(() => {
+              if (isInt) {
+                countUp(el, target, { duration: 2000 })
+              } else {
+                let start = 0
+                const dur = 2000
+                const startTime = performance.now()
+                const tick = (now) => {
+                  const p = Math.min((now - startTime) / dur, 1)
+                  const ease = 1 - Math.pow(1 - p, 3)
+                  el.textContent = (start + (target - start) * ease).toFixed(1)
+                  if (p < 1) requestAnimationFrame(tick)
+                }
+                requestAnimationFrame(tick)
+              }
+            }, idx * 150)
+            observer.unobserve(entry.target)
+          }
+        })
+      }, { threshold: 0.5 })
+      observer.observe(el)
+    })
+
+    // Parallax
+    const parallaxImg = document.getElementById('parallax-img')
+    if (parallaxImg) {
+      parallax(parallaxImg, { speed: 0.4 })
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,55 @@
+export const headerNavItems = [
+  { key: 'home', label: '指南' },
+  { key: 'examples', label: '示例' },
+  { key: 'components', label: 'API' },
+  { key: 'theme-generator', label: '游乐场' },
+]
+
+export const sidebarMenuItems = [
+  // —— 指南 ——
+  { index: 'guide-header', label: '—— 指南 ——', disabled: true },
+  { index: 'home', label: '总览', icon: '🏠' },
+  { index: 'animations', label: '动画引擎', icon: '⚡' },
+  { index: 'design-tokens', label: '设计令牌', icon: '🎨' },
+  { index: 'motion-spec', label: '动效规范', icon: '📐' },
+  // —— 示例 ——
+  { index: 'examples-header', label: '—— 示例 ——', disabled: true },
+  { index: 'examples', label: '业务示例', icon: '📋' },
+  // —— API ——
+  { index: 'api-header', label: '—— API ——', disabled: true },
+  { index: 'components', label: '组件总览', icon: '🧩' },
+  { index: 'api-stability', label: 'API稳定性', icon: '🛡️' },
+  // —— 组件 ——
+  { index: 'component-divider-general', label: '—— 通用 ——', disabled: true },
+  { index: 'component-button', label: 'Button 按钮', icon: '🔘' },
+  { index: 'component-input', label: 'Input 输入框', icon: '⌨️' },
+  { index: 'component-card', label: 'Card 卡片', icon: '🃏' },
+  { index: 'component-tag', label: 'Tag 标签', icon: '🏷️' },
+  { index: 'component-avatar', label: 'Avatar 头像', icon: '👤' },
+  { index: 'component-divider-layout', label: '—— 布局 ——', disabled: true },
+  { index: 'component-row', label: 'Row/Col 栅格', icon: '📐' },
+  { index: 'component-space', label: 'Space 间距', icon: '↔️' },
+  { index: 'component-divider', label: 'Divider 分割线', icon: '➖' },
+  { index: 'component-container', label: 'Container 容器', icon: '📦' },
+  { index: 'component-layout', label: 'Layout 页面布局', icon: '🏗️' },
+  { index: 'component-divider-nav', label: '—— 导航 ——', disabled: true },
+  { index: 'component-tabs', label: 'Tabs 标签页', icon: '📑' },
+  { index: 'component-menu', label: 'Menu 菜单', icon: '📋' },
+  { index: 'component-breadcrumb', label: 'Breadcrumb', icon: '🔀' },
+  { index: 'component-steps', label: 'Steps 步骤条', icon: '🪜' },
+  { index: 'component-divider-data', label: '—— 数据 ——', disabled: true },
+  { index: 'component-table', label: 'Table 表格', icon: '📊' },
+  { index: 'component-progress', label: 'Progress 进度', icon: '📈' },
+  { index: 'component-divider-feedback', label: '—— 反馈 ——', disabled: true },
+  { index: 'component-dialog', label: 'Dialog 对话框', icon: '💬' },
+  { index: 'component-alert', label: 'Alert 警告', icon: '⚠️' },
+  { index: 'component-switch', label: 'Switch 开关', icon: '🔛' },
+  { index: 'component-divider-form', label: '—— 表单 ——', disabled: true },
+  { index: 'component-select', label: 'Select 选择器', icon: '🔽' },
+  { index: 'component-checkbox', label: 'Checkbox', icon: '☑️' },
+  { index: 'component-radio', label: 'Radio', icon: '⭕' },
+  { index: 'component-slider', label: 'Slider 滑块', icon: '🎚️' },
+  // —— 游乐场 ——
+  { index: 'playground-header', label: '—— 游乐场 ——', disabled: true },
+  { index: 'theme-generator', label: '主题生成器', icon: '🎯' },
+]

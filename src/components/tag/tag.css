@@ -1,0 +1,123 @@
+.mk-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 8px;
+  height: 24px;
+  font-size: var(--mk-text-xs);
+  font-weight: var(--mk-font-medium);
+  line-height: 1;
+  color: var(--mk-text);
+  background: var(--mk-surface-raised);
+  border: 1px solid var(--mk-border);
+  border-radius: var(--mk-radius-sm);
+  white-space: nowrap;
+  user-select: none;
+  transition: var(--mk-transition-all);
+  vertical-align: middle;
+}
+
+.mk-tag.is-round {
+  border-radius: var(--mk-radius-full);
+}
+
+.mk-tag.is-closable {
+  padding-right: 4px;
+}
+
+/* Sizes */
+.mk-tag--small {
+  padding: 0 6px;
+  height: 20px;
+  font-size: 11px;
+}
+.mk-tag--small.is-closable {
+  padding-right: 2px;
+}
+
+.mk-tag--large {
+  padding: 0 12px;
+  height: 32px;
+  font-size: var(--mk-text-sm);
+}
+.mk-tag--large.is-closable {
+  padding-right: 6px;
+}
+
+/* Types */
+.mk-tag--primary {
+  background: var(--mk-primary-soft);
+  border-color: var(--mk-primary);
+  color: var(--mk-primary-hover);
+}
+.mk-tag--success {
+  background: var(--mk-success-soft);
+  border-color: var(--mk-success);
+  color: var(--mk-green-400);
+}
+.mk-tag--warning {
+  background: var(--mk-warning-soft);
+  border-color: var(--mk-warning);
+  color: var(--mk-amber-400);
+}
+.mk-tag--danger {
+  background: var(--mk-danger-soft);
+  border-color: var(--mk-danger);
+  color: var(--mk-red-400);
+}
+.mk-tag--info {
+  background: var(--mk-info-soft);
+  border-color: var(--mk-info);
+  color: var(--mk-sky-400);
+}
+
+/* Plain */
+.mk-tag.is-plain {
+  background: transparent;
+}
+.mk-tag--primary.is-plain {
+  border-color: var(--mk-primary);
+  color: var(--mk-primary-hover);
+}
+.mk-tag--success.is-plain {
+  border-color: var(--mk-success);
+  color: var(--mk-green-400);
+}
+.mk-tag--warning.is-plain {
+  border-color: var(--mk-warning);
+  color: var(--mk-amber-400);
+}
+.mk-tag--danger.is-plain {
+  border-color: var(--mk-danger);
+  color: var(--mk-red-400);
+}
+.mk-tag--info.is-plain {
+  border-color: var(--mk-info);
+  color: var(--mk-sky-400);
+}
+
+/* Close button */
+.mk-tag__close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  font-size: 14px;
+  line-height: 1;
+  color: inherit;
+  opacity: 0.6;
+  cursor: pointer;
+  border-radius: var(--mk-radius-sm);
+  transition: var(--mk-transition-all);
+}
+.mk-tag__close:hover {
+  opacity: 1;
+  background: var(--mk-surface-alpha-strong);
+}
+
+/* Closing animation */
+.mk-tag.is-closing {
+  transform: scale(0.85);
+  opacity: 0;
+}

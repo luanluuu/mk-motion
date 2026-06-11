@@ -1,0 +1,120 @@
+.mk-timepicker {
+  position: relative;
+  display: inline-flex;
+  width: 100%;
+  max-width: 160px;
+}
+
+.mk-timepicker__input {
+  width: 100%;
+  height: 36px;
+  padding: 0 32px 0 12px;
+  font-size: 13px;
+  color: var(--mk-text);
+  background: var(--mk-surface);
+  border: 1px solid var(--mk-border);
+  border-radius: var(--mk-radius);
+  outline: none;
+  transition: var(--mk-transition);
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpolyline points='12 6 12 12 16 14'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  background-size: 16px;
+}
+
+.mk-timepicker__input:hover {
+  border-color: var(--mk-border-hover);
+}
+
+.mk-timepicker__input:focus {
+  border-color: var(--mk-primary);
+}
+
+.mk-timepicker.is-disabled .mk-timepicker__input {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background-color: var(--mk-bg);
+}
+
+.mk-timepicker__panel {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  width: 200px;
+  height: 200px;
+  background: var(--mk-surface);
+  border: 1px solid var(--mk-border);
+  border-radius: var(--mk-radius);
+  box-shadow: var(--mk-shadow-lg);
+  z-index: var(--mk-z-dropdown);
+  display: flex;
+  opacity: 0;
+  transform: translateY(-4px);
+  pointer-events: none;
+  transition: all 0.15s ease;
+  padding: 8px 0;
+}
+
+.mk-timepicker__panel.is-open {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.mk-timepicker__column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.mk-timepicker__column + .mk-timepicker__column {
+  border-left: 1px solid var(--mk-border);
+}
+
+.mk-timepicker__column-header {
+  text-align: center;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--mk-text-tertiary);
+  padding: 4px 0;
+  border-bottom: 1px solid var(--mk-border);
+  flex-shrink: 0;
+}
+
+.mk-timepicker__column-list {
+  flex: 1;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.mk-timepicker__column-list::-webkit-scrollbar {
+  width: 4px;
+}
+
+.mk-timepicker__column-list::-webkit-scrollbar-thumb {
+  background: var(--mk-border-active);
+  border-radius: var(--mk-radius-full);
+}
+
+.mk-timepicker__item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 28px;
+  font-size: 13px;
+  color: var(--mk-text);
+  cursor: pointer;
+  transition: var(--mk-transition);
+}
+
+.mk-timepicker__item:hover {
+  background: var(--mk-surface-hover);
+}
+
+.mk-timepicker__item.is-selected {
+  background: var(--mk-primary);
+  color: #fff;
+  font-weight: 500;
+}

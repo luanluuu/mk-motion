@@ -1,0 +1,8 @@
+.mk-aside {
+  flex-shrink: 0;
+  box-sizing: border-box;
+  width: 240px;
+  overflow: auto;
+  background: var(--mk-surface);
+  border-right: 1px solid var(--mk-border);
+}

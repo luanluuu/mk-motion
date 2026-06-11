@@ -1,0 +1,16 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false
+  },
+  "include": [
+    "src/types.d.ts",
+    "src/vue/index.ts",
+    "src/vue/composables/**/*.ts",
+    "src/vite/**/*.ts",
+    "src/nuxt/**/*.ts",
+    "src/components-vue/**/*.ts",
+    "src/components-vue/**/*.vue"
+  ],
+  "exclude": []
+}

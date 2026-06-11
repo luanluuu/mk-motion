@@ -1,0 +1,121 @@
+.mk-menu {
+  list-style: none;
+  padding: 8px 0;
+  margin: 0;
+  font-size: var(--mk-text-sm);
+}
+
+.mk-menu--horizontal {
+  display: flex;
+  padding: 0;
+  border-bottom: 1px solid var(--mk-border);
+}
+
+.mk-menu-item {
+  position: relative;
+  transition: var(--mk-transition-colors);
+}
+
+.mk-menu-item__title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 16px;
+  color: var(--mk-text-secondary);
+  transition: var(--mk-transition-colors);
+  border-radius: 6px;
+  margin: 2px 8px;
+}
+
+.mk-menu--horizontal .mk-menu-item__title {
+  margin: 0;
+  border-radius: 0;
+  padding: 12px 16px;
+}
+
+.mk-menu-item__title:hover {
+  color: var(--mk-text);
+  background: var(--mk-surface-hover);
+}
+
+.mk-menu-item.is-active > .mk-menu-item__title {
+  color: var(--mk-primary);
+  background: var(--mk-primary-muted);
+}
+
+.mk-menu-item.is-disabled > .mk-menu-item__title {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.mk-menu-item__icon {
+  width: 18px;
+  text-align: center;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.mk-menu-item__text {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mk-menu-item__arrow {
+  font-size: 14px;
+  transition: transform 0.2s;
+  color: var(--mk-text-tertiary);
+}
+
+.mk-menu-item.is-open > .mk-menu-item__title .mk-menu-item__arrow {
+  transform: rotate(90deg);
+}
+
+.mk-menu-submenu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s var(--mk-ease-default);
+}
+
+.mk-menu-submenu.is-open {
+  max-height: 1000px;
+}
+
+.mk-menu--horizontal .mk-menu-submenu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 180px;
+  background: var(--mk-surface);
+  border: 1px solid var(--mk-border);
+  border-radius: var(--mk-radius);
+  box-shadow: var(--mk-shadow-lg);
+  z-index: var(--mk-z-dropdown);
+  max-height: none;
+  display: none;
+  padding: 4px 0;
+}
+
+.mk-menu--horizontal .mk-menu-item.has-children:hover > .mk-menu-submenu {
+  display: block;
+}
+
+/* Collapsed mode */
+.mk-menu.is-collapse .mk-menu-item__text,
+.mk-menu.is-collapse .mk-menu-item__arrow {
+  display: none;
+}
+
+.mk-menu.is-collapse .mk-menu-item__title {
+  justify-content: center;
+  padding: 12px 0;
+  margin: 2px 8px;
+}
+
+.mk-menu.is-collapse .mk-menu-submenu {
+  display: none !important;
+}

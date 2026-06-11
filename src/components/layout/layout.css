@@ -1,0 +1,15 @@
+.mk-layout {
+  display: flex;
+  flex: 1;
+  box-sizing: border-box;
+  min-width: 0;
+  min-height: 0;
+}
+
+.mk-layout--vertical {
+  flex-direction: column;
+}
+
+.mk-layout--horizontal {
+  flex-direction: row;
+}

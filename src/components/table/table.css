@@ -1,0 +1,233 @@
+.mk-table-wrapper {
+  width: 100%;
+  border: 1px solid var(--mk-border);
+  border-radius: var(--mk-radius);
+  overflow: hidden;
+  background: var(--mk-surface);
+}
+
+.mk-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.mk-table thead {
+  background: var(--mk-surface-alpha-weak);
+}
+
+.mk-table th {
+  padding: 10px 16px;
+  text-align: left;
+  font-weight: 500;
+  color: var(--mk-text-secondary);
+  border-bottom: 1px solid var(--mk-border);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  cursor: default;
+  user-select: none;
+}
+
+.mk-table th.is-sortable {
+  cursor: pointer;
+}
+
+.mk-table th.is-sortable:hover {
+  color: var(--mk-text);
+  background: var(--mk-surface-alpha-weak);
+}
+
+.mk-table__sort-icon {
+  margin-left: 4px;
+  font-size: 10px;
+  opacity: 0.4;
+  display: inline-block;
+  width: 12px;
+  text-align: center;
+}
+
+.mk-table__sort-icon.is-active {
+  opacity: 1;
+  color: var(--mk-primary);
+}
+
+.mk-table td {
+  padding: 10px 16px;
+  color: var(--mk-text);
+  border-bottom: 1px solid var(--mk-border);
+  vertical-align: middle;
+}
+
+.mk-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.mk-table tbody tr:hover {
+  background: var(--mk-primary-muted);
+}
+
+.mk-table tbody tr.is-editing td {
+  background: rgba(99,102,241,0.05);
+}
+
+/* Inline edit input */
+.mk-table__edit-input {
+  width: 100%;
+  padding: 6px 10px;
+  font-size: 13px;
+  color: var(--mk-text);
+  background: var(--mk-bg);
+  border: 1px solid var(--mk-border);
+  border-radius: 6px;
+  outline: none;
+  transition: var(--mk-transition);
+  box-sizing: border-box;
+}
+
+.mk-table__edit-input:focus {
+  border-color: var(--mk-primary);
+}
+
+/* Cell actions */
+.mk-table__actions {
+  display: flex;
+  gap: 8px;
+}
+
+.mk-table__action-btn {
+  font-size: 12px;
+  color: var(--mk-primary);
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+  transition: var(--mk-transition);
+}
+
+.mk-table__action-btn:hover {
+  background: var(--mk-primary-soft);
+}
+
+.mk-table__action-btn.is-danger {
+  color: var(--mk-danger);
+}
+
+.mk-table__action-btn.is-danger:hover {
+  background: var(--mk-danger-soft);
+}
+
+/* Empty state */
+.mk-table__empty {
+  padding: 48px 24px;
+  text-align: center;
+  color: var(--mk-text-tertiary);
+  font-size: 14px;
+}
+
+/* Virtual scroll */
+.mk-table-scroll-container {
+  overflow-y: auto;
+  position: relative;
+}
+
+.mk-table__virtual-spacer-top td,
+.mk-table__virtual-spacer-bottom td {
+  padding: 0 !important;
+  border: none !important;
+}
+
+.mk-table__virtual-row {
+  height: 44px;
+}
+
+.mk-table__virtual-row td {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Selection column */
+.mk-table th:first-child .mk-checkbox,
+.mk-table td:first-child .mk-checkbox {
+  margin: 0;
+}
+
+.mk-table th:first-child {
+  width: 48px;
+  text-align: center;
+  padding-left: 16px;
+  padding-right: 0;
+}
+
+.mk-table td:first-child {
+  text-align: center;
+  padding-left: 16px;
+  padding-right: 0;
+}
+
+/* Pagination */
+.mk-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 12px 16px;
+  border-top: 1px solid var(--mk-border);
+}
+
+.mk-pagination__btn {
+  min-width: 32px;
+  height: 32px;
+  padding: 0 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  color: var(--mk-text-secondary);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: var(--mk-transition);
+}
+
+.mk-pagination__btn:hover:not(:disabled) {
+  background: var(--mk-surface-alpha-medium);
+  color: var(--mk-text);
+}
+
+.mk-pagination__btn.is-active {
+  background: var(--mk-primary);
+  color: var(--mk-text-inverse);
+  border-color: var(--mk-primary);
+}
+
+.mk-pagination__btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.mk-pagination__total {
+  font-size: 12px;
+  color: var(--mk-text-tertiary);
+  margin-right: auto;
+}
+
+.mk-pagination__size {
+  margin-left: auto;
+  font-size: 12px;
+  color: var(--mk-text-secondary);
+}
+
+.mk-pagination__size select {
+  margin-left: 6px;
+  padding: 4px 8px;
+  font-size: 12px;
+  color: var(--mk-text);
+  background: var(--mk-bg);
+  border: 1px solid var(--mk-border);
+  border-radius: 4px;
+  cursor: pointer;
+  outline: none;
+}
