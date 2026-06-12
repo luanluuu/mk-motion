@@ -272,7 +272,10 @@ export class SpringAnimation {
   private _onComplete?: () => void
   private _onUpdate?: (props: SpringProperties) => void
   private _promiseResolve?: () => void
-
+  private _colorFrom?: [number, number, number, number]
+  private _colorTo?: [number, number, number, number]
+  private _colorRangeInv: number = 0
+  private _reusableProps: SpringProperties = {}
 
   constructor(
     target: HTMLElement | string,
@@ -306,6 +309,7 @@ export class SpringAnimation {
         toNum = toParsed[0]
         this._colorFrom = fromParsed
         this._colorTo = toParsed
+        this._colorRangeInv = 1 / (toParsed[0] - fromParsed[0] || 1)
       } else {
         fromNum = Number(fromVal)
         toNum = Number(toVal)
@@ -315,9 +319,6 @@ export class SpringAnimation {
       this.props.set(key, { name: key, def, spring, isColor })
     }
   }
-
-  private _colorFrom?: [number, number, number, number]
-  private _colorTo?: [number, number, number, number]
 
   private getCurrentValue(key: string, def: PropDef): number | string {
     if (def.type === 'transform') {
@@ -435,13 +436,10 @@ export class SpringAnimation {
       const state = active.spring.getState()
 
       if (active.def.type === 'transform') {
-        const val = active.isColor
-          ? state.current
-          : state.current
-        transformParts.push(active.def.toCss(val))
+        transformParts.push(active.def.toCss(state.current))
       } else if (active.isColor) {
         if (this._colorFrom && this._colorTo) {
-          const t = (state.current - this._colorFrom[0]) / (this._colorTo[0] - this._colorFrom[0] || 1)
+          const t = (state.current - this._colorFrom[0]) * this._colorRangeInv
           const clampedT = Math.max(0, Math.min(1, t))
           const r = this._colorFrom[0] + (this._colorTo[0] - this._colorFrom[0]) * clampedT
           const g = this._colorFrom[1] + (this._colorTo[1] - this._colorFrom[1]) * clampedT
@@ -464,16 +462,11 @@ export class SpringAnimation {
   }
 
   private getCurrentProperties(): SpringProperties {
-    const result: SpringProperties = {}
     for (const [propKey, active] of this.props) {
       const state = active.spring.getState()
-      if (active.isColor) {
-        (result as any)[propKey] = state.current
-      } else {
-        (result as any)[propKey] = state.current
-      }
+      ;(this._reusableProps as any)[propKey] = state.current
     }
-    return result
+    return this._reusableProps
   }
 
   onUpdate(cb: (props: SpringProperties) => void): this {

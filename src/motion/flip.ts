@@ -85,15 +85,14 @@ export function flip(
     const isHidden = last.width === 0 || last.height === 0
     if (wasHidden || isHidden) {
       const duration = options.duration ?? 240
+      const easing = options.easing ?? 'ease'
       // Start from visible/invisible based on previous state
       child.style.opacity = wasHidden ? '0' : '1'
       promises.push(
         new Promise<void>((resolve) => {
           requestAnimationFrame(() => {
-            child.style.transition = `opacity ${duration}ms ${options.easing ?? 'ease'}`
-            requestAnimationFrame(() => {
-              child.style.opacity = isHidden ? '0' : '1'
-            })
+            child.style.transition = `opacity ${duration}ms ${easing}`
+            child.style.opacity = isHidden ? '0' : '1'
           })
           setTimeout(() => {
             child.style.transition = ''
@@ -183,14 +182,13 @@ export function staggerFlip(
     const isHidden = last.width === 0 || last.height === 0
     if (wasHidden || isHidden) {
       const duration = options.duration ?? 240
+      const easing = options.easing ?? 'ease'
       child.style.opacity = wasHidden ? '0' : '1'
       return new Promise<void>((resolve) => {
         setTimeout(() => {
           requestAnimationFrame(() => {
-            child.style.transition = `opacity ${duration}ms ${options.easing ?? 'ease'}`
-            requestAnimationFrame(() => {
-              child.style.opacity = isHidden ? '0' : '1'
-            })
+            child.style.transition = `opacity ${duration}ms ${easing}`
+            child.style.opacity = isHidden ? '0' : '1'
           })
           setTimeout(() => {
             child.style.transition = ''
