@@ -1,6 +1,6 @@
 import { defineComponent, h, ref, onMounted, onUnmounted, watch, nextTick } from 'vue'
 import { createInput } from '../components/input/input.js'
-import type { InputOptions } from '../components/input/input.js'
+import type { InputOptions, InputSize } from '../components/input/input.js'
 
 export const MkInput = defineComponent({
   name: 'MkInput',
@@ -11,6 +11,7 @@ export const MkInput = defineComponent({
     disabled: { type: Boolean, default: false },
     clearable: { type: Boolean, default: false },
     showPassword: { type: Boolean, default: false },
+    size: { type: [String, Object] as () => InputSize, default: 'default' },
     maxlength: { type: Number, default: undefined },
     rows: { type: Number, default: undefined },
     motion: { type: Object as () => InputOptions['motion'], default: undefined },
@@ -30,6 +31,7 @@ export const MkInput = defineComponent({
         disabled: props.disabled,
         clearable: props.clearable,
         showPassword: props.showPassword,
+        size: props.size,
         maxlength: props.maxlength,
         rows: props.rows,
         motion: props.motion,

@@ -1,6 +1,13 @@
 import './input.css'
 import { withMotion, type MotionOptions } from '../../motion/component-motion.ts'
 
+export type InputSize = 'small' | 'default' | 'large' | {
+  height?: string
+  width?: string
+  padding?: string
+  fontSize?: string
+}
+
 export interface InputOptions {
   placeholder?: string
   type?: string
@@ -8,6 +15,7 @@ export interface InputOptions {
   disabled?: boolean
   clearable?: boolean
   showPassword?: boolean
+  size?: InputSize
   validate?: (value: string) => string | null
   onInput?: (value: string) => void
   onEnter?: (value: string) => void
@@ -41,6 +49,11 @@ export class MkInput {
     this.input.placeholder = this.options.placeholder || ''
     this.input.value = this.options.value || ''
     this.input.disabled = !!this.options.disabled
+
+    // Apply size
+    if (this.options.size) {
+      this.applySize(this.options.size)
+    }
 
     this.el.appendChild(this.input)
 
@@ -142,6 +155,17 @@ export class MkInput {
     this.errorMsg.classList.remove('show')
     this.input.removeAttribute('aria-invalid')
     this.input.removeAttribute('aria-describedby')
+  }
+
+  private applySize(size: InputSize): void {
+    if (typeof size === 'string') {
+      this.el.classList.add(`mk-input-wrapper--${size}`)
+    } else {
+      if (size.height) this.input.style.height = size.height
+      if (size.width) this.el.style.width = size.width
+      if (size.padding) this.input.style.padding = size.padding
+      if (size.fontSize) this.input.style.fontSize = size.fontSize
+    }
   }
 
   focus(): void {

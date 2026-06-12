@@ -21,6 +21,10 @@
 
 .mk-input::placeholder { color: var(--mk-text-tertiary); }
 
+/* Sizes */
+.mk-input-wrapper--small .mk-input { height: 28px; padding: 0 8px; font-size: 12px; }
+.mk-input-wrapper--large .mk-input { height: 44px; padding: 0 16px; font-size: 14px; }
+
 .mk-input:hover {
   border-color: var(--mk-border-hover);
 }
