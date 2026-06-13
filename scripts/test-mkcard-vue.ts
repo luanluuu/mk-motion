@@ -1,6 +1,6 @@
 import { createSSRApp } from 'vue'
 import { renderToString } from 'vue/server-renderer'
-import { MkCard } from './src/vue/card.ts'
+import { MkCard } from '../src/vue/card.ts'
 
 async function main() {
   const app = createSSRApp({
