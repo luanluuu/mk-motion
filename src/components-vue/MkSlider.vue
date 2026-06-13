@@ -3,19 +3,22 @@ import { computed, ref, useAttrs } from 'vue'
 
 defineOptions({ inheritAttrs: false })
 
-const props = withDefaults(defineProps<{
-  modelValue?: number
-  min?: number
-  max?: number
-  step?: number
-  showValue?: boolean
-}>(), {
-  modelValue: 0,
-  min: 0,
-  max: 100,
-  step: 1,
-  showValue: true,
-})
+const props = withDefaults(
+  defineProps<{
+    modelValue?: number
+    min?: number
+    max?: number
+    step?: number
+    showValue?: boolean
+  }>(),
+  {
+    modelValue: 0,
+    min: 0,
+    max: 100,
+    step: 1,
+    showValue: true,
+  }
+)
 
 const emit = defineEmits<{
   'update:modelValue': [value: number]
@@ -63,7 +66,10 @@ function onEnd() {
 }
 
 function adjustValue(delta: number) {
-  const next = Math.max(props.min, Math.min(props.max, clampedValue.value + delta))
+  const next = Math.max(
+    props.min,
+    Math.min(props.max, clampedValue.value + delta)
+  )
   if (next !== props.modelValue) {
     emit('update:modelValue', next)
     emit('change', next)
@@ -138,7 +144,13 @@ function onKeydown(e: KeyboardEvent) {
   <teleport to="body">
     <div
       v-if="dragging"
-      style="position:fixed;inset:0;z-index:9999;user-select:none;background:transparent;"
+      style="
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        user-select: none;
+        background: transparent;
+      "
       @mousemove="onMouseMove"
       @mouseup="onEnd"
       @touchend="onEnd"
@@ -185,7 +197,9 @@ function onKeydown(e: KeyboardEvent) {
   border-radius: 50%;
   transform: translate(-50%, -50%);
   cursor: grab;
-  transition: transform 0.15s, box-shadow 0.15s;
+  transition:
+    transform 0.15s,
+    box-shadow 0.15s;
   box-shadow: var(--mk-shadow-sm);
 }
 

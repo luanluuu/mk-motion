@@ -7,7 +7,9 @@ export interface TapOptions {
 
 export class TapRecognizer {
   private element: HTMLElement
-  private options: Required<Omit<TapOptions, 'onTap' | 'onDoubleTap' | 'onLongPress'>> &
+  private options: Required<
+    Omit<TapOptions, 'onTap' | 'onDoubleTap' | 'onLongPress'>
+  > &
     Pick<TapOptions, 'onTap' | 'onDoubleTap' | 'onLongPress'>
   private pointerId: number | null = null
   private startX = 0
@@ -80,7 +82,10 @@ export class TapRecognizer {
     const elapsed = performance.now() - this.startTime
     if (!this.moved && elapsed < this.tapTimeThreshold) {
       const now = performance.now()
-      if (now - this.lastTapTime < this.doubleTapWindow && this.options.onDoubleTap) {
+      if (
+        now - this.lastTapTime < this.doubleTapWindow &&
+        this.options.onDoubleTap
+      ) {
         this.lastTapTime = 0
         this.options.onDoubleTap()
       } else {

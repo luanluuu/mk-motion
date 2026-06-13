@@ -100,7 +100,8 @@ export async function toggleCollapse(
 
   if (!el) throw new Error('toggleCollapse: element not found')
 
-  const isHidden = getComputedStyle(el).display === 'none' || el.offsetHeight === 0
+  const isHidden =
+    getComputedStyle(el).display === 'none' || el.offsetHeight === 0
 
   if (isHidden) {
     await expand(el, options)

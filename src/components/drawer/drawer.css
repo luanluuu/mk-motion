@@ -15,28 +15,36 @@
 }
 
 .mk-drawer--right {
-  top: 0; right: 0; bottom: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
   width: 340px;
   border-left: 1px solid var(--mk-border);
   border-radius: var(--mk-radius-lg) 0 0 var(--mk-radius-lg);
 }
 
 .mk-drawer--left {
-  top: 0; left: 0; bottom: 0;
+  top: 0;
+  left: 0;
+  bottom: 0;
   width: 340px;
   border-right: 1px solid var(--mk-border);
   border-radius: 0 var(--mk-radius-lg) var(--mk-radius-lg) 0;
 }
 
 .mk-drawer--top {
-  top: 0; left: 0; right: 0;
+  top: 0;
+  left: 0;
+  right: 0;
   height: 300px;
   border-bottom: 1px solid var(--mk-border);
   border-radius: 0 0 var(--mk-radius-lg) var(--mk-radius-lg);
 }
 
 .mk-drawer--bottom {
-  bottom: 0; left: 0; right: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
   height: 300px;
   border-top: 1px solid var(--mk-border);
   border-radius: var(--mk-radius-lg) var(--mk-radius-lg) 0 0;
@@ -60,8 +68,11 @@
   cursor: pointer;
   color: var(--mk-text-tertiary);
   font-size: 16px;
-  width: 24px; height: 24px;
-  display: flex; align-items: center; justify-content: center;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border-radius: 4px;
   transition: var(--mk-transition);
 }

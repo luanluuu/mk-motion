@@ -4,7 +4,8 @@ import { MkCard } from './src/vue/card.ts'
 
 const app = createSSRApp({
   components: { MkCard },
-  template: '<div><MkCard title="Test Card" body="Hello World" shadow="hover" /></div>'
+  template:
+    '<div><MkCard title="Test Card" body="Hello World" shadow="hover" /></div>',
 })
 
 try {

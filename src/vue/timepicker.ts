@@ -1,4 +1,12 @@
-import { defineComponent, h, ref, onMounted, onUnmounted, watch, nextTick } from 'vue'
+import {
+  defineComponent,
+  h,
+  ref,
+  onMounted,
+  onUnmounted,
+  watch,
+  nextTick,
+} from 'vue'
 import { createTimePicker } from '../components/timepicker/timepicker.js'
 import type { TimePickerOptions } from '../components/timepicker/timepicker.js'
 
@@ -32,17 +40,26 @@ export const MkTimePicker = defineComponent({
 
     onMounted(() => nextTick(create))
 
-    watch(() => props.modelValue, (v) => {
-      if (instance && instance.value !== v) {
-        instance.value = v
+    watch(
+      () => props.modelValue,
+      (v) => {
+        if (instance && instance.value !== v) {
+          instance.value = v
+        }
       }
-    })
+    )
 
-    watch(() => props.disabled, (v) => {
-      if (instance) instance.setDisabled(v)
-    })
+    watch(
+      () => props.disabled,
+      (v) => {
+        if (instance) instance.setDisabled(v)
+      }
+    )
 
-    watch(() => [props.placeholder, props.format], () => nextTick(create))
+    watch(
+      () => [props.placeholder, props.format],
+      () => nextTick(create)
+    )
 
     onUnmounted(() => instance?.destroy())
 

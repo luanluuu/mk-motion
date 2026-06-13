@@ -65,8 +65,9 @@
   height: 2px;
   background: var(--mk-primary);
   border-radius: 1px;
-  transition: left var(--mk-duration-normal) var(--mk-ease-out-expo),
-              width var(--mk-duration-normal) var(--mk-ease-out-expo);
+  transition:
+    left var(--mk-duration-normal) var(--mk-ease-out-expo),
+    width var(--mk-duration-normal) var(--mk-ease-out-expo);
 }
 
 /* Card type */
@@ -123,8 +124,9 @@
   line-height: var(--mk-leading-normal);
   opacity: 0;
   transform: translateY(4px);
-  transition: opacity var(--mk-duration-normal) var(--mk-ease-default),
-              transform var(--mk-duration-normal) var(--mk-ease-out);
+  transition:
+    opacity var(--mk-duration-normal) var(--mk-ease-default),
+    transform var(--mk-duration-normal) var(--mk-ease-out);
 }
 
 .mk-tabs__panel.is-active {

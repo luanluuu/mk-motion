@@ -1,23 +1,16 @@
 <template>
   <div class="components-overview">
-    <div class="section-header" style="text-align: center;">
+    <div class="section-header" style="text-align: center">
       <h1 class="section-title">组件总览</h1>
       <p class="section-desc">
-        MotionKit 提供 35+ 个精心设计的组件，分为通用、布局、导航、数据展示、反馈、表单六大类。
+        MotionKit 提供 35+
+        个精心设计的组件，分为通用、布局、导航、数据展示、反馈、表单六大类。
       </p>
     </div>
 
-    <div
-      v-for="cat in categories"
-      :key="cat.title"
-      class="category-section"
-    >
+    <div v-for="cat in categories" :key="cat.title" class="category-section">
       <h2 class="doc-h2">{{ cat.title }}</h2>
-      <TransitionGroup
-        name="card-fade"
-        tag="div"
-        class="card-grid"
-      >
+      <TransitionGroup name="card-fade" tag="div" class="card-grid">
         <MkCard
           v-for="name in cat.comps"
           :key="name"
@@ -33,7 +26,10 @@
 </template>
 
 <script setup lang="ts">
-import { componentDocs } from '../data/component-docs.js'
+import {
+  componentDocs,
+  type ComponentDoc,
+} from '../data/component-docs.js'
 import { goTo } from '../router.js'
 import { onMounted } from 'vue'
 
@@ -42,7 +38,10 @@ onMounted(() => {
 })
 
 const categories = [
-  { title: '通用', comps: ['button', 'input', 'card', 'tag', 'avatar', 'empty'] },
+  {
+    title: '通用',
+    comps: ['button', 'input', 'card', 'tag', 'avatar', 'empty'],
+  },
   { title: '布局', comps: ['row', 'space', 'divider', 'container', 'layout'] },
   { title: '导航', comps: ['tabs', 'menu', 'breadcrumb', 'steps'] },
   { title: '数据展示', comps: ['table', 'progress'] },
@@ -52,11 +51,11 @@ const categories = [
 ]
 
 function getDocTitle(name: string) {
-  return (componentDocs as any)[name]?.title || name
+  return (componentDocs as Record<string, ComponentDoc>)[name]?.title || name
 }
 
 function getDocDesc(name: string) {
-  return (componentDocs as any)[name]?.desc || ''
+  return (componentDocs as Record<string, ComponentDoc>)[name]?.desc || ''
 }
 </script>
 
@@ -98,7 +97,9 @@ function getDocDesc(name: string) {
 .overview-card {
   cursor: pointer;
   width: 100%;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .overview-card:hover {
@@ -114,7 +115,9 @@ function getDocDesc(name: string) {
 
 .card-fade-enter-active,
 .card-fade-leave-active {
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
 }
 
 @media (max-width: 900px) {

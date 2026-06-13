@@ -105,9 +105,13 @@ const onSelect = (item: DropdownItem) => {
   doHide()
 }
 
-useClickOutside(menuRef, () => {
-  if (props.trigger === 'click' && visible.value) doHide()
-}, { ignore: [targetRef] })
+useClickOutside(
+  menuRef,
+  () => {
+    if (props.trigger === 'click' && visible.value) doHide()
+  },
+  { ignore: [targetRef] }
+)
 
 watch(visible, (val) => {
   if (!val) clearTimers()
@@ -142,7 +146,10 @@ watch(visible, (val) => {
             v-for="item in items"
             :key="item.value"
             class="mk-dropdown__item"
-            :class="{ 'is-disabled': item.disabled, 'is-divided': item.divided }"
+            :class="{
+              'is-disabled': item.disabled,
+              'is-divided': item.divided,
+            }"
             role="menuitem"
             :aria-disabled="item.disabled ? 'true' : undefined"
             @click="onSelect(item)"
@@ -175,8 +182,9 @@ watch(visible, (val) => {
   padding: 4px 0;
   opacity: 0;
   transform: scale(0.96) translateY(-2px);
-  transition: opacity var(--mk-duration-fast) var(--mk-ease-default),
-              transform var(--mk-duration-fast) var(--mk-ease-out);
+  transition:
+    opacity var(--mk-duration-fast) var(--mk-ease-default),
+    transform var(--mk-duration-fast) var(--mk-ease-out);
   z-index: var(--mk-z-dropdown);
 }
 

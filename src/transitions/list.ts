@@ -1,6 +1,6 @@
 export interface ListStaggerOptions {
-  stagger?: number         // 每项间隔毫秒
-  duration?: number        // 单个动画时长
+  stagger?: number // 每项间隔毫秒
+  duration?: number // 单个动画时长
   animation?: 'fadeUp' | 'fadeDown' | 'fadeLeft' | 'fadeRight' | 'zoom'
 }
 
@@ -49,7 +49,9 @@ export function listStagger(
 
   const opts = { ...DEFAULT_LIST, ...options }
   const preset = PRESETS[opts.animation]
-  const items = Array.from(el.children) as HTMLElement[]
+  const items = Array.from(el.children).filter(
+    (child): child is HTMLElement => child instanceof HTMLElement
+  )
 
   items.forEach((item) => {
     item.style.cssText += preset.from

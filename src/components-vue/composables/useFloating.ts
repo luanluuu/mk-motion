@@ -23,21 +23,37 @@ export function computePosition(
   switch (placement) {
     case 'top':
       top = targetRect.top + scrollY - floatingRect.height - offset
-      left = targetRect.left + scrollX + targetRect.width / 2 - floatingRect.width / 2
+      left =
+        targetRect.left +
+        scrollX +
+        targetRect.width / 2 -
+        floatingRect.width / 2
       arrowClass = 'is-bottom'
       break
     case 'bottom':
       top = targetRect.bottom + scrollY + offset
-      left = targetRect.left + scrollX + targetRect.width / 2 - floatingRect.width / 2
+      left =
+        targetRect.left +
+        scrollX +
+        targetRect.width / 2 -
+        floatingRect.width / 2
       arrowClass = 'is-top'
       break
     case 'left':
-      top = targetRect.top + scrollY + targetRect.height / 2 - floatingRect.height / 2
+      top =
+        targetRect.top +
+        scrollY +
+        targetRect.height / 2 -
+        floatingRect.height / 2
       left = targetRect.left + scrollX - floatingRect.width - offset
       arrowClass = 'is-right'
       break
     case 'right':
-      top = targetRect.top + scrollY + targetRect.height / 2 - floatingRect.height / 2
+      top =
+        targetRect.top +
+        scrollY +
+        targetRect.height / 2 -
+        floatingRect.height / 2
       left = targetRect.right + scrollX + offset
       arrowClass = 'is-left'
       break

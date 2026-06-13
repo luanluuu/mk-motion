@@ -23,7 +23,13 @@ export { default as MkBreadcrumb } from './MkBreadcrumb.vue'
 export type { BreadcrumbItem, BreadcrumbProps } from './types.js'
 
 export { default as MkSteps } from './MkSteps.vue'
-export type { StepItem, StepStatus, StepsDirection, StepsSize, StepsProps } from './types.js'
+export type {
+  StepItem,
+  StepStatus,
+  StepsDirection,
+  StepsSize,
+  StepsProps,
+} from './types.js'
 
 export { default as MkLoading } from './MkLoading.vue'
 export type { LoadingProps } from './types.js'

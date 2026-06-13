@@ -1,7 +1,7 @@
 export interface RippleOptions {
-  color?: string        // 波纹颜色
-  duration?: number     // 动画时长毫秒
-  maxScale?: number     // 最大缩放倍数
+  color?: string // 波纹颜色
+  duration?: number // 动画时长毫秒
+  maxScale?: number // 最大缩放倍数
 }
 
 const DEFAULT_RIPPLE: Required<RippleOptions> = {

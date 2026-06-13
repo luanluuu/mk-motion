@@ -31,10 +31,7 @@ function getContainer(): HTMLDivElement {
   return container
 }
 
-export function message(
-  msg: string,
-  options: MessageOptions = {}
-): () => void {
+export function message(msg: string, options: MessageOptions = {}): () => void {
   const opts = { type: 'info', duration: 3000, closable: true, ...options }
   const el = document.createElement('div')
   el.className = `mk-message mk-message--${opts.type}`
@@ -83,14 +80,23 @@ function removeMessage(el: HTMLDivElement): void {
   }, 300)
 }
 
-export function messageSuccess(msg: string, options?: Omit<MessageOptions, 'type'>): () => void {
+export function messageSuccess(
+  msg: string,
+  options?: Omit<MessageOptions, 'type'>
+): () => void {
   return message(msg, { ...options, type: 'success' })
 }
 
-export function messageError(msg: string, options?: Omit<MessageOptions, 'type'>): () => void {
+export function messageError(
+  msg: string,
+  options?: Omit<MessageOptions, 'type'>
+): () => void {
   return message(msg, { ...options, type: 'error' })
 }
 
-export function messageWarning(msg: string, options?: Omit<MessageOptions, 'type'>): () => void {
+export function messageWarning(
+  msg: string,
+  options?: Omit<MessageOptions, 'type'>
+): () => void {
   return message(msg, { ...options, type: 'warning' })
 }

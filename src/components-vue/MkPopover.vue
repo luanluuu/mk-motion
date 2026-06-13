@@ -34,7 +34,12 @@ const showTimer = ref<ReturnType<typeof setTimeout> | null>(null)
 const hideTimer = ref<ReturnType<typeof setTimeout> | null>(null)
 
 const placementRef = computed(() => props.placement)
-const { position, arrowClass, update } = useFloating(targetRef, popoverRef, placementRef, 8)
+const { position, arrowClass, update } = useFloating(
+  targetRef,
+  popoverRef,
+  placementRef,
+  8
+)
 
 const widthStyle = computed(() => {
   if (props.width === undefined) return undefined
@@ -123,7 +128,10 @@ watch(visible, (val) => {
         ref="popoverRef"
         class="mk-popover"
         :class="`mk-popover--${placement}`"
-        :style="[{ top: `${position.top}px`, left: `${position.left}px` }, { width: widthStyle }]"
+        :style="[
+          { top: `${position.top}px`, left: `${position.left}px` },
+          { width: widthStyle },
+        ]"
         :role="trigger === 'click' ? 'dialog' : 'tooltip'"
         :tabindex="trigger === 'click' ? -1 : undefined"
         @mouseenter="onPopoverEnter"
@@ -146,8 +154,9 @@ watch(visible, (val) => {
   position: absolute;
   opacity: 0;
   transform: scale(0.96) translateY(2px);
-  transition: opacity var(--mk-duration-fast) var(--mk-ease-default),
-              transform var(--mk-duration-fast) var(--mk-ease-out);
+  transition:
+    opacity var(--mk-duration-fast) var(--mk-ease-default),
+    transform var(--mk-duration-fast) var(--mk-ease-out);
   filter: drop-shadow(var(--mk-shadow-lg));
   background: var(--mk-surface-raised);
   border: 1px solid var(--mk-border-hover);

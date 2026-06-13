@@ -9,7 +9,7 @@ export interface UploadFile {
   status?: 'ready' | 'uploading' | 'success' | 'error'
   progress?: number
   raw?: File
-  response?: any
+  response?: unknown
 }
 
 interface Props {
@@ -30,15 +30,15 @@ const emit = defineEmits<{
   change: [files: UploadFile[]]
   preview: [file: UploadFile]
   remove: [file: UploadFile]
-  success: [response: any, file: UploadFile]
-  error: [error: any, file: UploadFile]
+  success: [response: unknown, file: UploadFile]
+  error: [error: unknown, file: UploadFile]
 }>()
 
 const fileList = defineModel<UploadFile[]>('fileList', { default: () => [] })
 
 defineSlots<{
-  trigger?: () => any
-  tip?: () => any
+  trigger?: () => unknown
+  tip?: () => unknown
 }>()
 
 const inputRef = ref<HTMLInputElement | null>(null)
@@ -83,18 +83,22 @@ function handleFiles(files: FileList | null) {
   if (!files) return
   const newFiles = Array.from(files)
     .filter((f) => !props.maxSize || f.size <= props.maxSize)
-    .map((f): UploadFile => ({
-      uid: generateUid(),
-      name: f.name,
-      size: f.size,
-      status: 'ready',
-      progress: 0,
-      raw: f,
-    }))
+    .map(
+      (f): UploadFile => ({
+        uid: generateUid(),
+        name: f.name,
+        size: f.size,
+        status: 'ready',
+        progress: 0,
+        raw: f,
+      })
+    )
 
   if (!newFiles.length) return
 
-  const next = props.multiple ? [...fileList.value, ...newFiles] : newFiles.slice(0, 1)
+  const next = props.multiple
+    ? [...fileList.value, ...newFiles]
+    : newFiles.slice(0, 1)
   fileList.value = next
   emit('change', next)
 
@@ -185,17 +189,21 @@ function previewFile(file: UploadFile) {
   emit('preview', file)
 }
 
-watch(fileList, (list, prevList) => {
-  list?.forEach((f) => {
-    if (f.status === 'ready') uploadFile(f)
-  })
-  // Revoke URLs for removed files
-  prevList?.forEach((f) => {
-    if (f.raw && !list?.some((item) => item === f)) {
-      revokeObjectUrl(f.raw)
-    }
-  })
-}, { immediate: true, deep: true })
+watch(
+  fileList,
+  (list, prevList) => {
+    list?.forEach((f) => {
+      if (f.status === 'ready') uploadFile(f)
+    })
+    // Revoke URLs for removed files
+    prevList?.forEach((f) => {
+      if (f.raw && !list?.some((item) => item === f)) {
+        revokeObjectUrl(f.raw)
+      }
+    })
+  },
+  { immediate: true, deep: true }
+)
 </script>
 
 <template>
@@ -239,7 +247,11 @@ watch(fileList, (list, prevList) => {
     </div>
 
     <div class="mk-upload__list">
-      <div v-for="file in fileList" :key="file.uid ?? file.name" class="mk-upload__item">
+      <div
+        v-for="file in fileList"
+        :key="file.uid ?? file.name"
+        class="mk-upload__item"
+      >
         <img
           v-if="isImage(file) && file.raw"
           :src="getObjectUrl(file.raw)"
@@ -247,7 +259,9 @@ watch(fileList, (list, prevList) => {
           class="mk-upload__item-thumb"
         />
         <div class="mk-upload__item-info">
-          <span class="mk-upload__item-name" @click="previewFile(file)">{{ file.name }}</span>
+          <span class="mk-upload__item-name" @click="previewFile(file)">{{
+            file.name
+          }}</span>
           <span class="mk-upload__item-size">{{ formatSize(file.size) }}</span>
         </div>
         <div class="mk-upload__item-progress">
@@ -256,7 +270,13 @@ watch(fileList, (list, prevList) => {
             :style="{ width: `${file.progress ?? 0}%` }"
           />
         </div>
-        <button type="button" class="mk-upload__item-remove" @click="removeFile(file)">✕</button>
+        <button
+          type="button"
+          class="mk-upload__item-remove"
+          @click="removeFile(file)"
+        >
+          ✕
+        </button>
       </div>
     </div>
   </div>

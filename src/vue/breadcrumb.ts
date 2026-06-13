@@ -1,4 +1,12 @@
-import { defineComponent, h, ref, onMounted, onUnmounted, watch, nextTick } from 'vue'
+import {
+  defineComponent,
+  h,
+  ref,
+  onMounted,
+  onUnmounted,
+  watch,
+  nextTick,
+} from 'vue'
 import { createBreadcrumb } from '../components/breadcrumb/breadcrumb.js'
 import type { BreadcrumbOptions } from '../components/breadcrumb/breadcrumb.js'
 
@@ -26,7 +34,11 @@ export const MkBreadcrumb = defineComponent({
     }
 
     onMounted(() => nextTick(create))
-    watch(() => [props.items, props.separator], () => nextTick(create), { deep: true })
+    watch(
+      () => [props.items, props.separator],
+      () => nextTick(create),
+      { deep: true }
+    )
     onUnmounted(() => instance?.destroy())
 
     return () => h('div', { ref: container })

@@ -5,10 +5,18 @@ export const MkRow = defineComponent({
   props: {
     gutter: { type: Number, default: undefined },
     justify: {
-      type: String as () => 'start' | 'center' | 'end' | 'space-between' | 'space-around',
+      type: String as () =>
+        | 'start'
+        | 'center'
+        | 'end'
+        | 'space-between'
+        | 'space-around',
       default: undefined,
     },
-    align: { type: String as () => 'top' | 'middle' | 'bottom', default: undefined },
+    align: {
+      type: String as () => 'top' | 'middle' | 'bottom',
+      default: undefined,
+    },
     wrap: { type: Boolean, default: true },
   },
   setup(props, { slots }) {
@@ -24,7 +32,9 @@ export const MkRow = defineComponent({
               'mk-row--no-wrap': props.wrap === false,
             },
           ],
-          style: props.gutter ? { margin: `0 -${props.gutter / 2}px` } : undefined,
+          style: props.gutter
+            ? { margin: `0 -${props.gutter / 2}px` }
+            : undefined,
         },
         slots.default?.()
       )

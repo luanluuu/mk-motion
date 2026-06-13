@@ -21,7 +21,9 @@ describe('CountUp', () => {
   })
 
   it('throws for missing element', () => {
-    expect(() => new CountUp('#nonexistent')).toThrow('CountUp: element not found')
+    expect(() => new CountUp('#nonexistent')).toThrow(
+      'CountUp: element not found'
+    )
   })
 
   it('renders plain number without formatting', async () => {
@@ -94,7 +96,9 @@ describe('CountUp', () => {
   it('applyEasing: linear returns t unchanged', () => {
     const cu = new CountUp(element)
     // Use reflect to access private method for testing
-    const applyEasing = (cu as any).applyEasing.bind(cu)
+    const applyEasing = (
+      cu as unknown as { applyEasing: (t: number, easing: string) => number }
+    ).applyEasing.bind(cu)
     expect(applyEasing(0, 'linear')).toBe(0)
     expect(applyEasing(0.5, 'linear')).toBe(0.5)
     expect(applyEasing(1, 'linear')).toBe(1)
@@ -102,7 +106,9 @@ describe('CountUp', () => {
 
   it('applyEasing: easeOut decelerates', () => {
     const cu = new CountUp(element)
-    const applyEasing = (cu as any).applyEasing.bind(cu)
+    const applyEasing = (
+      cu as unknown as { applyEasing: (t: number, easing: string) => number }
+    ).applyEasing.bind(cu)
     const v = applyEasing(0.5, 'easeOut')
     // easeOut should be > 0.5 (ahead of linear at midpoint)
     expect(v).toBeGreaterThan(0.5)
@@ -111,7 +117,9 @@ describe('CountUp', () => {
 
   it('applyEasing: easeInOut accelerates then decelerates', () => {
     const cu = new CountUp(element)
-    const applyEasing = (cu as any).applyEasing.bind(cu)
+    const applyEasing = (
+      cu as unknown as { applyEasing: (t: number, easing: string) => number }
+    ).applyEasing.bind(cu)
     expect(applyEasing(0, 'easeInOut')).toBe(0)
     expect(applyEasing(1, 'easeInOut')).toBeCloseTo(1)
     // At t=0.5 should be 0.5

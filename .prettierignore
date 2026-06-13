@@ -1,0 +1,7 @@
+dist
+node_modules
+coverage
+dist-docs
+demo-vue/dist
+demo-vue/node_modules
+package-lock.json

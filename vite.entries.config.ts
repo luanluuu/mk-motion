@@ -18,6 +18,8 @@ export default defineConfig({
         vite: resolve(__dirname, 'src/vite/plugin.ts'),
         resolver: resolve(__dirname, 'src/vite/resolver.ts'),
         nuxt: resolve(__dirname, 'src/nuxt/module.ts'),
+        stability: resolve(__dirname, 'src/stability.ts'),
+        legacy: resolve(__dirname, 'src/legacy.ts'),
       },
       formats: ['es'],
       fileName: (_format, entryName) => `${entryName}.js`,
@@ -45,6 +47,7 @@ export default defineConfig({
       include: [
         'src/types.d.ts',
         'src/motion-entry.ts',
+        'src/legacy.ts',
         'src/vue/index.ts',
         'src/vue/composables/**/*.ts',
         'src/vite/**/*.ts',

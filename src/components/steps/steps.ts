@@ -19,8 +19,16 @@ export class MkSteps {
   private options: StepsOptions
 
   constructor(container: HTMLElement | string, options: StepsOptions) {
-    const parent = typeof container === 'string' ? document.querySelector(container)! : container
-    this.options = { direction: 'horizontal', current: 0, size: 'default', ...options }
+    const parent =
+      typeof container === 'string'
+        ? document.querySelector(container)!
+        : container
+    this.options = {
+      direction: 'horizontal',
+      current: 0,
+      size: 'default',
+      ...options,
+    }
 
     this.el = document.createElement('div')
     this.el.className = `mk-steps mk-steps--${this.options.direction}`
@@ -38,7 +46,9 @@ export class MkSteps {
       const step = document.createElement('div')
       step.className = 'mk-step'
 
-      const status = item.status ?? (index < current ? 'finish' : index === current ? 'process' : 'wait')
+      const status =
+        item.status ??
+        (index < current ? 'finish' : index === current ? 'process' : 'wait')
       step.classList.add(`is-${status}`)
       if (index === items.length - 1) step.classList.add('is-last')
 
@@ -97,6 +107,9 @@ export class MkSteps {
   }
 }
 
-export function createSteps(container: HTMLElement | string, options: StepsOptions): MkSteps {
+export function createSteps(
+  container: HTMLElement | string,
+  options: StepsOptions
+): MkSteps {
   return new MkSteps(container, options)
 }

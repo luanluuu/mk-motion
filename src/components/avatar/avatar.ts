@@ -81,7 +81,9 @@ export class MkAvatar {
     const existingFallback = this.el.querySelector('.mk-avatar__fallback')
     if (existingFallback) existingFallback.remove()
 
-    let img = this.el.querySelector('.mk-avatar__image') as HTMLImageElement | null
+    let img = this.el.querySelector(
+      '.mk-avatar__image'
+    ) as HTMLImageElement | null
     if (!img) {
       img = document.createElement('img')
       img.className = 'mk-avatar__image'

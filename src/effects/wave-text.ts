@@ -1,8 +1,8 @@
 export interface WaveTextOptions {
-  amplitude?: number       // 波浪幅度像素
-  frequency?: number       // 波浪频率
-  speed?: number           // 波动速度
-  stagger?: number         // 字符间隔
+  amplitude?: number // 波浪幅度像素
+  frequency?: number // 波浪频率
+  speed?: number // 波动速度
+  stagger?: number // 字符间隔
 }
 
 const DEFAULT_WAVE: Required<WaveTextOptions> = {
@@ -20,9 +20,7 @@ export class WaveText {
 
   constructor(element: HTMLElement | string) {
     this.element =
-      typeof element === 'string'
-        ? document.querySelector(element)!
-        : element
+      typeof element === 'string' ? document.querySelector(element)! : element
 
     if (!this.element) {
       throw new Error('WaveText: element not found')

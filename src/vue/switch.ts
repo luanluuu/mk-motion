@@ -1,4 +1,12 @@
-import { defineComponent, h, ref, onMounted, onUnmounted, watch, nextTick } from 'vue'
+import {
+  defineComponent,
+  h,
+  ref,
+  onMounted,
+  onUnmounted,
+  watch,
+  nextTick,
+} from 'vue'
 import { createSwitch } from '../components/switch/switch.js'
 import type { SwitchOptions } from '../components/switch/switch.js'
 
@@ -31,7 +39,16 @@ export const MkSwitch = defineComponent({
     }
 
     onMounted(() => nextTick(create))
-    watch(() => [props.modelValue, props.disabled, props.activeText, props.inactiveText], () => nextTick(create), { deep: true })
+    watch(
+      () => [
+        props.modelValue,
+        props.disabled,
+        props.activeText,
+        props.inactiveText,
+      ],
+      () => nextTick(create),
+      { deep: true }
+    )
     onUnmounted(() => instance?.destroy())
 
     return () => h('div', { ref: container, style: 'display:inline-block' })

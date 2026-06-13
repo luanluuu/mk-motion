@@ -5,7 +5,15 @@ export type MicroAnimation = 'lift' | 'glow' | 'scale' | 'slideUp' | 'none'
 
 export interface MotionOptions {
   /** Mount entrance animation */
-  enter?: 'fadeIn' | 'slideInUp' | 'slideInDown' | 'slideInLeft' | 'slideInRight' | 'zoomIn' | 'bounceIn' | 'none'
+  enter?:
+    | 'fadeIn'
+    | 'slideInUp'
+    | 'slideInDown'
+    | 'slideInLeft'
+    | 'slideInRight'
+    | 'zoomIn'
+    | 'bounceIn'
+    | 'none'
   /** Unmount exit animation */
   exit?: 'fadeOut' | 'slideOutUp' | 'slideOutDown' | 'zoomOut' | 'none'
   /** Hover micro-interaction */
@@ -88,7 +96,13 @@ export function withMotion(el: HTMLElement, options: MotionOptions = {}) {
   }
   function onMouseUp() {
     if (opts.active === 'press') {
-      style.transform = hoverActive ? (opts.hover === 'lift' ? 'translateY(-2px)' : opts.hover === 'scale' ? 'scale(1.02)' : '') : ''
+      style.transform = hoverActive
+        ? opts.hover === 'lift'
+          ? 'translateY(-2px)'
+          : opts.hover === 'scale'
+            ? 'scale(1.02)'
+            : ''
+        : ''
     }
   }
 
@@ -96,7 +110,8 @@ export function withMotion(el: HTMLElement, options: MotionOptions = {}) {
   function onFocus() {
     if (opts.focus === 'ring') {
       style.outline = 'none'
-      style.boxShadow = '0 0 0 2px var(--mk-primary-muted), 0 0 0 4px var(--mk-primary)'
+      style.boxShadow =
+        '0 0 0 2px var(--mk-primary-muted), 0 0 0 4px var(--mk-primary)'
       style.transition = `box-shadow ${opts.duration}ms ${opts.easing}`
     }
   }
@@ -118,7 +133,10 @@ export function withMotion(el: HTMLElement, options: MotionOptions = {}) {
     /** Play entrance animation */
     async playEnter() {
       if (!animator || opts.enter === 'none') return
-      await animator.animate(opts.enter, { duration: opts.duration, delay: opts.delay })
+      await animator.animate(opts.enter, {
+        duration: opts.duration,
+        delay: opts.delay,
+      })
     },
 
     /** Play exit animation. Returns a Promise that resolves when animation completes. */
@@ -159,19 +177,21 @@ export function staggerEnter(
   _animation?: AnimationName,
   options?: { duration?: number; stagger?: number; delay?: number }
 ) {
-  const children = container.querySelectorAll(selector)
+  const children = container.querySelectorAll<HTMLElement>(selector)
   if (children.length === 0) return
 
   const delay = options?.delay ?? 100
   const stagger = options?.stagger ?? 80
   const duration = options?.duration ?? 400
 
-  children.forEach((el, i) => {
-    const htmlEl = el as HTMLElement
+  children.forEach((htmlEl, i) => {
     htmlEl.style.opacity = '0'
-    setTimeout(() => {
-      htmlEl.style.transition = `opacity ${duration}ms ease`
-      htmlEl.style.opacity = '1'
-    }, delay + i * stagger)
+    setTimeout(
+      () => {
+        htmlEl.style.transition = `opacity ${duration}ms ease`
+        htmlEl.style.opacity = '1'
+      },
+      delay + i * stagger
+    )
   })
 }

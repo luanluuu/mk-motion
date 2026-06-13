@@ -52,9 +52,16 @@ export {
 } from '../components-vue/index.js'
 
 // Composables
-export { useMkTheme, useMkMotion, useMkLoading, useMkMessage } from './composables/index.js'
+export {
+  useMkTheme,
+  useMkMotion,
+  useMkLoading,
+  useMkMessage,
+} from './composables/index.js'
 
-const componentEntries = Object.entries(components).filter(([name]) => name.startsWith('Mk'))
+const componentEntries = Object.entries(components).filter(([name]) =>
+  name.startsWith('Mk')
+)
 
 export const MkMotionVue: Plugin = {
   install(app: App) {

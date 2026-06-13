@@ -7,7 +7,9 @@ const props = defineProps<{
 
 const asideStyle = computed(() => {
   if (props.width !== undefined) {
-    return { width: typeof props.width === 'number' ? `${props.width}px` : props.width }
+    return {
+      width: typeof props.width === 'number' ? `${props.width}px` : props.width,
+    }
   }
   return undefined
 })

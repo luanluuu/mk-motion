@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, h, watch } from 'vue'
+import type { VNode } from 'vue'
 
 export interface TreeNode {
   id: string
@@ -43,7 +44,10 @@ const emit = defineEmits<{
 
 const nodeMap = new Map<string, InternalTreeNode>()
 
-function processNodes(data: TreeNode[], parent?: InternalTreeNode): InternalTreeNode[] {
+function processNodes(
+  data: TreeNode[],
+  parent?: InternalTreeNode
+): InternalTreeNode[] {
   return data.map((n) => {
     const node: InternalTreeNode = {
       ...n,
@@ -62,10 +66,14 @@ function processNodes(data: TreeNode[], parent?: InternalTreeNode): InternalTree
 
 const nodes = ref<InternalTreeNode[]>(processNodes(props.data))
 
-watch(() => props.data, (next) => {
-  nodeMap.clear()
-  nodes.value = processNodes(next)
-}, { deep: true })
+watch(
+  () => props.data,
+  (next) => {
+    nodeMap.clear()
+    nodes.value = processNodes(next)
+  },
+  { deep: true }
+)
 
 const filterText = computed(() => props.filter?.trim().toLowerCase() ?? '')
 
@@ -100,7 +108,8 @@ function updateParentsCheck(parent?: InternalTreeNode) {
   if (!parent) return
   const children = parent.children
   const allChecked = children?.every((c) => c.checked) ?? false
-  const someChecked = children?.some((c) => c.checked || c.indeterminate) ?? false
+  const someChecked =
+    children?.some((c) => c.checked || c.indeterminate) ?? false
   if (allChecked) {
     parent.checked = true
     parent.indeterminate = false
@@ -158,69 +167,108 @@ function visibleNode(node: InternalTreeNode): boolean {
   return false
 }
 
-function renderLabel(node: InternalTreeNode): any {
+function renderLabel(node: InternalTreeNode): VNode | string {
   if (!filterText.value || !matchesFilter(node)) return node.label
   const safe = filterText.value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
   const regex = new RegExp(`(${safe})`, 'gi')
   const parts = node.label.split(regex)
-  return h('span', {}, parts.map((part) =>
-    part.toLowerCase() === filterText.value
-      ? h('mark', { style: { background: 'transparent', color: 'var(--mk-primary)', fontWeight: 600 } }, part)
-      : part
-  ))
+  return h(
+    'span',
+    {},
+    parts.map((part) =>
+      part.toLowerCase() === filterText.value
+        ? h(
+            'mark',
+            {
+              style: {
+                background: 'transparent',
+                color: 'var(--mk-primary)',
+                fontWeight: 600,
+              },
+            },
+            part
+          )
+        : part
+    )
+  )
 }
 
-function renderTreeNode(node: InternalTreeNode, level: number): any {
+function renderTreeNode(node: InternalTreeNode, level: number): VNode | null {
   if (!visibleNode(node)) return null
 
   const hasChildren = !!node.children && node.children.length > 0
   const expandable = !node.isLeaf && (hasChildren || props.lazy)
 
-  return h('div', {
-    class: [
-      'mk-tree-node',
-      { 'is-disabled': node.disabled, 'is-leaf': !expandable },
-    ],
-  }, [
-    h('div', {
-      class: 'mk-tree-node__content',
-      style: { paddingLeft: `${level * 18}px` },
-    }, [
-      h('span', {
-        class: ['mk-tree-node__arrow', { 'is-expanded': node.expanded }],
-        onClick: (e: Event) => {
-          e.stopPropagation()
-          if (expandable) toggleExpand(node)
+  return h(
+    'div',
+    {
+      class: [
+        'mk-tree-node',
+        { 'is-disabled': node.disabled, 'is-leaf': !expandable },
+      ],
+    },
+    [
+      h(
+        'div',
+        {
+          class: 'mk-tree-node__content',
+          style: { paddingLeft: `${level * 18}px` },
         },
-      }, expandable ? '▶' : ''),
-      props.showCheckbox
-        ? h('span', {
-            class: [
-              'mk-tree-node__checkbox',
-              { 'is-checked': node.checked, 'is-indeterminate': node.indeterminate },
-            ],
-            onClick: (e: Event) => {
-              e.stopPropagation()
-              toggleCheck(node)
+        [
+          h(
+            'span',
+            {
+              class: ['mk-tree-node__arrow', { 'is-expanded': node.expanded }],
+              onClick: (e: Event) => {
+                e.stopPropagation()
+                if (expandable) toggleExpand(node)
+              },
             },
-          })
+            expandable ? '▶' : ''
+          ),
+          props.showCheckbox
+            ? h('span', {
+                class: [
+                  'mk-tree-node__checkbox',
+                  {
+                    'is-checked': node.checked,
+                    'is-indeterminate': node.indeterminate,
+                  },
+                ],
+                onClick: (e: Event) => {
+                  e.stopPropagation()
+                  toggleCheck(node)
+                },
+              })
+            : null,
+          h(
+            'span',
+            {
+              class: 'mk-tree-node__label',
+              onClick: () => handleSelect(node),
+            },
+            renderLabel(node)
+          ),
+          node.loading ? h('span', { class: 'mk-tree-node__loading' }) : null,
+        ]
+      ),
+      node.expanded && hasChildren
+        ? h(
+            'div',
+            { class: 'mk-tree-node__children' },
+            node.children!.map((child) => renderTreeNode(child, level + 1))
+          )
         : null,
-      h('span', {
-        class: 'mk-tree-node__label',
-        onClick: () => handleSelect(node),
-      }, renderLabel(node)),
-      node.loading ? h('span', { class: 'mk-tree-node__loading' }) : null,
-    ]),
-    node.expanded && hasChildren
-      ? h('div', { class: 'mk-tree-node__children' },
-          node.children!.map((child) => renderTreeNode(child, level + 1))
-        )
-      : null,
-  ])
+    ]
+  )
 }
 
 const renderRoot = computed(() =>
-  h('div', { class: 'mk-tree' }, nodes.value.map((n) => renderTreeNode(n, 0)))
+  h(
+    'div',
+    { class: 'mk-tree' },
+    nodes.value.map((n) => renderTreeNode(n, 0))
+  )
 )
 </script>
 

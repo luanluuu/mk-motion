@@ -1,14 +1,17 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 
-const props = withDefaults(defineProps<{
-  modelValue?: boolean
-  disabled?: boolean
-  activeText?: string
-  inactiveText?: string
-}>(), {
-  modelValue: false,
-})
+const props = withDefaults(
+  defineProps<{
+    modelValue?: boolean
+    disabled?: boolean
+    activeText?: string
+    inactiveText?: string
+  }>(),
+  {
+    modelValue: false,
+  }
+)
 
 const emit = defineEmits<{
   'update:modelValue': [value: boolean]
@@ -54,13 +57,15 @@ function onKeydown(e: KeyboardEvent) {
       v-if="inactiveText"
       class="mk-switch__label"
       :class="{ 'mk-switch__label--active': !modelValue }"
-    >{{ inactiveText }}</span>
+      >{{ inactiveText }}</span
+    >
     <span class="mk-switch__core" />
     <span
       v-if="activeText"
       class="mk-switch__label"
       :class="{ 'mk-switch__label--active': modelValue }"
-    >{{ activeText }}</span>
+      >{{ activeText }}</span
+    >
   </label>
 </template>
 

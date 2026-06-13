@@ -1,4 +1,12 @@
-import { defineComponent, h, ref, onMounted, onUnmounted, watch, nextTick } from 'vue'
+import {
+  defineComponent,
+  h,
+  ref,
+  onMounted,
+  onUnmounted,
+  watch,
+  nextTick,
+} from 'vue'
 import { createUpload } from '../components/upload/upload.js'
 import type { UploadOptions } from '../components/upload/upload.js'
 
@@ -31,7 +39,10 @@ export const MkUpload = defineComponent({
 
     onMounted(() => nextTick(create))
 
-    watch(() => [props.accept, props.multiple, props.drag, props.maxSize], () => nextTick(create))
+    watch(
+      () => [props.accept, props.multiple, props.drag, props.maxSize],
+      () => nextTick(create)
+    )
 
     onUnmounted(() => instance?.destroy())
 

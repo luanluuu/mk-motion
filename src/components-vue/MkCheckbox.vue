@@ -13,10 +13,13 @@ const props = withDefaults(defineProps<CheckboxProps>(), {
   indeterminate: false,
 })
 
-const group = inject<{
-  modelValue: import('vue').Ref<(string | number)[]>
-  change: (value: string | number, checked: boolean) => void
-}>('mk-checkbox-group', undefined as any)
+const group = inject<
+  | {
+      modelValue: import('vue').Ref<(string | number)[]>
+      change: (value: string | number, checked: boolean) => void
+    }
+  | undefined
+>('mk-checkbox-group')
 
 const inGroup = !!group
 

@@ -1,9 +1,9 @@
 import type { AnimationName } from '../core/utils.ts'
 
 export interface ScrollTriggerOptions {
-  threshold?: number        // 0~1，元素进入视口多少比例时触发
-  rootMargin?: string       // 类似 CSS margin，扩大/缩小视口判定范围
-  once?: boolean            // 是否只触发一次
+  threshold?: number // 0~1，元素进入视口多少比例时触发
+  rootMargin?: string // 类似 CSS margin，扩大/缩小视口判定范围
+  once?: boolean // 是否只触发一次
   duration?: number
   easing?: string
 }
@@ -18,7 +18,10 @@ const DEFAULT_SCROLL_OPTS: Required<ScrollTriggerOptions> = {
 
 export class ScrollTrigger {
   private observer: IntersectionObserver | null = null
-  private elements = new Map<Element, { name: AnimationName; opts: ScrollTriggerOptions }>()
+  private elements = new Map<
+    Element,
+    { name: AnimationName; opts: ScrollTriggerOptions }
+  >()
 
   watch(
     selector: string | Element | Element[],

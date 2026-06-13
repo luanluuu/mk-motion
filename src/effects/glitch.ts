@@ -1,8 +1,8 @@
 export interface GlitchOptions {
-  duration?: number        // 单次故障时长
-  intensity?: number       // 1~10 故障强度
-  color1?: string          // 故障色 1
-  color2?: string          // 故障色 2
+  duration?: number // 单次故障时长
+  intensity?: number // 1~10 故障强度
+  color1?: string // 故障色 1
+  color2?: string // 故障色 2
 }
 
 const DEFAULT_GLITCH: Required<GlitchOptions> = {

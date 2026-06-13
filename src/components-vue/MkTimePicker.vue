@@ -32,14 +32,13 @@ function parseTime(value: string): { h: number; m: number; s: number } {
 }
 
 function formatTime(h: number, m: number, s: number, fmt: string): string {
-  return fmt
-    .replace('HH', pad(h))
-    .replace('mm', pad(m))
-    .replace('ss', pad(s))
+  return fmt.replace('HH', pad(h)).replace('mm', pad(m)).replace('ss', pad(s))
 }
 
 const innerValue = computed(() => props.modelValue || '')
-const parsed = computed(() => (innerValue.value ? parseTime(innerValue.value) : { h: 0, m: 0, s: 0 }))
+const parsed = computed(() =>
+  innerValue.value ? parseTime(innerValue.value) : { h: 0, m: 0, s: 0 }
+)
 
 const isOpen = ref(false)
 const pickerRef = ref<HTMLDivElement | null>(null)
@@ -97,7 +96,8 @@ function onClickOutside(e: MouseEvent) {
 }
 
 watch(isOpen, (openValue) => {
-  if (openValue) document.addEventListener('click', onClickOutside, { capture: true })
+  if (openValue)
+    document.addEventListener('click', onClickOutside, { capture: true })
   else document.removeEventListener('click', onClickOutside, { capture: true })
 })
 
@@ -111,7 +111,11 @@ onMounted(() => {
 </script>
 
 <template>
-  <div ref="pickerRef" class="mk-timepicker" :class="{ 'is-disabled': disabled }">
+  <div
+    ref="pickerRef"
+    class="mk-timepicker"
+    :class="{ 'is-disabled': disabled }"
+  >
     <input
       type="text"
       class="mk-timepicker__input"
@@ -290,7 +294,9 @@ onMounted(() => {
 
 .mk-timepicker-fade-enter-active,
 .mk-timepicker-fade-leave-active {
-  transition: opacity 0.15s ease, transform 0.15s ease;
+  transition:
+    opacity 0.15s ease,
+    transform 0.15s ease;
 }
 
 .mk-timepicker-fade-enter-from,

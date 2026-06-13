@@ -1,27 +1,48 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
-import { calcDragIndex, DraggableList, createDraggableList } from '../../interactive/draggable-list'
+import {
+  calcDragIndex,
+  DraggableList,
+  createDraggableList,
+} from '../../interactive/draggable-list'
 
 // ============================================================================
 // calcDragIndex — 纯逻辑，不依赖 DraggableList 内部状态
 // ============================================================================
 
 describe('calcDragIndex', () => {
-  function mockRects(coords: Array<{ top: number; height: number; left: number; width: number }>) {
-    return vi.spyOn(Element.prototype, 'getBoundingClientRect')
+  function mockRects(
+    coords: Array<{ top: number; height: number; left: number; width: number }>
+  ) {
+    return vi
+      .spyOn(Element.prototype, 'getBoundingClientRect')
       .mockImplementation(function (this: Element) {
         const items = Array.from(this.parentElement?.children || [])
         const idx = items.indexOf(this)
         if (idx >= 0 && idx < coords.length) {
           const c = coords[idx]
           return {
-            top: c.top, left: c.left,
-            bottom: c.top + c.height, right: c.left + c.width,
-            width: c.width, height: c.height,
-            x: c.left, y: c.top,
+            top: c.top,
+            left: c.left,
+            bottom: c.top + c.height,
+            right: c.left + c.width,
+            width: c.width,
+            height: c.height,
+            x: c.left,
+            y: c.top,
             toJSON: () => ({}),
           }
         }
-        return { top: 0, left: 0, bottom: 0, right: 0, width: 0, height: 0, x: 0, y: 0, toJSON: () => ({}) }
+        return {
+          top: 0,
+          left: 0,
+          bottom: 0,
+          right: 0,
+          width: 0,
+          height: 0,
+          x: 0,
+          y: 0,
+          toJSON: () => ({}),
+        }
       })
   }
 
@@ -34,8 +55,8 @@ describe('calcDragIndex', () => {
     document.body.appendChild(container)
 
     mockRects([
-      { top: 0, height: 50, left: 0, width: 100 },   // mid=25
-      { top: 50, height: 50, left: 0, width: 100 },  // mid=75
+      { top: 0, height: 50, left: 0, width: 100 }, // mid=25
+      { top: 50, height: 50, left: 0, width: 100 }, // mid=75
     ])
 
     // Pointer at y=10 — above mid of first item
@@ -57,8 +78,8 @@ describe('calcDragIndex', () => {
     container.appendChild(c)
 
     mockRects([
-      { top: 0, height: 50, left: 0, width: 100 },   // mid=25
-      { top: 50, height: 50, left: 0, width: 100 },  // mid=75
+      { top: 0, height: 50, left: 0, width: 100 }, // mid=25
+      { top: 50, height: 50, left: 0, width: 100 }, // mid=75
       { top: 100, height: 50, left: 0, width: 100 }, // mid=125
     ])
 
@@ -99,14 +120,14 @@ describe('calcDragIndex', () => {
     container.appendChild(c)
 
     mockRects([
-      { top: 0, height: 50, left: 0, width: 100 },   // mid=50
+      { top: 0, height: 50, left: 0, width: 100 }, // mid=50
       { top: 0, height: 50, left: 100, width: 100 }, // mid=150
       { top: 0, height: 50, left: 200, width: 100 }, // mid=250
     ])
 
-    expect(calcDragIndex([a, b, c], 40, 'horizontal')).toBe(0)   // above item 0 midpoint (mid=50)
-    expect(calcDragIndex([a, b, c], 120, 'horizontal')).toBe(1)  // between mid of item 0 and 1
-    expect(calcDragIndex([a, b, c], 300, 'horizontal')).toBe(3)  // below all
+    expect(calcDragIndex([a, b, c], 40, 'horizontal')).toBe(0) // above item 0 midpoint (mid=50)
+    expect(calcDragIndex([a, b, c], 120, 'horizontal')).toBe(1) // between mid of item 0 and 1
+    expect(calcDragIndex([a, b, c], 300, 'horizontal')).toBe(3) // below all
 
     vi.restoreAllMocks()
   })
@@ -124,8 +145,8 @@ describe('calcDragIndex', () => {
       { top: 0, height: 50, left: 0, width: 100 }, // mid=25
     ])
 
-    expect(calcDragIndex([a], 10, 'vertical')).toBe(0)  // above mid
-    expect(calcDragIndex([a], 30, 'vertical')).toBe(1)  // below mid
+    expect(calcDragIndex([a], 10, 'vertical')).toBe(0) // above mid
+    expect(calcDragIndex([a], 30, 'vertical')).toBe(1) // below mid
 
     vi.restoreAllMocks()
   })
@@ -162,7 +183,9 @@ describe('DraggableList', () => {
   })
 
   it('throws for missing container', () => {
-    expect(() => new DraggableList('#nonexistent')).toThrow('DraggableList: container not found')
+    expect(() => new DraggableList('#nonexistent')).toThrow(
+      'DraggableList: container not found'
+    )
   })
 
   it('accepts options', () => {
@@ -208,7 +231,10 @@ describe('DraggableList', () => {
 
     // Dispatch mousedown on the disabled item
     const event = new MouseEvent('mousedown', { bubbles: true, button: 0 })
-    Object.defineProperty(event, 'target', { value: disabledEl, writable: false })
+    Object.defineProperty(event, 'target', {
+      value: disabledEl,
+      writable: false,
+    })
 
     // Since findItem returns null for data-drag-disabled, no drag should start
     // The test verifies no error occurs
@@ -229,7 +255,10 @@ describe('DraggableList', () => {
     const dl = new DraggableList(container)
 
     const event = new MouseEvent('mousedown', { bubbles: true, button: 0 })
-    Object.defineProperty(event, 'target', { value: nestedSpan, writable: false })
+    Object.defineProperty(event, 'target', {
+      value: nestedSpan,
+      writable: false,
+    })
 
     expect(() => container.dispatchEvent(event)).not.toThrow()
     dl.destroy()

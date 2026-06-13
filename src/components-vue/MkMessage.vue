@@ -59,11 +59,7 @@ onUnmounted(() => {
 
 <template>
   <Transition name="mk-message">
-    <div
-      v-show="visible"
-      class="mk-message"
-      :class="`mk-message--${type}`"
-    >
+    <div v-show="visible" class="mk-message" :class="`mk-message--${type}`">
       <span class="mk-message__icon">{{ ICONS[type] }}</span>
       <span class="mk-message__content">{{ message }}</span>
       <span
@@ -74,7 +70,8 @@ onUnmounted(() => {
         aria-label="Close"
         @click="doClose"
         @keydown.enter.prevent="doClose"
-      >✕</span>
+        >✕</span
+      >
     </div>
   </Transition>
 </template>
@@ -135,8 +132,16 @@ onUnmounted(() => {
   background: var(--mk-surface-hover);
 }
 
-.mk-message--success .mk-message__icon { color: var(--mk-success); }
-.mk-message--warning .mk-message__icon { color: var(--mk-warning); }
-.mk-message--error   .mk-message__icon { color: var(--mk-danger); }
-.mk-message--info    .mk-message__icon { color: var(--mk-primary); }
+.mk-message--success .mk-message__icon {
+  color: var(--mk-success);
+}
+.mk-message--warning .mk-message__icon {
+  color: var(--mk-warning);
+}
+.mk-message--error .mk-message__icon {
+  color: var(--mk-danger);
+}
+.mk-message--info .mk-message__icon {
+  color: var(--mk-primary);
+}
 </style>

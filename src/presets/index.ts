@@ -23,13 +23,19 @@ export function slideInDown(el: HTMLElement | string, opts?: AnimationOptions) {
 export function slideInLeft(el: HTMLElement | string, opts?: AnimationOptions) {
   return $(el).animate('slideInLeft', opts)
 }
-export function slideInRight(el: HTMLElement | string, opts?: AnimationOptions) {
+export function slideInRight(
+  el: HTMLElement | string,
+  opts?: AnimationOptions
+) {
   return $(el).animate('slideInRight', opts)
 }
 export function slideOutUp(el: HTMLElement | string, opts?: AnimationOptions) {
   return $(el).animate('slideOutUp', opts)
 }
-export function slideOutDown(el: HTMLElement | string, opts?: AnimationOptions) {
+export function slideOutDown(
+  el: HTMLElement | string,
+  opts?: AnimationOptions
+) {
   return $(el).animate('slideOutDown', opts)
 }
 

@@ -27,16 +27,20 @@ const model = defineModel<boolean>({ default: false })
 const overlayRef = ref<HTMLDivElement | null>(null)
 const visible = ref(false)
 
-watch(model, async (val) => {
-  if (val) {
-    visible.value = true
-    await nextTick()
-    emit('open')
-  } else {
-    visible.value = false
-    emit('close')
-  }
-}, { immediate: true })
+watch(
+  model,
+  async (val) => {
+    if (val) {
+      visible.value = true
+      await nextTick()
+      emit('open')
+    } else {
+      visible.value = false
+      emit('close')
+    }
+  },
+  { immediate: true }
+)
 
 const doClose = () => {
   const finish = () => {
@@ -95,7 +99,8 @@ const onConfirm = () => {
               @click="doClose"
               @keydown.enter.prevent="doClose"
               @keydown.space.prevent="doClose"
-            >✕</span>
+              >✕</span
+            >
           </div>
           <div class="mk-dialog__body">
             <slot />
@@ -103,7 +108,9 @@ const onConfirm = () => {
           <div class="mk-dialog__footer">
             <slot name="footer">
               <button class="mk-button" @click="doClose">取消</button>
-              <button class="mk-button mk-button--primary" @click="onConfirm">确定</button>
+              <button class="mk-button mk-button--primary" @click="onConfirm">
+                确定
+              </button>
             </slot>
           </div>
         </div>
@@ -194,12 +201,14 @@ const onConfirm = () => {
 }
 
 .mk-dialog-fade-enter-active .mk-dialog {
-  transition: transform var(--mk-duration-slow) var(--mk-ease-spring),
-              opacity var(--mk-duration-normal) var(--mk-ease-out);
+  transition:
+    transform var(--mk-duration-slow) var(--mk-ease-spring),
+    opacity var(--mk-duration-normal) var(--mk-ease-out);
 }
 .mk-dialog-fade-leave-active .mk-dialog {
-  transition: transform var(--mk-duration-fast) var(--mk-ease-in),
-              opacity var(--mk-duration-fast) var(--mk-ease-in);
+  transition:
+    transform var(--mk-duration-fast) var(--mk-ease-in),
+    opacity var(--mk-duration-fast) var(--mk-ease-in);
 }
 .mk-dialog-fade-enter-from .mk-dialog,
 .mk-dialog-fade-leave-to .mk-dialog {

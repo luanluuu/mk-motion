@@ -151,7 +151,9 @@ describe('SpringValue', () => {
     const lightState = sLight.tick(0.016)
     const heavyState = sHeavy.tick(0.016)
     // Heavier mass → lower acceleration → smaller displacement
-    expect(Math.abs(heavyState.current)).toBeLessThanOrEqual(Math.abs(lightState.current) + 0.001)
+    expect(Math.abs(heavyState.current)).toBeLessThanOrEqual(
+      Math.abs(lightState.current) + 0.001
+    )
   })
 })
 

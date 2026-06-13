@@ -1,7 +1,7 @@
 export interface TypewriterOptions {
-  speed?: number        // 每个字间隔毫秒
-  cursor?: boolean      // 是否显示闪烁光标
-  cursorChar?: string   // 光标字符
+  speed?: number // 每个字间隔毫秒
+  cursor?: boolean // 是否显示闪烁光标
+  cursorChar?: string // 光标字符
   onComplete?: () => void
 }
 
@@ -19,9 +19,7 @@ export class Typewriter {
 
   constructor(element: HTMLElement | string) {
     this.element =
-      typeof element === 'string'
-        ? document.querySelector(element)!
-        : element
+      typeof element === 'string' ? document.querySelector(element)! : element
 
     if (!this.element) {
       throw new Error('Typewriter: element not found')
@@ -88,7 +86,9 @@ export class Typewriter {
         this.element.style.borderRightColor = 'transparent'
         return
       }
-      this.element.style.borderRightColor = visible ? 'currentColor' : 'transparent'
+      this.element.style.borderRightColor = visible
+        ? 'currentColor'
+        : 'transparent'
       visible = !visible
       setTimeout(blink, 530)
     }

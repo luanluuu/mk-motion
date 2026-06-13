@@ -10,7 +10,9 @@
     <div class="example-body">
       <div class="example-hint">
         <MkTag type="info" size="small">💡 拖拽 ⠿ 手柄对表格行排序</MkTag>
-        <MkTag type="success" size="small">修改顺序后自动保存到 LocalStorage</MkTag>
+        <MkTag type="success" size="small"
+          >修改顺序后自动保存到 LocalStorage</MkTag
+        >
       </div>
 
       <div ref="tableRef" class="sortable-table">
@@ -33,7 +35,10 @@
             <MkTag size="small" type="info">{{ row.category }}</MkTag>
           </span>
           <span class="col-status">
-            <MkTag size="small" :type="row.status === '稳定' ? 'success' : 'warning'">
+            <MkTag
+              size="small"
+              :type="row.status === '稳定' ? 'success' : 'warning'"
+            >
               {{ row.status }}
             </MkTag>
           </span>
@@ -41,14 +46,19 @@
         </div>
       </div>
 
-      <MkSpace style="margin-top: 20px;">
+      <MkSpace style="margin-top: 20px">
         <MkButton size="small" plain @click="resetRows">重置顺序</MkButton>
-        <MkButton size="small" type="primary" @click="saveOrder">保存到 Storage</MkButton>
+        <MkButton size="small" type="primary" @click="saveOrder"
+          >保存到 Storage</MkButton
+        >
         <span v-if="saved" class="save-hint">✓ 已保存</span>
       </MkSpace>
 
       <div class="example-code-hint">
-        <p>核心 API：<code>createDraggableList</code> 绑定表格行，通过 <code>onDragEnd</code> 回调同步数据</p>
+        <p>
+          核心 API：<code>createDraggableList</code> 绑定表格行，通过
+          <code>onDragEnd</code> 回调同步数据
+        </p>
       </div>
     </div>
   </div>
@@ -101,7 +111,9 @@ onMounted(() => {
     placeholderClass: 'table-placeholder',
     itemSelector: '.table-row',
     onDragEnd(_item, _fromIndex, _toIndex) {
-      const children = Array.from(tableRef.value!.querySelectorAll('.table-row')) as HTMLElement[]
+      const children = Array.from(
+        tableRef.value!.querySelectorAll('.table-row')
+      ) as HTMLElement[]
       const ids = children.map((el) => Number(el.dataset.id)).filter(Boolean)
       reorderRows(ids)
     },
@@ -127,13 +139,35 @@ function resetRows() {
 </script>
 
 <style scoped>
-.example-page { max-width: 760px; margin: 0 auto; padding-bottom: 80px; }
-.example-hero { text-align: center; padding: 56px 24px 32px; }
-.example-title { font-size: 1.8rem; font-weight: 700; margin: 0 0 8px; }
-.example-desc { font-size: 0.95rem; color: var(--mk-text-secondary); margin: 0; }
+.example-page {
+  max-width: 760px;
+  margin: 0 auto;
+  padding-bottom: 80px;
+}
+.example-hero {
+  text-align: center;
+  padding: 56px 24px 32px;
+}
+.example-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 0 0 8px;
+}
+.example-desc {
+  font-size: 0.95rem;
+  color: var(--mk-text-secondary);
+  margin: 0;
+}
 
-.example-body { padding: 0 24px; }
-.example-hint { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+.example-body {
+  padding: 0 24px;
+}
+.example-hint {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
 
 .sortable-table {
   border: 1px solid var(--mk-border);
@@ -158,13 +192,26 @@ function resetRows() {
   font-size: 0.9rem;
   transition: background 0.15s;
 }
-.table-row:last-child { border-bottom: none; }
-.table-row:hover { background: var(--mk-bg-secondary); }
+.table-row:last-child {
+  border-bottom: none;
+}
+.table-row:hover {
+  background: var(--mk-bg-secondary);
+}
 
-.col-order { width: 40px; color: var(--mk-text-tertiary); }
-.col-name { flex: 1; }
-.col-category { width: 70px; }
-.col-status { width: 60px; }
+.col-order {
+  width: 40px;
+  color: var(--mk-text-tertiary);
+}
+.col-name {
+  flex: 1;
+}
+.col-category {
+  width: 70px;
+}
+.col-status {
+  width: 60px;
+}
 .col-drag {
   width: 36px;
   cursor: grab;
@@ -173,22 +220,33 @@ function resetRows() {
   text-align: center;
   user-select: none;
 }
-.col-drag:active { cursor: grabbing; }
+.col-drag:active {
+  cursor: grabbing;
+}
 
 .table-placeholder {
-  background: var(--mk-primary-muted, rgba(99,102,241,0.08)) !important;
+  background: var(--mk-primary-muted, rgba(99, 102, 241, 0.08)) !important;
   border: 2px dashed var(--mk-primary) !important;
   border-radius: 0 !important;
 }
 
-.save-hint { font-size: 0.85rem; color: var(--mk-success, #67c23a); }
+.save-hint {
+  font-size: 0.85rem;
+  color: var(--mk-success, #67c23a);
+}
 .example-code-hint {
-  margin-top: 24px; padding: 16px;
-  background: var(--mk-surface); border-radius: var(--mk-radius-lg);
-  font-size: 0.85rem; color: var(--mk-text-secondary);
+  margin-top: 24px;
+  padding: 16px;
+  background: var(--mk-surface);
+  border-radius: var(--mk-radius-lg);
+  font-size: 0.85rem;
+  color: var(--mk-text-secondary);
 }
 .example-code-hint code {
-  background: var(--mk-bg-elevated); padding: 2px 6px;
-  border-radius: 4px; font-family: ui-monospace, monospace; font-size: 0.82rem;
+  background: var(--mk-bg-elevated);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: ui-monospace, monospace;
+  font-size: 0.82rem;
 }
 </style>

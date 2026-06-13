@@ -1,5 +1,5 @@
 export interface ParallaxOptions {
-  speed?: number           // 视差速度，0.1~1
+  speed?: number // 视差速度，0.1~1
   direction?: 'vertical' | 'horizontal'
 }
 
@@ -27,7 +27,7 @@ export function parallax(
   const onScroll = () => {
     const rect = el.getBoundingClientRect()
     const windowHeight = window.innerHeight
-    const centerOffset = (rect.top + rect.height / 2 - windowHeight / 2)
+    const centerOffset = rect.top + rect.height / 2 - windowHeight / 2
     const offset = centerOffset * opts.speed
 
     if (opts.direction === 'vertical') {
@@ -50,7 +50,11 @@ export function parallax(
  * 批量给多个元素添加视差，支持不同速度
  */
 export function parallaxGroup(
-  items: Array<{ selector: string; speed?: number; direction?: 'vertical' | 'horizontal' }>
+  items: Array<{
+    selector: string
+    speed?: number
+    direction?: 'vertical' | 'horizontal'
+  }>
 ): () => void {
   const cleaners = items.map((item) =>
     parallax(item.selector, { speed: item.speed, direction: item.direction })

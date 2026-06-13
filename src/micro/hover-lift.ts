@@ -1,9 +1,9 @@
 export interface HoverLiftOptions {
-  y?: number            // 悬浮时向上移动像素
-  scale?: number        // 悬浮时放大比例
-  shadow?: string       // 悬浮时阴影
-  duration?: number     // 过渡时长毫秒
-  easing?: string       // 缓动
+  y?: number // 悬浮时向上移动像素
+  scale?: number // 悬浮时放大比例
+  shadow?: string // 悬浮时阴影
+  duration?: number // 过渡时长毫秒
+  easing?: string // 缓动
 }
 
 const DEFAULT_HOVER: Required<HoverLiftOptions> = {

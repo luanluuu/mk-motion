@@ -1,6 +1,9 @@
 import '../../styles/element-plus.css'
 import './button.css'
-import { withMotion, type MotionOptions } from '../../motion/component-motion.ts'
+import {
+  withMotion,
+  type MotionOptions,
+} from '../../motion/component-motion.ts'
 import { springHover, springPress } from '../../motion/component-spring.ts'
 import type { SpringOptions } from '../../core/spring-engine.ts'
 
@@ -76,14 +79,27 @@ export class MkButton {
 
     // Apply spring or traditional motion
     if (this.options.spring !== undefined && this.options.spring !== false) {
-      const springOpts = this.options.spring === true ? undefined : this.options.spring
-      this.springHoverCtrl = springHover(this.el, { scale: 1.03, y: -1, shadow: true, spring: springOpts })
-      this.springPressCtrl = springPress(this.el, { scale: 0.97, spring: springOpts })
+      const springOpts =
+        this.options.spring === true ? undefined : this.options.spring
+      this.springHoverCtrl = springHover(this.el, {
+        scale: 1.03,
+        y: -1,
+        shadow: true,
+        spring: springOpts,
+      })
+      this.springPressCtrl = springPress(this.el, {
+        scale: 0.97,
+        spring: springOpts,
+      })
     } else if (this.options.motion !== undefined) {
       this.motion = withMotion(this.el, this.options.motion)
     } else {
       // Default: spring hover for better feel
-      this.springHoverCtrl = springHover(this.el, { scale: 1.03, y: -1, shadow: true })
+      this.springHoverCtrl = springHover(this.el, {
+        scale: 1.03,
+        y: -1,
+        shadow: true,
+      })
       this.springPressCtrl = springPress(this.el, { scale: 0.97 })
     }
   }

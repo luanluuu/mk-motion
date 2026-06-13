@@ -1,15 +1,17 @@
 export interface CountUpOptions {
-  duration?: number       // 动画总时长毫秒
+  duration?: number // 动画总时长毫秒
   easing?: 'linear' | 'easeOut' | 'easeInOut'
-  decimals?: number       // 小数位
-  prefix?: string         // 前缀
-  suffix?: string         // 后缀
-  separator?: string      // 千分位分隔符
+  decimals?: number // 小数位
+  prefix?: string // 前缀
+  suffix?: string // 后缀
+  separator?: string // 千分位分隔符
   onUpdate?: (value: number) => void
   onComplete?: () => void
 }
 
-const DEFAULT_COUNT_OPTS: Required<Omit<CountUpOptions, 'onUpdate' | 'onComplete'>> = {
+const DEFAULT_COUNT_OPTS: Required<
+  Omit<CountUpOptions, 'onUpdate' | 'onComplete'>
+> = {
   duration: 2000,
   easing: 'easeOut',
   decimals: 0,
@@ -24,9 +26,7 @@ export class CountUp {
 
   constructor(element: HTMLElement | string) {
     this.element =
-      typeof element === 'string'
-        ? document.querySelector(element)!
-        : element
+      typeof element === 'string' ? document.querySelector(element)! : element
 
     if (!this.element) {
       throw new Error('CountUp: element not found')

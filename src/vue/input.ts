@@ -1,4 +1,12 @@
-import { defineComponent, h, ref, onMounted, onUnmounted, watch, nextTick } from 'vue'
+import {
+  defineComponent,
+  h,
+  ref,
+  onMounted,
+  onUnmounted,
+  watch,
+  nextTick,
+} from 'vue'
 import { createInput } from '../components/input/input.js'
 import type { InputOptions, InputSize } from '../components/input/input.js'
 
@@ -14,7 +22,10 @@ export const MkInput = defineComponent({
     size: { type: [String, Object] as () => InputSize, default: 'default' },
     maxlength: { type: Number, default: undefined },
     rows: { type: Number, default: undefined },
-    motion: { type: Object as () => InputOptions['motion'], default: undefined },
+    motion: {
+      type: Object as () => InputOptions['motion'],
+      default: undefined,
+    },
   },
   emits: ['update:modelValue', 'enter', 'focus', 'blur'],
   setup(props, { emit }) {
@@ -44,15 +55,21 @@ export const MkInput = defineComponent({
 
     onMounted(() => nextTick(create))
 
-    watch(() => props.modelValue, (v) => {
-      if (instance && instance.input.value !== v) {
-        instance.input.value = v
+    watch(
+      () => props.modelValue,
+      (v) => {
+        if (instance && instance.input.value !== v) {
+          instance.input.value = v
+        }
       }
-    })
+    )
 
-    watch(() => props.disabled, (v) => {
-      if (instance) instance.input.disabled = v
-    })
+    watch(
+      () => props.disabled,
+      (v) => {
+        if (instance) instance.input.disabled = v
+      }
+    )
 
     onUnmounted(() => instance?.destroy())
 

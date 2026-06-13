@@ -17,15 +17,17 @@ export default defineConfig({
         if (format === 'umd') return 'mk-motion.umd.cjs'
         return 'mk-motion.js'
       },
-      formats: ['es', 'umd']
+      formats: ['es', 'umd'],
     },
     rollupOptions: {
-      external: [],
+      external: ['vue'],
       output: {
-        globals: {}
-      }
+        globals: {
+          vue: 'Vue',
+        },
+      },
     },
-    cssCodeSplit: false
+    cssCodeSplit: false,
   },
   plugins: [
     vue(),
@@ -33,6 +35,6 @@ export default defineConfig({
       insertTypesEntry: true,
       copyDtsFiles: true,
       exclude: ['src/__tests__/**'],
-    })
-  ]
+    }),
+  ],
 })

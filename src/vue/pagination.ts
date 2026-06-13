@@ -1,4 +1,12 @@
-import { defineComponent, h, ref, onMounted, onUnmounted, watch, nextTick } from 'vue'
+import {
+  defineComponent,
+  h,
+  ref,
+  onMounted,
+  onUnmounted,
+  watch,
+  nextTick,
+} from 'vue'
 import { createPagination } from '../components/pagination/pagination.js'
 import type { PaginationOptions } from '../components/pagination/pagination.js'
 
@@ -35,7 +43,11 @@ export const MkPagination = defineComponent({
     }
 
     onMounted(() => nextTick(create))
-    watch(() => [props.total, props.pageSize, props.currentPage, props.pageSizes], () => nextTick(create), { deep: true })
+    watch(
+      () => [props.total, props.pageSize, props.currentPage, props.pageSizes],
+      () => nextTick(create),
+      { deep: true }
+    )
     onUnmounted(() => instance?.destroy())
 
     return () => h('div', { ref: container })

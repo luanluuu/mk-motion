@@ -5,8 +5,22 @@ import {
 import type { LoadingOptions } from '../../components/loading/loading.js'
 
 export function useMkLoading() {
-  return {
-    showLoading: (options?: LoadingOptions) => showLoading(options),
-    showFullscreenLoading: (text?: string) => showFullscreenLoading(text),
+  let cleanup: (() => void) | null = null
+
+  const start = (options: LoadingOptions = {}) => {
+    cleanup?.()
+    cleanup = showLoading(options)
   }
+
+  const startFullscreen = (text?: string) => {
+    cleanup?.()
+    cleanup = showFullscreenLoading(text)
+  }
+
+  const stop = () => {
+    cleanup?.()
+    cleanup = null
+  }
+
+  return { start, startFullscreen, stop }
 }

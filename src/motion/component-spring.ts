@@ -3,12 +3,17 @@ import type { SpringOptions } from '../core/spring-engine.js'
 
 const activeSpringAnimations = new WeakMap<HTMLElement, SpringAnimation>()
 
-function playSpring(el: HTMLElement, to: Record<string, any>, spring: SpringOptions): void {
+function playSpring(
+  el: HTMLElement,
+  to: Record<string, number>,
+  spring: SpringOptions
+): void {
   activeSpringAnimations.get(el)?.stop()
-  const from: Record<string, any> = {}
+  const from: Record<string, number> = {}
   const anim = new SpringAnimation(el, from, to, spring)
   activeSpringAnimations.set(el, anim)
-  anim.play()
+  anim
+    .play()
     .then(() => {
       if (activeSpringAnimations.get(el) === anim) {
         activeSpringAnimations.delete(el)
@@ -79,8 +84,16 @@ export function springOverlay(
     close: async () => {
       content.style.transformOrigin = opts.transformOrigin!
       await Promise.all([
-        springTo(overlay, { opacity: 0 }, { ...springOpts, stiffness: (springOpts?.stiffness ?? 300) * 1.5 }),
-        springTo(content, { opacity: 0, scale: 0.95 }, { ...springOpts, stiffness: (springOpts?.stiffness ?? 300) * 1.5 }),
+        springTo(
+          overlay,
+          { opacity: 0 },
+          { ...springOpts, stiffness: (springOpts?.stiffness ?? 300) * 1.5 }
+        ),
+        springTo(
+          content,
+          { opacity: 0, scale: 0.95 },
+          { ...springOpts, stiffness: (springOpts?.stiffness ?? 300) * 1.5 }
+        ),
       ])
       overlay.style.pointerEvents = 'none'
     },
@@ -100,13 +113,18 @@ export function springHover(
     spring?: SpringOptions
   } = {}
 ): { enable: () => void; disable: () => void; destroy: () => void } {
-  const { scale = 1.02, y = -2, shadow = true, spring = { stiffness: 180, damping: 26 } } = options
+  const {
+    scale = 1.02,
+    y = -2,
+    shadow = true,
+    spring = { stiffness: 180, damping: 26 },
+  } = options
 
   let enabled = true
 
   const onEnter = () => {
     if (!enabled) return
-    const to: Record<string, any> = { scale, y }
+    const to: Record<string, number> = { scale, y }
     if (shadow) {
       el.style.boxShadow = 'var(--mk-shadow-md)'
     }
@@ -115,7 +133,7 @@ export function springHover(
 
   const onLeave = () => {
     if (!enabled) return
-    const to: Record<string, any> = { scale: 1, y: 0 }
+    const to: Record<string, number> = { scale: 1, y: 0 }
     if (shadow) {
       el.style.boxShadow = ''
     }
@@ -126,8 +144,12 @@ export function springHover(
   el.addEventListener('mouseleave', onLeave)
 
   return {
-    enable: () => { enabled = true },
-    disable: () => { enabled = false },
+    enable: () => {
+      enabled = true
+    },
+    disable: () => {
+      enabled = false
+    },
     destroy: () => {
       el.removeEventListener('mouseenter', onEnter)
       el.removeEventListener('mouseleave', onLeave)

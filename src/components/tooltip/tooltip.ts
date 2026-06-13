@@ -49,7 +49,11 @@ function setTooltipContent(content: string | HTMLElement): void {
   }
 }
 
-function positionTooltip(target: HTMLElement, placement: string, offset: number): void {
+function positionTooltip(
+  target: HTMLElement,
+  placement: string,
+  offset: number
+): void {
   const tip = getTooltip()
   const arrow = tip.querySelector('.mk-tooltip__arrow') as HTMLDivElement
   const rect = target.getBoundingClientRect()
@@ -102,7 +106,10 @@ function positionTooltip(target: HTMLElement, placement: string, offset: number)
   arrow.className = `mk-tooltip__arrow ${arrowClass}`
 }
 
-function showTooltip(target: HTMLElement, options: Required<TooltipOptions>): void {
+function showTooltip(
+  target: HTMLElement,
+  options: Required<TooltipOptions>
+): void {
   if (hideTimer) {
     clearTimeout(hideTimer)
     hideTimer = null

@@ -1,4 +1,9 @@
-import { message, messageSuccess, messageError, messageWarning } from '../components/message/message.js'
+import {
+  message,
+  messageSuccess,
+  messageError,
+  messageWarning,
+} from '../components/message/message.js'
 import type { MessageOptions } from '../components/message/message.js'
 
 export function useMkMessage() {

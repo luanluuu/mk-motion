@@ -9,11 +9,14 @@ export interface RadioProps {
 
 const props = defineProps<RadioProps>()
 
-const group = inject<{
-  modelValue: import('vue').Ref<string | number | undefined>
-  change: (value: string | number) => void
-  name: string
-}>('mk-radio-group', undefined as any)
+const group = inject<
+  | {
+      modelValue: import('vue').Ref<string | number | undefined>
+      change: (value: string | number) => void
+      name: string
+    }
+  | undefined
+>('mk-radio-group')
 
 const checked = computed(() => group?.modelValue.value === props.value)
 

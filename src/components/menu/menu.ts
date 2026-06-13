@@ -27,7 +27,10 @@ export class MkMenu {
   private activeIndex: string
 
   constructor(container: HTMLElement | string, options: MenuOptions) {
-    const parent = typeof container === 'string' ? document.querySelector(container)! : container
+    const parent =
+      typeof container === 'string'
+        ? document.querySelector(container)!
+        : container
     this.options = { mode: 'vertical', collapse: false, ...options }
     this.openeds = new Set(options.defaultOpeneds || [])
     this.activeIndex = options.defaultActive || ''
@@ -45,7 +48,7 @@ export class MkMenu {
 
   private render(): void {
     this.el.innerHTML = ''
-    this.options.items.forEach(item => {
+    this.options.items.forEach((item) => {
       this.el.appendChild(this.renderItem(item, 0))
     })
   }
@@ -54,7 +57,8 @@ export class MkMenu {
     const hasChildren = item.children && item.children.length > 0
     const isOpen = this.openeds.has(item.index)
     const isActive = this.activeIndex === item.index
-    const isCollapsed = this.options.collapse && this.options.mode === 'vertical'
+    const isCollapsed =
+      this.options.collapse && this.options.mode === 'vertical'
 
     const li = document.createElement('li')
     li.className = 'mk-menu-item'
@@ -121,7 +125,7 @@ export class MkMenu {
       sub.className = 'mk-menu-submenu'
       if (isOpen) sub.classList.add('is-open')
       sub.setAttribute('role', 'menu')
-      item.children!.forEach(child => {
+      item.children!.forEach((child) => {
         sub.appendChild(this.renderItem(child, level + 1))
       })
       li.appendChild(sub)
@@ -138,7 +142,9 @@ export class MkMenu {
       const li = active.parentElement as HTMLLIElement
       const ul = li.parentElement as HTMLUListElement
       const items = Array.from(ul.children)
-        .filter((el): el is HTMLLIElement => el.classList.contains('mk-menu-item'))
+        .filter((el): el is HTMLLIElement =>
+          el.classList.contains('mk-menu-item')
+        )
         .map((li) => li.querySelector('.mk-menu-item__title') as HTMLElement)
         .filter(Boolean)
 
@@ -163,9 +169,12 @@ export class MkMenu {
           // Close parent submenu if inside one
           const parentLi = ul.closest('.mk-menu-item') as HTMLLIElement | null
           if (parentLi && ul !== this.el) {
-            const parentTitle = parentLi.querySelector('.mk-menu-item__title') as HTMLElement | null
+            const parentTitle = parentLi.querySelector(
+              '.mk-menu-item__title'
+            ) as HTMLElement | null
             if (parentTitle) {
-              const isExpanded = parentTitle.getAttribute('aria-expanded') === 'true'
+              const isExpanded =
+                parentTitle.getAttribute('aria-expanded') === 'true'
               if (isExpanded) {
                 parentTitle.click()
                 parentTitle.focus()
@@ -187,6 +196,9 @@ export class MkMenu {
   }
 }
 
-export function createMenu(container: HTMLElement | string, options: MenuOptions): MkMenu {
+export function createMenu(
+  container: HTMLElement | string,
+  options: MenuOptions
+): MkMenu {
   return new MkMenu(container, options)
 }

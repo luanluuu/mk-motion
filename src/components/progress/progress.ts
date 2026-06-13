@@ -82,13 +82,19 @@ export class MkProgress {
     const isDashboard = this.options.type === 'dashboard'
     const dashArray = isDashboard ? circumference * 0.75 : circumference
 
-    this.circleSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
+    this.circleSvg = document.createElementNS(
+      'http://www.w3.org/2000/svg',
+      'svg'
+    )
     this.circleSvg.setAttribute('width', `${size}`)
     this.circleSvg.setAttribute('height', `${size}`)
     this.circleSvg.setAttribute('viewBox', `0 0 ${size} ${size}`)
     this.circleSvg.classList.add('mk-progress__svg')
 
-    this.circleTrack = document.createElementNS('http://www.w3.org/2000/svg', 'circle')
+    this.circleTrack = document.createElementNS(
+      'http://www.w3.org/2000/svg',
+      'circle'
+    )
     this.circleTrack.setAttribute('cx', `${size / 2}`)
     this.circleTrack.setAttribute('cy', `${size / 2}`)
     this.circleTrack.setAttribute('r', `${radius}`)
@@ -96,7 +102,10 @@ export class MkProgress {
     this.circleTrack.setAttribute('stroke-width', `${strokeWidth}`)
     this.circleTrack.classList.add('mk-progress__track-circle')
 
-    this.circlePath = document.createElementNS('http://www.w3.org/2000/svg', 'circle')
+    this.circlePath = document.createElementNS(
+      'http://www.w3.org/2000/svg',
+      'circle'
+    )
     this.circlePath.setAttribute('cx', `${size / 2}`)
     this.circlePath.setAttribute('cy', `${size / 2}`)
     this.circlePath.setAttribute('r', `${radius}`)

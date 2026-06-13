@@ -1,8 +1,8 @@
 export interface SpringOptions {
-  stiffness?: number    // 刚度，默认 170
-  damping?: number      // 阻尼，默认 26
-  mass?: number         // 质量，默认 1
-  precision?: number    // 停止精度，默认 0.01
+  stiffness?: number // 刚度，默认 170
+  damping?: number // 阻尼，默认 26
+  mass?: number // 质量，默认 1
+  precision?: number // 停止精度，默认 0.01
 }
 
 const DEFAULT_SPRING: Required<SpringOptions> = {

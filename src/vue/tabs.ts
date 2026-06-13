@@ -1,4 +1,12 @@
-import { defineComponent, h, ref, onMounted, onUnmounted, watch, nextTick } from 'vue'
+import {
+  defineComponent,
+  h,
+  ref,
+  onMounted,
+  onUnmounted,
+  watch,
+  nextTick,
+} from 'vue'
 import { createTabs } from '../components/tabs/tabs.js'
 import type { TabItem, TabsOptions } from '../components/tabs/tabs.js'
 
@@ -29,7 +37,11 @@ export const MkTabs = defineComponent({
     }
 
     onMounted(() => nextTick(create))
-    watch(() => [props.type, props.items, props.modelValue], () => nextTick(create), { deep: true })
+    watch(
+      () => [props.type, props.items, props.modelValue],
+      () => nextTick(create),
+      { deep: true }
+    )
     onUnmounted(() => instance?.destroy())
 
     return () => h('div', { ref: container })

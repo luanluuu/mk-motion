@@ -1,4 +1,12 @@
-import { defineComponent, h, ref, onMounted, onUnmounted, watch, nextTick } from 'vue'
+import {
+  defineComponent,
+  h,
+  ref,
+  onMounted,
+  onUnmounted,
+  watch,
+  nextTick,
+} from 'vue'
 import { MkSlider as MkSliderClass } from '../components/form/slider.js'
 import type { SliderOptions } from '../components/form/slider.js'
 
@@ -34,13 +42,20 @@ export const MkSlider = defineComponent({
 
     onMounted(() => nextTick(create))
 
-    watch(() => props.modelValue, (v) => {
-      if (instance && instance.value !== v) {
-        instance.value = v
+    watch(
+      () => props.modelValue,
+      (v) => {
+        if (instance && instance.value !== v) {
+          instance.value = v
+        }
       }
-    })
+    )
 
-    watch(() => [props.min, props.max, props.step], () => nextTick(create), { deep: true })
+    watch(
+      () => [props.min, props.max, props.step],
+      () => nextTick(create),
+      { deep: true }
+    )
 
     onUnmounted(() => instance?.destroy())
 

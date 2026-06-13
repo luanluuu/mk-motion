@@ -32,8 +32,11 @@
 }
 
 .mk-message__icon {
-  width: 18px; height: 18px;
-  display: flex; align-items: center; justify-content: center;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: 13px;
   flex-shrink: 0;
   border-radius: 50%;
@@ -48,8 +51,11 @@
   cursor: pointer;
   color: var(--mk-text-tertiary);
   font-size: 11px;
-  width: 20px; height: 20px;
-  display: flex; align-items: center; justify-content: center;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border-radius: 4px;
   transition: var(--mk-transition);
 }
@@ -58,7 +64,15 @@
   background: var(--mk-surface-hover);
 }
 
-.mk-message--success .mk-message__icon { color: var(--mk-success); }
-.mk-message--warning .mk-message__icon { color: var(--mk-warning); }
-.mk-message--error   .mk-message__icon { color: var(--mk-danger); }
-.mk-message--info    .mk-message__icon { color: var(--mk-primary); }
+.mk-message--success .mk-message__icon {
+  color: var(--mk-success);
+}
+.mk-message--warning .mk-message__icon {
+  color: var(--mk-warning);
+}
+.mk-message--error .mk-message__icon {
+  color: var(--mk-danger);
+}
+.mk-message--info .mk-message__icon {
+  color: var(--mk-primary);
+}

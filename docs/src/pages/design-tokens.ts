@@ -33,7 +33,16 @@ export function renderDesignTokens(container?: HTMLElement) {
     <h2 class="doc-h2" id="motion">运动</h2>
     <div id="token-motion"></div>
   `
-  renderToc(['semantic','colors','surfaces','typography','spacing','radius','shadows','motion'])
+  renderToc([
+    'semantic',
+    'colors',
+    'surfaces',
+    'typography',
+    'spacing',
+    'radius',
+    'shadows',
+    'motion',
+  ])
   setTimeout(() => {
     renderSemantic()
     renderAllColorScales()
@@ -70,13 +79,11 @@ function renderSemantic() {
     grid.style.gridTemplateColumns = 'repeat(auto-fill, minmax(140px, 1fr))'
     grid.style.gap = '8px'
 
-    const vars = [
-      `--mk-${name}`,
-      `--mk-${name}-soft`,
-      `--mk-${name}-muted`,
-    ]
-    vars.forEach(v => {
-      const value = getComputedStyle(document.documentElement).getPropertyValue(v).trim()
+    const vars = [`--mk-${name}`, `--mk-${name}-soft`, `--mk-${name}-muted`]
+    vars.forEach((v) => {
+      const value = getComputedStyle(document.documentElement)
+        .getPropertyValue(v)
+        .trim()
       const box = document.createElement('div')
       box.style.background = value || '#000'
       box.style.borderRadius = '8px'
@@ -96,7 +103,7 @@ function renderSemantic() {
 function renderAllColorScales() {
   const el = document.getElementById('token-colors')!
   const colors = ['indigo', 'green', 'amber', 'red', 'slate', 'sky']
-  colors.forEach(colorName => {
+  colors.forEach((colorName) => {
     const section = document.createElement('div')
     section.style.marginBottom = '20px'
     const header = document.createElement('h4')
@@ -111,10 +118,12 @@ function renderAllColorScales() {
     grid.style.gridTemplateColumns = 'repeat(auto-fill, minmax(100px, 1fr))'
     grid.style.gap = '6px'
 
-    const steps = [50,100,200,300,400,500,600,700,800,900,950]
-    steps.forEach(step => {
+    const steps = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950]
+    steps.forEach((step) => {
       const varName = `--mk-${colorName}-${step}`
-      const value = getComputedStyle(document.documentElement).getPropertyValue(varName).trim()
+      const value = getComputedStyle(document.documentElement)
+        .getPropertyValue(varName)
+        .trim()
       const box = document.createElement('div')
       box.style.background = value || '#000'
       box.style.borderRadius = '6px'
@@ -134,18 +143,36 @@ function renderAllColorScales() {
 function renderSurfaces() {
   const el = document.getElementById('token-surfaces')!
   const tokens = [
-    '--mk-bg', '--mk-bg-elevated', '--mk-surface', '--mk-surface-hover', '--mk-surface-active', '--mk-surface-raised',
-    '--mk-border', '--mk-border-hover', '--mk-border-active', '--mk-divider',
-    '--mk-text', '--mk-text-primary', '--mk-text-secondary', '--mk-text-tertiary', '--mk-text-disabled', '--mk-text-inverse',
+    '--mk-bg',
+    '--mk-bg-elevated',
+    '--mk-surface',
+    '--mk-surface-hover',
+    '--mk-surface-active',
+    '--mk-surface-raised',
+    '--mk-border',
+    '--mk-border-hover',
+    '--mk-border-active',
+    '--mk-divider',
+    '--mk-text',
+    '--mk-text-primary',
+    '--mk-text-secondary',
+    '--mk-text-tertiary',
+    '--mk-text-disabled',
+    '--mk-text-inverse',
   ]
   const grid = document.createElement('div')
   grid.style.display = 'grid'
   grid.style.gridTemplateColumns = 'repeat(auto-fill, minmax(200px, 1fr))'
   grid.style.gap = '8px'
 
-  tokens.forEach(v => {
-    const value = getComputedStyle(document.documentElement).getPropertyValue(v).trim()
-    const isColor = value.startsWith('#') || value.startsWith('rgb') || value.startsWith('var')
+  tokens.forEach((v) => {
+    const value = getComputedStyle(document.documentElement)
+      .getPropertyValue(v)
+      .trim()
+    const isColor =
+      value.startsWith('#') ||
+      value.startsWith('rgb') ||
+      value.startsWith('var')
     const box = document.createElement('div')
     box.style.display = 'flex'
     box.style.alignItems = 'center'
@@ -180,31 +207,43 @@ function renderSurfaces() {
 function renderTypography() {
   const el = document.getElementById('token-typography')!
   const sizes = [
-    { name: 'xs', size: '0.75rem' }, { name: 'sm', size: '0.8125rem' },
-    { name: 'base', size: '0.875rem' }, { name: 'md', size: '1rem' },
-    { name: 'lg', size: '1.125rem' }, { name: 'xl', size: '1.25rem' },
-    { name: '2xl', size: '1.5rem' }, { name: '3xl', size: '1.875rem' },
+    { name: 'xs', size: '0.75rem' },
+    { name: 'sm', size: '0.8125rem' },
+    { name: 'base', size: '0.875rem' },
+    { name: 'md', size: '1rem' },
+    { name: 'lg', size: '1.125rem' },
+    { name: 'xl', size: '1.25rem' },
+    { name: '2xl', size: '1.5rem' },
+    { name: '3xl', size: '1.875rem' },
     { name: '4xl', size: '2.25rem' },
   ]
-  el.innerHTML = sizes.map(s => `
+  el.innerHTML = sizes
+    .map(
+      (s) => `
     <div style="display:flex;align-items:center;gap:16px;padding:10px 0;border-bottom:1px solid var(--mk-border);">
       <span style="font-size:0.75rem;color:var(--mk-text-tertiary);width:80px;font-family:var(--mk-font-mono);">${s.size}</span>
       <span style="font-size:${s.size};color:var(--mk-text);">Text ${s.name.toUpperCase()}</span>
     </div>
-  `).join('')
+  `
+    )
+    .join('')
 }
 
 function renderSpacing() {
   const el = document.getElementById('token-spacing')!
-  const spaces = [1,2,3,4,5,6,8,10,12,16,20,24]
+  const spaces = [1, 2, 3, 4, 5, 6, 8, 10, 12, 16, 20, 24]
   el.style.display = 'grid'
   el.style.gridTemplateColumns = 'repeat(auto-fill, minmax(200px, 1fr))'
   el.style.gap = '8px'
-  spaces.forEach(n => {
+  spaces.forEach((n) => {
     const px = n * 4
     const box = document.createElement('div')
-    box.style.display = 'flex'; box.style.alignItems = 'center'; box.style.gap = '12px'
-    box.style.padding = '10px 12px'; box.style.borderRadius = '6px'; box.style.border = '1px solid var(--mk-border)'
+    box.style.display = 'flex'
+    box.style.alignItems = 'center'
+    box.style.gap = '12px'
+    box.style.padding = '10px 12px'
+    box.style.borderRadius = '6px'
+    box.style.border = '1px solid var(--mk-border)'
     box.innerHTML = `<div style="width:${px}px;height:16px;background:var(--mk-primary);border-radius:4px;flex-shrink:0;"></div><span style="font-size:0.75rem;color:var(--mk-text-secondary);font-family:var(--mk-font-mono);">space-${n} = ${px}px</span>`
     el.appendChild(box)
   })
@@ -225,12 +264,16 @@ function renderRadius() {
   el.style.display = 'grid'
   el.style.gridTemplateColumns = 'repeat(auto-fill, minmax(140px, 1fr))'
   el.style.gap = '12px'
-  radii.forEach(r => {
+  radii.forEach((r) => {
     const name = r.name ? `radius-${r.name}` : 'radius'
     const box = document.createElement('div')
-    box.style.display = 'flex'; box.style.flexDirection = 'column'; box.style.gap = '6px'; box.style.alignItems = 'center'
+    box.style.display = 'flex'
+    box.style.flexDirection = 'column'
+    box.style.gap = '6px'
+    box.style.alignItems = 'center'
     const shape = document.createElement('div')
-    shape.style.width = '64px'; shape.style.height = '64px'
+    shape.style.width = '64px'
+    shape.style.height = '64px'
     shape.style.background = 'var(--mk-primary)'
     shape.style.borderRadius = r.val
     const label = document.createElement('span')
@@ -246,13 +289,20 @@ function renderRadius() {
 
 function renderShadows() {
   const el = document.getElementById('token-shadows')!
-  const shadows = ['sm','','md','lg','xl']
-  el.style.display = 'grid'; el.style.gridTemplateColumns = '1fr'; el.style.gap = '12px'
-  shadows.forEach(s => {
+  const shadows = ['sm', '', 'md', 'lg', 'xl']
+  el.style.display = 'grid'
+  el.style.gridTemplateColumns = '1fr'
+  el.style.gap = '12px'
+  shadows.forEach((s) => {
     const name = s ? `shadow-${s}` : 'shadow'
     const box = document.createElement('div')
-    box.style.height = '60px'; box.style.background = 'var(--mk-surface)'; box.style.borderRadius = '8px'
-    box.style.boxShadow = `var(--mk-${name})`; box.style.display = 'flex'; box.style.alignItems = 'center'; box.style.padding = '0 16px'
+    box.style.height = '60px'
+    box.style.background = 'var(--mk-surface)'
+    box.style.borderRadius = '8px'
+    box.style.boxShadow = `var(--mk-${name})`
+    box.style.display = 'flex'
+    box.style.alignItems = 'center'
+    box.style.padding = '0 16px'
     box.innerHTML = `<span style="font-size:0.8rem;color:var(--mk-text-secondary);font-family:var(--mk-font-mono);">--mk-${name}</span>`
     el.appendChild(box)
   })
@@ -274,9 +324,12 @@ function renderMotion() {
     { name: 'slower', ms: '600ms' },
   ]
 
-  let html = '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-bottom:24px;">'
-  easings.forEach(e => {
-    const value = getComputedStyle(document.documentElement).getPropertyValue(`--mk-${e.name}`).trim()
+  let html =
+    '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-bottom:24px;">'
+  easings.forEach((e) => {
+    const value = getComputedStyle(document.documentElement)
+      .getPropertyValue(`--mk-${e.name}`)
+      .trim()
     html += `
       <div style="padding:12px;border:1px solid var(--mk-border);border-radius:8px;background:var(--mk-surface);">
         <div style="font-size:0.8rem;color:var(--mk-text);margin-bottom:8px;font-family:var(--mk-font-mono);">${e.label}</div>
@@ -289,9 +342,12 @@ function renderMotion() {
   })
   html += '</div>'
 
-  html += '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;">'
-  durations.forEach(d => {
-    const value = getComputedStyle(document.documentElement).getPropertyValue(`--mk-duration-${d.name}`).trim()
+  html +=
+    '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;">'
+  durations.forEach((d) => {
+    const value = getComputedStyle(document.documentElement)
+      .getPropertyValue(`--mk-duration-${d.name}`)
+      .trim()
     html += `
       <div style="padding:12px;border:1px solid var(--mk-border);border-radius:8px;background:var(--mk-surface);display:flex;flex-direction:column;align-items:center;gap:8px;">
         <div style="font-size:0.8rem;color:var(--mk-text);font-family:var(--mk-font-mono);">${d.name}</div>
@@ -307,7 +363,7 @@ function renderMotion() {
 
   // Animate the bars
   setTimeout(() => {
-    el.querySelectorAll<HTMLElement>('.motion-demo-bar').forEach(bar => {
+    el.querySelectorAll<HTMLElement>('.motion-demo-bar').forEach((bar) => {
       bar.style.width = '100%'
     })
   }, 100)

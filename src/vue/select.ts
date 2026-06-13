@@ -1,11 +1,22 @@
-import { defineComponent, h, ref, onMounted, onUnmounted, watch, nextTick } from 'vue'
+import {
+  defineComponent,
+  h,
+  ref,
+  onMounted,
+  onUnmounted,
+  watch,
+  nextTick,
+} from 'vue'
 import { createSelect } from '../components/form/select.js'
 import type { SelectOptions, SelectOption } from '../components/form/select.js'
 
 export const MkSelect = defineComponent({
   name: 'MkSelect',
   props: {
-    modelValue: { type: [String, Number] as () => string | number | undefined, default: undefined },
+    modelValue: {
+      type: [String, Number] as () => string | number | undefined,
+      default: undefined,
+    },
     options: { type: Array as () => SelectOption[], default: () => [] },
     placeholder: { type: String, default: '请选择' },
     disabled: { type: Boolean, default: false },
@@ -13,7 +24,12 @@ export const MkSelect = defineComponent({
     itemHeight: { type: Number, default: 36 },
     filterable: { type: Boolean, default: false },
     remote: { type: Boolean, default: false },
-    remoteMethod: { type: Function as () => (query: string) => Promise<SelectOption[]> | SelectOption[], default: undefined },
+    remoteMethod: {
+      type: Function as () => (
+        query: string
+      ) => Promise<SelectOption[]> | SelectOption[],
+      default: undefined,
+    },
     debounce: { type: Number, default: 300 },
   },
   emits: ['update:modelValue', 'change'],
@@ -44,23 +60,33 @@ export const MkSelect = defineComponent({
 
     onMounted(() => nextTick(create))
 
-    watch(() => props.modelValue, (v) => {
-      if (instance && instance.value !== v) {
-        instance.setValue(v as string | number)
+    watch(
+      () => props.modelValue,
+      (v) => {
+        if (instance && instance.value !== v) {
+          instance.setValue(v as string | number)
+        }
       }
-    })
+    )
 
-    watch(() => props.disabled, (v) => {
-      if (instance) instance.setDisabled(v)
-    })
-
-    watch(() => [props.options, props.placeholder], () => {
-      if (instance) {
-        instance.setOptions(props.options)
-      } else {
-        nextTick(create)
+    watch(
+      () => props.disabled,
+      (v) => {
+        if (instance) instance.setDisabled(v)
       }
-    }, { deep: true })
+    )
+
+    watch(
+      () => [props.options, props.placeholder],
+      () => {
+        if (instance) {
+          instance.setOptions(props.options)
+        } else {
+          nextTick(create)
+        }
+      },
+      { deep: true }
+    )
 
     onUnmounted(() => instance?.destroy())
 

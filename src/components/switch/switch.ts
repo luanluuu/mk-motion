@@ -41,7 +41,8 @@ export class MkSwitch {
       this.inactiveLabel = document.createElement('span')
       this.inactiveLabel.className = 'mk-switch__label'
       this.inactiveLabel.textContent = this.options.inactiveText
-      if (!this._value) this.inactiveLabel.classList.add('mk-switch__label--active')
+      if (!this._value)
+        this.inactiveLabel.classList.add('mk-switch__label--active')
       this.el.appendChild(this.inactiveLabel)
     }
 
@@ -53,7 +54,8 @@ export class MkSwitch {
       this.activeLabel = document.createElement('span')
       this.activeLabel.className = 'mk-switch__label'
       this.activeLabel.textContent = this.options.activeText
-      if (this._value) this.activeLabel.classList.add('mk-switch__label--active')
+      if (this._value)
+        this.activeLabel.classList.add('mk-switch__label--active')
       this.el.appendChild(this.activeLabel)
     }
 

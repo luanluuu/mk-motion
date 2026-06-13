@@ -19,6 +19,11 @@ export const sidebarMenuItems = [
   { index: 'api-header', label: '—— API ——', disabled: true },
   { index: 'components', label: '组件总览', icon: '🧩' },
   { index: 'api-stability', label: 'API稳定性', icon: '🛡️' },
+  { index: 'flip', label: 'FLIP 动画', icon: '🔄' },
+  { index: 'gesture', label: '手势交互', icon: '🖐' },
+  { index: 'effects', label: '视觉特效', icon: '✨' },
+  { index: 'devtools', label: 'DevTools', icon: '🛠️' },
+  { index: 'nuxt', label: 'Nuxt 集成', icon: '🔌' },
   // —— 组件 ——
   { index: 'component-divider-general', label: '—— 通用 ——', disabled: true },
   { index: 'component-button', label: 'Button 按钮', icon: '🔘' },

@@ -1,5 +1,10 @@
 import { describe, it, expect } from 'vitest'
-import { parseTime, toCssTime, setCSSVariables, removeCSSVariables } from '../../core/utils'
+import {
+  parseTime,
+  toCssTime,
+  setCSSVariables,
+  removeCSSVariables,
+} from '../../core/utils'
 
 describe('parseTime', () => {
   it('returns number as-is', () => {

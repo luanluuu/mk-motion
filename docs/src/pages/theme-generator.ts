@@ -48,21 +48,36 @@ function hexToRgb(hex: string): [number, number, number] {
 }
 
 function rgbToHex(r: number, g: number, b: number): string {
-  return '#' + [r, g, b].map((v) => Math.max(0, Math.min(255, v)).toString(16).padStart(2, '0')).join('')
+  return (
+    '#' +
+    [r, g, b]
+      .map((v) => Math.max(0, Math.min(255, v)).toString(16).padStart(2, '0'))
+      .join('')
+  )
 }
 
 function rgbToHsl(r: number, g: number, b: number): [number, number, number] {
-  r /= 255; g /= 255; b /= 255
-  const max = Math.max(r, g, b), min = Math.min(r, g, b)
-  let h = 0, s = 0
+  r /= 255
+  g /= 255
+  b /= 255
+  const max = Math.max(r, g, b),
+    min = Math.min(r, g, b)
+  let h = 0,
+    s = 0
   const l = (max + min) / 2
   if (max !== min) {
     const d = max - min
     s = l > 0.5 ? d / (2 - max - min) : d / (max + min)
     switch (max) {
-      case r: h = ((g - b) / d + (g < b ? 6 : 0)) / 6; break
-      case g: h = ((b - r) / d + 2) / 6; break
-      case b: h = ((r - g) / d + 4) / 6; break
+      case r:
+        h = ((g - b) / d + (g < b ? 6 : 0)) / 6
+        break
+      case g:
+        h = ((b - r) / d + 2) / 6
+        break
+      case b:
+        h = ((r - g) / d + 4) / 6
+        break
     }
   }
   return [h, s, l]
@@ -91,9 +106,18 @@ function hslToRgb(h: number, s: number, l: number): [number, number, number] {
 }
 
 function updateColorFromSliders(key: string): string {
-  const h = parseFloat((document.getElementById(`slider-h-${key}`) as HTMLInputElement).value) / 360
-  const s = parseFloat((document.getElementById(`slider-s-${key}`) as HTMLInputElement).value) / 100
-  const l = parseFloat((document.getElementById(`slider-l-${key}`) as HTMLInputElement).value) / 100
+  const h =
+    parseFloat(
+      (document.getElementById(`slider-h-${key}`) as HTMLInputElement).value
+    ) / 360
+  const s =
+    parseFloat(
+      (document.getElementById(`slider-s-${key}`) as HTMLInputElement).value
+    ) / 100
+  const l =
+    parseFloat(
+      (document.getElementById(`slider-l-${key}`) as HTMLInputElement).value
+    ) / 100
   const [r, g, b] = hslToRgb(h, s, l)
   const hex = rgbToHex(r, g, b)
   const swatch = document.getElementById(`swatch-${key}`)
@@ -105,10 +129,11 @@ function updateColorFromSliders(key: string): string {
 
 function renderPalette() {
   const el = document.getElementById('theme-palette')!
-  el.innerHTML = Object.keys(DEFAULT_COLORS).map((key) => {
-    const [r, g, b] = hexToRgb(DEFAULT_COLORS[key])
-    const [h, s, l] = rgbToHsl(r, g, b)
-    return `
+  el.innerHTML = Object.keys(DEFAULT_COLORS)
+    .map((key) => {
+      const [r, g, b] = hexToRgb(DEFAULT_COLORS[key])
+      const [h, s, l] = rgbToHsl(r, g, b)
+      return `
       <div style="display:flex;align-items:center;gap:16px;margin-bottom:16px;padding:16px;border:1px solid var(--mk-border);border-radius:var(--mk-radius);background:var(--mk-surface);">
         <div id="swatch-${key}" style="width:48px;height:48px;border-radius:var(--mk-radius);background:${DEFAULT_COLORS[key]};border:1px solid var(--mk-border);flex-shrink:0;"></div>
         <div style="flex:1;min-width:0;">
@@ -128,11 +153,14 @@ function renderPalette() {
         </div>
       </div>
     `
-  }).join('')
+    })
+    .join('')
 
   Object.keys(DEFAULT_COLORS).forEach((key) => {
-    ['h', 's', 'l'].forEach((channel) => {
-      const slider = document.getElementById(`slider-${channel}-${key}`) as HTMLInputElement
+    ;['h', 's', 'l'].forEach((channel) => {
+      const slider = document.getElementById(
+        `slider-${channel}-${key}`
+      ) as HTMLInputElement
       if (slider) {
         slider.addEventListener('input', () => {
           updateColorFromSliders(key)
@@ -203,7 +231,7 @@ function renderExport() {
     navigator.clipboard.writeText(code)
     const old = btn.textContent
     btn.textContent = '已复制'
-    setTimeout(() => btn.textContent = old, 1500)
+    setTimeout(() => (btn.textContent = old), 1500)
   })
 
   const wrap = document.createElement('div')
@@ -213,8 +241,10 @@ function renderExport() {
 
   // Update export on any slider change
   Object.keys(DEFAULT_COLORS).forEach((key) => {
-    ['h', 's', 'l'].forEach((channel) => {
-      const slider = document.getElementById(`slider-${channel}-${key}`) as HTMLInputElement
+    ;['h', 's', 'l'].forEach((channel) => {
+      const slider = document.getElementById(
+        `slider-${channel}-${key}`
+      ) as HTMLInputElement
       if (slider) {
         slider.addEventListener('input', () => {
           pre.textContent = generateCSS()

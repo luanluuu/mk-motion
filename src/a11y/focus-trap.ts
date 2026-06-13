@@ -30,7 +30,9 @@ export class FocusTrap {
 
     const handler = (e: KeyboardEvent) => this.handleKeyDown(e)
     this.container.addEventListener('keydown', handler)
-    this.listeners.push(() => this.container.removeEventListener('keydown', handler))
+    this.listeners.push(() =>
+      this.container.removeEventListener('keydown', handler)
+    )
   }
 
   deactivate(): void {

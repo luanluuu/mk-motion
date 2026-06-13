@@ -14,6 +14,11 @@ import AnimatedDialog from './views/examples/AnimatedDialog.vue'
 import RouteTransition from './views/examples/RouteTransition.vue'
 import FilterableGrid from './views/examples/FilterableGrid.vue'
 import NumberCounter from './views/examples/NumberCounter.vue'
+import Gesture from './views/Gesture.vue'
+import DevTools from './views/DevTools.vue'
+import Nuxt from './views/Nuxt.vue'
+import Flip from './views/Flip.vue'
+import Effects from './views/Effects.vue'
 
 export const router = createRouter({
   history: createWebHistory(),
@@ -33,6 +38,11 @@ export const router = createRouter({
     { path: '/theme-generator', component: ThemeGenerator },
     { path: '/motion-spec', component: MotionSpec },
     { path: '/api-stability', component: ApiStability },
+    { path: '/gesture', component: Gesture },
+    { path: '/devtools', component: DevTools },
+    { path: '/nuxt', component: Nuxt },
+    { path: '/flip', component: Flip },
+    { path: '/effects', component: Effects },
     { path: '/component-:name', component: ComponentDoc, props: true },
   ],
 })

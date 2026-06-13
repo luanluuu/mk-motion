@@ -1,6 +1,6 @@
 export interface DraggableOptions {
   axis?: 'x' | 'y' | 'both'
-  bounds?: HTMLElement | string | null  // 限制拖拽范围
+  bounds?: HTMLElement | string | null // 限制拖拽范围
   onStart?: (e: PointerEvent) => void
   onDrag?: (x: number, y: number) => void
   onEnd?: (x: number, y: number) => void
@@ -8,7 +8,9 @@ export interface DraggableOptions {
 
 export class Draggable {
   private element: HTMLElement
-  private options: Required<Omit<DraggableOptions, 'bounds' | 'onStart' | 'onDrag' | 'onEnd'>> &
+  private options: Required<
+    Omit<DraggableOptions, 'bounds' | 'onStart' | 'onDrag' | 'onEnd'>
+  > &
     Pick<DraggableOptions, 'bounds' | 'onStart' | 'onDrag' | 'onEnd'>
   private startX = 0
   private startY = 0

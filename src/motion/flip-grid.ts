@@ -34,29 +34,42 @@ export function filterGrid(
   changeFnOrOptions?: (() => void) | FlipGridOptions,
   maybeOptions?: FlipGridOptions
 ): Promise<void> {
-  const el = typeof container === 'string'
-    ? document.querySelector<HTMLElement>(container)!
-    : container
+  const el =
+    typeof container === 'string'
+      ? document.querySelector<HTMLElement>(container)!
+      : container
 
   // New signature: filterGrid(container, itemSelector, changeFn, options)
   if (typeof itemSelectorOrPredicate === 'string') {
     const itemSelector = itemSelectorOrPredicate
-    const changeFn = typeof changeFnOrOptions === 'function' ? changeFnOrOptions : () => {}
+    const changeFn =
+      typeof changeFnOrOptions === 'function' ? changeFnOrOptions : () => {}
     const options = maybeOptions || {}
-    return flipGrid(el, () => {
-      changeFn()
-    }, { ...options, itemSelector })
+    return flipGrid(
+      el,
+      () => {
+        changeFn()
+      },
+      { ...options, itemSelector }
+    )
   }
 
   // Legacy signature: filterGrid(container, predicate, options)
   const predicate = itemSelectorOrPredicate
-  const options = (changeFnOrOptions as FlipGridOptions) || {}
-  return flipGrid(el, () => {
-    const items = Array.from(el.querySelectorAll(options.itemSelector || '> *')) as HTMLElement[]
-    items.forEach((item) => {
-      item.style.display = predicate(item) ? '' : 'none'
-    })
-  }, options)
+  const options =
+    (typeof changeFnOrOptions === 'object' ? changeFnOrOptions : {}) || {}
+  return flipGrid(
+    el,
+    () => {
+      const items = Array.from(
+        el.querySelectorAll(options.itemSelector || '> *')
+      ).filter((el): el is HTMLElement => el instanceof HTMLElement)
+      items.forEach((item) => {
+        item.style.display = predicate(item) ? '' : 'none'
+      })
+    },
+    options
+  )
 }
 
 /**
@@ -67,15 +80,22 @@ export function sortGrid(
   compareFn: (a: HTMLElement, b: HTMLElement) => number,
   options: FlipGridOptions = {}
 ): Promise<void> {
-  const el = typeof container === 'string'
-    ? document.querySelector<HTMLElement>(container)!
-    : container
+  const el =
+    typeof container === 'string'
+      ? document.querySelector<HTMLElement>(container)!
+      : container
 
-  return flipGrid(el, () => {
-    const items = Array.from(el.children) as HTMLElement[]
-    items.sort(compareFn)
-    items.forEach((item) => el.appendChild(item))
-  }, options)
+  return flipGrid(
+    el,
+    () => {
+      const items = Array.from(el.children).filter(
+        (el): el is HTMLElement => el instanceof HTMLElement
+      )
+      items.sort(compareFn)
+      items.forEach((item) => el.appendChild(item))
+    },
+    options
+  )
 }
 
 export interface ShuffleGridOptions extends FlipGridOptions {
@@ -95,9 +115,10 @@ export function shuffleGrid(
   itemSelectorOrOptions?: string | ShuffleGridOptions,
   maybeOptions?: ShuffleGridOptions
 ): Promise<void> {
-  const el = typeof container === 'string'
-    ? document.querySelector<HTMLElement>(container)!
-    : container
+  const el =
+    typeof container === 'string'
+      ? document.querySelector<HTMLElement>(container)!
+      : container
 
   let itemSelector: string | undefined
   let options: ShuffleGridOptions = {}
@@ -112,19 +133,25 @@ export function shuffleGrid(
 
   const selector = itemSelector || '> *'
 
-  return flipGrid(el, () => {
-    const items = Array.from(el.querySelectorAll(selector)) as HTMLElement[]
-    // Fisher-Yates shuffle using insertBefore to reorder DOM
-    for (let i = items.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1))
-      // Swap positions in DOM
-      if (j !== i) {
-        const ref = items[i].nextSibling
-        el.insertBefore(items[i], items[j])
-        el.insertBefore(items[j], ref)
-        // Update array to reflect new order
-        ;[items[i], items[j]] = [items[j], items[i]]
+  return flipGrid(
+    el,
+    () => {
+      const items = Array.from(el.querySelectorAll(selector)).filter(
+        (el): el is HTMLElement => el instanceof HTMLElement
+      )
+      // Fisher-Yates shuffle using insertBefore to reorder DOM
+      for (let i = items.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1))
+        // Swap positions in DOM
+        if (j !== i) {
+          const ref = items[i].nextSibling
+          el.insertBefore(items[i], items[j])
+          el.insertBefore(items[j], ref)
+          // Update array to reflect new order
+          ;[items[i], items[j]] = [items[j], items[i]]
+        }
       }
-    }
-  }, { ...options, itemSelector: selector })
+    },
+    { ...options, itemSelector: selector }
+  )
 }

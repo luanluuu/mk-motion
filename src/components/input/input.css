@@ -19,11 +19,21 @@
   transition: var(--mk-transition);
 }
 
-.mk-input::placeholder { color: var(--mk-text-tertiary); }
+.mk-input::placeholder {
+  color: var(--mk-text-tertiary);
+}
 
 /* Sizes */
-.mk-input-wrapper--small .mk-input { height: 28px; padding: 0 8px; font-size: 12px; }
-.mk-input-wrapper--large .mk-input { height: 44px; padding: 0 16px; font-size: 14px; }
+.mk-input-wrapper--small .mk-input {
+  height: 28px;
+  padding: 0 8px;
+  font-size: 12px;
+}
+.mk-input-wrapper--large .mk-input {
+  height: 44px;
+  padding: 0 16px;
+  font-size: 14px;
+}
 
 .mk-input:hover {
   border-color: var(--mk-border-hover);
@@ -55,8 +65,11 @@
 .mk-input__suffix-item {
   cursor: pointer;
   font-size: 13px;
-  width: 20px; height: 20px;
-  display: flex; align-items: center; justify-content: center;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border-radius: 4px;
   transition: var(--mk-transition);
 }
@@ -90,7 +103,14 @@
 }
 
 @keyframes mk-input-shake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-4px); }
-  75% { transform: translateX(4px); }
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-4px);
+  }
+  75% {
+    transform: translateX(4px);
+  }
 }

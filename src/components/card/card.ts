@@ -1,5 +1,8 @@
 import './card.css'
-import { withMotion, type MotionOptions } from '../../motion/component-motion.ts'
+import {
+  withMotion,
+  type MotionOptions,
+} from '../../motion/component-motion.ts'
 import { springHover } from '../../motion/component-spring.ts'
 import type { SpringOptions } from '../../core/spring-engine.ts'
 
@@ -31,7 +34,8 @@ export class MkCard {
 
     if (options.shadow) {
       if (options.shadow === 'always') this.el.classList.add('is-always-shadow')
-      else if (options.shadow === 'hover') this.el.classList.add('is-hover-shadow')
+      else if (options.shadow === 'hover')
+        this.el.classList.add('is-hover-shadow')
     }
     if (options.loading) {
       this.el.classList.add('is-loading')
@@ -74,12 +78,21 @@ export class MkCard {
     // Apply spring or traditional motion
     if (options.spring !== undefined && options.spring !== false) {
       const springOpts = options.spring === true ? undefined : options.spring
-      this.springHoverCtrl = springHover(this.el, { scale: 1.01, y: -4, shadow: true, spring: springOpts })
+      this.springHoverCtrl = springHover(this.el, {
+        scale: 1.01,
+        y: -4,
+        shadow: true,
+        spring: springOpts,
+      })
     } else if (options.motion !== undefined) {
       this.motion = withMotion(this.el, options.motion)
     } else {
       // Default: spring hover for better feel
-      this.springHoverCtrl = springHover(this.el, { scale: 1.01, y: -4, shadow: true })
+      this.springHoverCtrl = springHover(this.el, {
+        scale: 1.01,
+        y: -4,
+        shadow: true,
+      })
     }
   }
 

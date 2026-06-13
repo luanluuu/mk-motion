@@ -1,8 +1,8 @@
 export interface CoverFlowOptions {
-  perspective?: number     // 透视距离
-  rotateY?: number         // 两侧卡片旋转角度
-  spacing?: number         // 卡片间距
-  scale?: number           // 中心卡片缩放
+  perspective?: number // 透视距离
+  rotateY?: number // 两侧卡片旋转角度
+  spacing?: number // 卡片间距
+  scale?: number // 中心卡片缩放
 }
 
 const DEFAULT_COVERFLOW: Required<CoverFlowOptions> = {

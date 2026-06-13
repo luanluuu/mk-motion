@@ -1,4 +1,12 @@
-import { defineComponent, h, ref, onMounted, onUnmounted, watch, nextTick } from 'vue'
+import {
+  defineComponent,
+  h,
+  ref,
+  onMounted,
+  onUnmounted,
+  watch,
+  nextTick,
+} from 'vue'
 import { createForm } from '../components/form/form.js'
 import type { FormOptions, FormField } from '../components/form/form.js'
 
@@ -6,9 +14,15 @@ export const MkForm = defineComponent({
   name: 'MkForm',
   props: {
     fields: { type: Array as () => FormField[], required: true },
-    layout: { type: String as () => FormOptions['layout'], default: 'vertical' },
+    layout: {
+      type: String as () => FormOptions['layout'],
+      default: 'vertical',
+    },
     labelWidth: { type: String, default: '' },
-    modelValue: { type: Object as () => Record<string, any>, default: () => ({}) },
+    modelValue: {
+      type: Object as () => Record<string, unknown>,
+      default: () => ({}),
+    },
   },
   emits: ['submit', 'validate', 'update:modelValue'],
   setup(props, { emit }) {
@@ -32,15 +46,29 @@ export const MkForm = defineComponent({
 
     onMounted(() => nextTick(create))
 
-    watch(() => props.fields, () => nextTick(create), { deep: true })
-    watch(() => props.layout, () => nextTick(create))
-    watch(() => props.labelWidth, () => nextTick(create))
+    watch(
+      () => props.fields,
+      () => nextTick(create),
+      { deep: true }
+    )
+    watch(
+      () => props.layout,
+      () => nextTick(create)
+    )
+    watch(
+      () => props.labelWidth,
+      () => nextTick(create)
+    )
 
-    watch(() => props.modelValue, (v) => {
-      if (instance) {
-        instance.setValues(v)
-      }
-    }, { deep: true })
+    watch(
+      () => props.modelValue,
+      (v) => {
+        if (instance) {
+          instance.setValues(v)
+        }
+      },
+      { deep: true }
+    )
 
     onUnmounted(() => instance?.destroy())
 

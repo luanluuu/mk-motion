@@ -1,9 +1,13 @@
 <script setup lang="ts">
 import { provide, reactive } from 'vue'
-import { formContextKey, type FormContext, type FormRule } from './formInjection.js'
+import {
+  formContextKey,
+  type FormContext,
+  type FormRule,
+} from './formInjection.js'
 
 interface Props {
-  model: Record<string, any>
+  model: Record<string, unknown>
   rules?: Record<string, FormRule[]>
   layout?: 'vertical' | 'horizontal' | 'inline'
   labelWidth?: string
@@ -15,14 +19,14 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const emit = defineEmits<{
-  submit: [values: Record<string, any>]
+  submit: [values: Record<string, unknown>]
   validate: [errors: Record<string, string>]
 }>()
 
-const model = defineModel<Record<string, any>>('model', { required: true })
+const model = defineModel<Record<string, unknown>>('model', { required: true })
 
 defineSlots<{
-  default?: () => any
+  default?: () => unknown
 }>()
 
 const fields = reactive<Map<string, () => string | undefined>>(new Map())
@@ -36,7 +40,7 @@ function unregisterField(prop: string) {
   fields.delete(prop)
 }
 
-function updateFieldValue(prop: string, value: any) {
+function updateFieldValue(prop: string, value: unknown) {
   const next = { ...model.value, [prop]: value }
   model.value = next
 }
@@ -74,11 +78,21 @@ function onSubmit(e: Event) {
 }
 
 const context = reactive<FormContext>({
-  get model() { return model.value },
-  get rules() { return props.rules },
-  get labelWidth() { return props.labelWidth },
-  get labelPosition() { return props.labelPosition },
-  get layout() { return props.layout },
+  get model() {
+    return model.value
+  },
+  get rules() {
+    return props.rules
+  },
+  get labelWidth() {
+    return props.labelWidth
+  },
+  get labelPosition() {
+    return props.labelPosition
+  },
+  get layout() {
+    return props.layout
+  },
   registerField,
   unregisterField,
   updateFieldValue,

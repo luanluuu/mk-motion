@@ -22,7 +22,9 @@ const emit = defineEmits<{
 const currentPageModel = defineModel<number>('currentPage', { default: 1 })
 const pageSizeModel = defineModel<number>('pageSize', { default: 10 })
 
-const totalPages = computed(() => Math.max(1, Math.ceil(props.total / pageSizeModel.value)))
+const totalPages = computed(() =>
+  Math.max(1, Math.ceil(props.total / pageSizeModel.value))
+)
 
 const pageRange = computed(() => {
   const maxVisible = 5
@@ -35,7 +37,8 @@ const pageRange = computed(() => {
 })
 
 function setPage(page: number) {
-  if (page < 1 || page > totalPages.value || page === currentPageModel.value) return
+  if (page < 1 || page > totalPages.value || page === currentPageModel.value)
+    return
   currentPageModel.value = page
   emit('change', page)
 }
@@ -70,8 +73,15 @@ function onSizeChange(e: Event) {
     </button>
 
     <template v-if="pageRange.start > 1">
-      <button type="button" class="mk-pagination__btn" @click="setPage(1)">1</button>
-      <span v-if="pageRange.start > 2" class="mk-pagination__btn" style="cursor: default">...</span>
+      <button type="button" class="mk-pagination__btn" @click="setPage(1)">
+        1
+      </button>
+      <span
+        v-if="pageRange.start > 2"
+        class="mk-pagination__btn"
+        style="cursor: default"
+        >...</span
+      >
     </template>
 
     <button
@@ -86,8 +96,17 @@ function onSizeChange(e: Event) {
     </button>
 
     <template v-if="pageRange.end < totalPages">
-      <span v-if="pageRange.end < totalPages - 1" class="mk-pagination__btn" style="cursor: default">...</span>
-      <button type="button" class="mk-pagination__btn" @click="setPage(totalPages)">
+      <span
+        v-if="pageRange.end < totalPages - 1"
+        class="mk-pagination__btn"
+        style="cursor: default"
+        >...</span
+      >
+      <button
+        type="button"
+        class="mk-pagination__btn"
+        @click="setPage(totalPages)"
+      >
         {{ totalPages }}
       </button>
     </template>

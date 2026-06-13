@@ -4,7 +4,7 @@ interface TimelineItem {
   name: AnimationName
   target: HTMLElement | string
   options?: AnimationOptions
-  at?: number  // 相对时间线起点的毫秒数
+  at?: number // 相对时间线起点的毫秒数
 }
 
 export class Timeline {
@@ -41,9 +41,9 @@ export class Timeline {
 
     const promises = this.items.map((item) => {
       return new Promise<void>((resolve) => {
-        const el =
+        const el: HTMLElement | null =
           typeof item.target === 'string'
-            ? document.querySelector(item.target)
+            ? document.querySelector<HTMLElement>(item.target)
             : item.target
 
         if (!el || signal.aborted) {
@@ -62,29 +62,28 @@ export class Timeline {
           }
 
           const className = `mk-animated mk-${item.name}`
-          const htmlEl = el as HTMLElement
-          htmlEl.classList.add(...className.split(' '))
-          htmlEl.style.setProperty('--mk-duration', `${duration}ms`)
-          htmlEl.style.setProperty('--mk-easing', easing)
+          el.classList.add(...className.split(' '))
+          el.style.setProperty('--mk-duration', `${duration}ms`)
+          el.style.setProperty('--mk-easing', easing)
 
           const onEnd = (e: AnimationEvent) => {
             if (e.animationName.startsWith('mk-')) {
-              htmlEl.removeEventListener('animationend', onEnd)
-              htmlEl.classList.remove(...className.split(' '))
-              htmlEl.style.removeProperty('--mk-duration')
-              htmlEl.style.removeProperty('--mk-easing')
+              el.removeEventListener('animationend', onEnd)
+              el.classList.remove(...className.split(' '))
+              el.style.removeProperty('--mk-duration')
+              el.style.removeProperty('--mk-easing')
               resolve()
             }
           }
 
-          htmlEl.addEventListener('animationend', onEnd)
+          el.addEventListener('animationend', onEnd)
 
           // 安全兜底：如果动画没触发，超时 resolve
           setTimeout(() => {
-            htmlEl.removeEventListener('animationend', onEnd)
-            htmlEl.classList.remove(...className.split(' '))
-            htmlEl.style.removeProperty('--mk-duration')
-            htmlEl.style.removeProperty('--mk-easing')
+            el.removeEventListener('animationend', onEnd)
+            el.classList.remove(...className.split(' '))
+            el.style.removeProperty('--mk-duration')
+            el.style.removeProperty('--mk-easing')
             resolve()
           }, duration + 100)
         }, delay)
@@ -106,16 +105,15 @@ export class Timeline {
 
     // 清理所有残留的动画类
     this.items.forEach((item) => {
-      const el =
+      const el: HTMLElement | null =
         typeof item.target === 'string'
-          ? document.querySelector(item.target)
+          ? document.querySelector<HTMLElement>(item.target)
           : item.target
       if (el) {
-        const htmlEl = el as HTMLElement
         const className = `mk-animated mk-${item.name}`
-        htmlEl.classList.remove(...className.split(' '))
-        htmlEl.style.removeProperty('--mk-duration')
-        htmlEl.style.removeProperty('--mk-easing')
+        el.classList.remove(...className.split(' '))
+        el.style.removeProperty('--mk-duration')
+        el.style.removeProperty('--mk-easing')
       }
     })
   }

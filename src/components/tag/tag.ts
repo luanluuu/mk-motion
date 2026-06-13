@@ -1,6 +1,9 @@
 import '../../styles/element-plus.css'
 import './tag.css'
-import { withMotion, type MotionOptions } from '../../motion/component-motion.ts'
+import {
+  withMotion,
+  type MotionOptions,
+} from '../../motion/component-motion.ts'
 import { onKey, Keys } from '../../a11y/keyboard.ts'
 
 export interface TagOptions {
@@ -59,7 +62,10 @@ export class MkTag {
 
     parent.appendChild(this.el)
 
-    this.motion = withMotion(this.el, options.motion || { hover: 'scale', enter: 'zoomIn', duration: 200 })
+    this.motion = withMotion(
+      this.el,
+      options.motion || { hover: 'scale', enter: 'zoomIn', duration: 200 }
+    )
   }
 
   private buildClass(): string {

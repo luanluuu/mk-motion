@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import { provide, ref, watch } from 'vue'
 
-const props = withDefaults(defineProps<{
-  modelValue?: string | number
-}>(), {
-  modelValue: undefined as any,
-})
+const props = withDefaults(
+  defineProps<{
+    modelValue?: string | number
+  }>(),
+  {
+    modelValue: undefined,
+  }
+)
 
 const emit = defineEmits<{
   'update:modelValue': [value: string | number]
@@ -14,9 +17,12 @@ const emit = defineEmits<{
 
 const modelValueRef = ref(props.modelValue)
 
-watch(() => props.modelValue, (v) => {
-  modelValueRef.value = v
-})
+watch(
+  () => props.modelValue,
+  (v) => {
+    modelValueRef.value = v
+  }
+)
 
 function change(value: string | number) {
   modelValueRef.value = value
@@ -31,8 +37,14 @@ provide('mk-radio-group', {
 })
 
 function onKeydown(e: KeyboardEvent) {
-  const labels = Array.from((e.currentTarget as HTMLElement).querySelectorAll('.mk-radio:not(.is-disabled)')) as HTMLElement[]
-  const currentIndex = labels.findIndex(el => el.getAttribute('tabindex') === '0' || document.activeElement === el)
+  const labels = Array.from(
+    (e.currentTarget as HTMLElement).querySelectorAll(
+      '.mk-radio:not(.is-disabled)'
+    )
+  ) as HTMLElement[]
+  const currentIndex = labels.findIndex(
+    (el) => el.getAttribute('tabindex') === '0' || document.activeElement === el
+  )
   let nextIndex = currentIndex
   if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
     e.preventDefault()
@@ -42,7 +54,9 @@ function onKeydown(e: KeyboardEvent) {
     nextIndex = (currentIndex + 1) % labels.length
   }
   if (nextIndex !== currentIndex && labels[nextIndex]) {
-    labels.forEach((el, i) => el.setAttribute('tabindex', i === nextIndex ? '0' : '-1'))
+    labels.forEach((el, i) =>
+      el.setAttribute('tabindex', i === nextIndex ? '0' : '-1')
+    )
     labels[nextIndex].focus()
     labels[nextIndex].click()
   }

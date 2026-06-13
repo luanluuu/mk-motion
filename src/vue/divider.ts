@@ -4,7 +4,10 @@ export const MkDivider = defineComponent({
   name: 'MkDivider',
   props: {
     text: { type: String, default: '' },
-    direction: { type: String as () => 'horizontal' | 'vertical', default: 'horizontal' },
+    direction: {
+      type: String as () => 'horizontal' | 'vertical',
+      default: 'horizontal',
+    },
     dashed: { type: Boolean, default: false },
   },
   setup(props) {

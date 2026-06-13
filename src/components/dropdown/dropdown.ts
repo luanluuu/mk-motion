@@ -127,7 +127,9 @@ export class MkDropdown {
         this.toggle()
       }
       this.trigger.addEventListener('click', onClick)
-      this.cleanupFns.push(() => this.trigger.removeEventListener('click', onClick))
+      this.cleanupFns.push(() =>
+        this.trigger.removeEventListener('click', onClick)
+      )
 
       const onDocClick = (e: MouseEvent) => {
         if (this.isOpen && !this.el.contains(e.target as Node)) {
@@ -135,7 +137,9 @@ export class MkDropdown {
         }
       }
       document.addEventListener('click', onDocClick)
-      this.cleanupFns.push(() => document.removeEventListener('click', onDocClick))
+      this.cleanupFns.push(() =>
+        document.removeEventListener('click', onDocClick)
+      )
     } else {
       const onEnter = () => {
         if (this.hideTimer) {
@@ -153,8 +157,12 @@ export class MkDropdown {
       }
       this.trigger.addEventListener('mouseenter', onEnter)
       this.trigger.addEventListener('mouseleave', onLeave)
-      this.cleanupFns.push(() => this.trigger.removeEventListener('mouseenter', onEnter))
-      this.cleanupFns.push(() => this.trigger.removeEventListener('mouseleave', onLeave))
+      this.cleanupFns.push(() =>
+        this.trigger.removeEventListener('mouseenter', onEnter)
+      )
+      this.cleanupFns.push(() =>
+        this.trigger.removeEventListener('mouseleave', onLeave)
+      )
 
       const onMenuEnter = () => {
         if (this.hideTimer) {
@@ -167,8 +175,12 @@ export class MkDropdown {
       }
       this.menu.addEventListener('mouseenter', onMenuEnter)
       this.menu.addEventListener('mouseleave', onMenuLeave)
-      this.cleanupFns.push(() => this.menu.removeEventListener('mouseenter', onMenuEnter))
-      this.cleanupFns.push(() => this.menu.removeEventListener('mouseleave', onMenuLeave))
+      this.cleanupFns.push(() =>
+        this.menu.removeEventListener('mouseenter', onMenuEnter)
+      )
+      this.cleanupFns.push(() =>
+        this.menu.removeEventListener('mouseleave', onMenuLeave)
+      )
     }
   }
 

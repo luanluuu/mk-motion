@@ -1,8 +1,8 @@
 export interface SpringOptions {
-  stiffness?: number    // 刚度，默认 170
-  damping?: number      // 阻尼，默认 26
-  mass?: number         // 质量，默认 1
-  precision?: number    // 停止精度，默认 0.01
+  stiffness?: number // 刚度，默认 170
+  damping?: number // 阻尼，默认 26
+  mass?: number // 质量，默认 1
+  precision?: number // 停止精度，默认 0.01
 }
 
 const DEFAULT_SPRING: Required<SpringOptions> = {
@@ -13,16 +13,23 @@ const DEFAULT_SPRING: Required<SpringOptions> = {
 }
 
 // DevTools registry
+declare global {
+  interface Window {
+    __MK_MOTION__?: MkMotionGlobal
+  }
+}
+
 interface MkMotionGlobal {
   activeSpringAnimations: Set<SpringAnimation>
 }
 
 function getMkMotionGlobal(): MkMotionGlobal {
-  const win = window as any
-  if (!win.__MK_MOTION__) {
-    win.__MK_MOTION__ = { activeSpringAnimations: new Set<SpringAnimation>() }
+  if (!window.__MK_MOTION__) {
+    window.__MK_MOTION__ = {
+      activeSpringAnimations: new Set<SpringAnimation>(),
+    }
   }
-  return win.__MK_MOTION__
+  return window.__MK_MOTION__
 }
 
 export interface SpringValueState {
@@ -93,7 +100,9 @@ export class SpringValue {
 // 颜色解析与插值
 // ---------------------------------------------------------------------------
 
-export function parseColor(input: string | [number, number, number] | [number, number, number, number]): [number, number, number, number] {
+export function parseColor(
+  input: string | [number, number, number] | [number, number, number, number]
+): [number, number, number, number] {
   if (Array.isArray(input)) {
     return input.length === 4 ? input : [...input, 1]
   }
@@ -148,7 +157,12 @@ export function parseColor(input: string | [number, number, number] | [number, n
   return [0, 0, 0, 1]
 }
 
-export function formatColor(r: number, g: number, b: number, a: number): string {
+export function formatColor(
+  r: number,
+  g: number,
+  b: number,
+  a: number
+): string {
   if (a >= 0.999) {
     const ri = Math.round(r)
     const gi = Math.round(g)
@@ -173,10 +187,18 @@ interface PropDef {
 
 export function parseTransformValue(transform: string, key: string): number {
   const defaults: Record<string, number> = {
-    x: 0, y: 0, z: 0,
-    translateX: 0, translateY: 0, translateZ: 0,
-    scale: 1, scaleX: 1, scaleY: 1,
-    rotate: 0, rotateX: 0, rotateY: 0,
+    x: 0,
+    y: 0,
+    z: 0,
+    translateX: 0,
+    translateY: 0,
+    translateZ: 0,
+    scale: 1,
+    scaleX: 1,
+    scaleY: 1,
+    rotate: 0,
+    rotateX: 0,
+    rotateY: 0,
   }
   if (!transform) return defaults[key] ?? 0
 
@@ -196,15 +218,24 @@ export function parseTransformValue(transform: string, key: string): number {
   }
 
   // Handle shorthand translate(x, y) / translate3d(x, y, z)
-  const translateMatch = transform.match(/translate\(\s*([-\d.]+)(?:px)?\s*,\s*([-\d.]+)(?:px)?\s*\)/)
-  const translate3dMatch = transform.match(/translate3d\(\s*([-\d.]+)(?:px)?\s*,\s*([-\d.]+)(?:px)?\s*,\s*([-\d.]+)(?:px)?\s*\)/)
+  const translateMatch = transform.match(
+    /translate\(\s*([-\d.]+)(?:px)?\s*,\s*([-\d.]+)(?:px)?\s*\)/
+  )
+  const translate3dMatch = transform.match(
+    /translate3d\(\s*([-\d.]+)(?:px)?\s*,\s*([-\d.]+)(?:px)?\s*,\s*([-\d.]+)(?:px)?\s*\)/
+  )
 
-  if (translate3dMatch && (key === 'x' || key === 'translateX')) return parseFloat(translate3dMatch[1])
-  if (translate3dMatch && (key === 'y' || key === 'translateY')) return parseFloat(translate3dMatch[2])
-  if (translate3dMatch && (key === 'z' || key === 'translateZ')) return parseFloat(translate3dMatch[3])
+  if (translate3dMatch && (key === 'x' || key === 'translateX'))
+    return parseFloat(translate3dMatch[1])
+  if (translate3dMatch && (key === 'y' || key === 'translateY'))
+    return parseFloat(translate3dMatch[2])
+  if (translate3dMatch && (key === 'z' || key === 'translateZ'))
+    return parseFloat(translate3dMatch[3])
 
-  if (translateMatch && (key === 'x' || key === 'translateX')) return parseFloat(translateMatch[1])
-  if (translateMatch && (key === 'y' || key === 'translateY')) return parseFloat(translateMatch[2])
+  if (translateMatch && (key === 'x' || key === 'translateX'))
+    return parseFloat(translateMatch[1])
+  if (translateMatch && (key === 'y' || key === 'translateY'))
+    return parseFloat(translateMatch[2])
 
   const match = transform.match(patterns[key])
   if (match) return parseFloat(match[1])
@@ -212,23 +243,84 @@ export function parseTransformValue(transform: string, key: string): number {
 }
 
 const PROP_MAP: Record<string, PropDef> = {
-  x: { type: 'transform', unit: 'px', toCss: (v) => `translateX(${v}${typeof v === 'number' ? 'px' : ''})` },
-  y: { type: 'transform', unit: 'px', toCss: (v) => `translateY(${v}${typeof v === 'number' ? 'px' : ''})` },
-  translateX: { type: 'transform', unit: 'px', toCss: (v) => `translateX(${v}${typeof v === 'number' ? 'px' : ''})` },
-  translateY: { type: 'transform', unit: 'px', toCss: (v) => `translateY(${v}${typeof v === 'number' ? 'px' : ''})` },
-  translateZ: { type: 'transform', unit: 'px', toCss: (v) => `translateZ(${v}${typeof v === 'number' ? 'px' : ''})` },
+  x: {
+    type: 'transform',
+    unit: 'px',
+    toCss: (v) => `translateX(${v}${typeof v === 'number' ? 'px' : ''})`,
+  },
+  y: {
+    type: 'transform',
+    unit: 'px',
+    toCss: (v) => `translateY(${v}${typeof v === 'number' ? 'px' : ''})`,
+  },
+  translateX: {
+    type: 'transform',
+    unit: 'px',
+    toCss: (v) => `translateX(${v}${typeof v === 'number' ? 'px' : ''})`,
+  },
+  translateY: {
+    type: 'transform',
+    unit: 'px',
+    toCss: (v) => `translateY(${v}${typeof v === 'number' ? 'px' : ''})`,
+  },
+  translateZ: {
+    type: 'transform',
+    unit: 'px',
+    toCss: (v) => `translateZ(${v}${typeof v === 'number' ? 'px' : ''})`,
+  },
   scale: { type: 'transform', toCss: (v) => `scale(${v})` },
   scaleX: { type: 'transform', toCss: (v) => `scaleX(${v})` },
   scaleY: { type: 'transform', toCss: (v) => `scaleY(${v})` },
-  rotate: { type: 'transform', unit: 'deg', toCss: (v) => `rotate(${v}${typeof v === 'number' ? 'deg' : ''})` },
-  rotateX: { type: 'transform', unit: 'deg', toCss: (v) => `rotateX(${v}${typeof v === 'number' ? 'deg' : ''})` },
-  rotateY: { type: 'transform', unit: 'deg', toCss: (v) => `rotateY(${v}${typeof v === 'number' ? 'deg' : ''})` },
+  rotate: {
+    type: 'transform',
+    unit: 'deg',
+    toCss: (v) => `rotate(${v}${typeof v === 'number' ? 'deg' : ''})`,
+  },
+  rotateX: {
+    type: 'transform',
+    unit: 'deg',
+    toCss: (v) => `rotateX(${v}${typeof v === 'number' ? 'deg' : ''})`,
+  },
+  rotateY: {
+    type: 'transform',
+    unit: 'deg',
+    toCss: (v) => `rotateY(${v}${typeof v === 'number' ? 'deg' : ''})`,
+  },
   opacity: { type: 'number', cssName: 'opacity', toCss: (v) => `${v}` },
-  width: { type: 'number', cssName: 'width', unit: 'px', toCss: (v) => `${v}px` },
-  height: { type: 'number', cssName: 'height', unit: 'px', toCss: (v) => `${v}px` },
-  borderRadius: { type: 'number', cssName: 'border-radius', unit: 'px', toCss: (v) => `${v}px` },
-  backgroundColor: { type: 'color', cssName: 'background-color', toCss: (v) => formatColor((v as any)[0], (v as any)[1], (v as any)[2], (v as any)[3]) },
-  color: { type: 'color', cssName: 'color', toCss: (v) => formatColor((v as any)[0], (v as any)[1], (v as any)[2], (v as any)[3]) },
+  width: {
+    type: 'number',
+    cssName: 'width',
+    unit: 'px',
+    toCss: (v) => `${v}px`,
+  },
+  height: {
+    type: 'number',
+    cssName: 'height',
+    unit: 'px',
+    toCss: (v) => `${v}px`,
+  },
+  borderRadius: {
+    type: 'number',
+    cssName: 'border-radius',
+    unit: 'px',
+    toCss: (v) => `${v}px`,
+  },
+  backgroundColor: {
+    type: 'color',
+    cssName: 'background-color',
+    toCss: (v) => {
+      const [r, g, b, a] = v as [number, number, number, number]
+      return formatColor(r, g, b, a)
+    },
+  },
+  color: {
+    type: 'color',
+    cssName: 'color',
+    toCss: (v) => {
+      const [r, g, b, a] = v as [number, number, number, number]
+      return formatColor(r, g, b, a)
+    },
+  },
 }
 
 export interface SpringProperties {
@@ -247,7 +339,10 @@ export interface SpringProperties {
   width?: number
   height?: number
   borderRadius?: number
-  backgroundColor?: string | [number, number, number] | [number, number, number, number]
+  backgroundColor?:
+    | string
+    | [number, number, number]
+    | [number, number, number, number]
   color?: string | [number, number, number] | [number, number, number, number]
 }
 
@@ -283,8 +378,12 @@ export class SpringAnimation {
     to: SpringProperties,
     options: SpringOptions = {}
   ) {
-    this.target = typeof target === 'string' ? document.querySelector<HTMLElement>(target)! : target
-    if (!this.target) throw new Error('SpringAnimation: target element not found')
+    this.target =
+      typeof target === 'string'
+        ? document.querySelector<HTMLElement>(target)!
+        : target
+    if (!this.target)
+      throw new Error('SpringAnimation: target element not found')
 
     this.options = { ...DEFAULT_SPRING, ...options }
     this.initProps(from, to)
@@ -295,15 +394,26 @@ export class SpringAnimation {
       const def = PROP_MAP[key]
       if (!def) continue
 
-      const fromVal = (from as any)[key] ?? this.getCurrentValue(key, def)
+      const fromVal =
+        from[key as keyof SpringProperties] ?? this.getCurrentValue(key, def)
       const isColor = def.type === 'color'
 
       let fromNum: number
       let toNum: number
 
       if (isColor) {
-        const fromParsed = parseColor(fromVal as any)
-        const toParsed = parseColor(toVal as any)
+        const fromParsed = parseColor(
+          fromVal as
+            | string
+            | [number, number, number]
+            | [number, number, number, number]
+        )
+        const toParsed = parseColor(
+          toVal as
+            | string
+            | [number, number, number]
+            | [number, number, number, number]
+        )
         // 用 R 通道作为弹簧值，G/B/A 在 onUpdate 中按比例插值
         fromNum = fromParsed[0]
         toNum = toParsed[0]
@@ -326,10 +436,14 @@ export class SpringAnimation {
       return parseTransformValue(transform, key)
     }
     if (def.type === 'color') {
-      const computed = getComputedStyle(this.target)[def.cssName as any]
+      const computed = def.cssName
+        ? getComputedStyle(this.target).getPropertyValue(def.cssName)
+        : ''
       return computed || '#000000'
     }
-    const computed = getComputedStyle(this.target)[def.cssName as any]
+    const computed = def.cssName
+      ? getComputedStyle(this.target).getPropertyValue(def.cssName)
+      : '0'
     return parseFloat(computed) || 0
   }
 
@@ -386,7 +500,12 @@ export class SpringAnimation {
       const active = this.props.get(key)
       if (active) {
         if (active.isColor) {
-          const toParsed = parseColor(toVal as any)
+          const toParsed = parseColor(
+            toVal as
+              | string
+              | [number, number, number]
+              | [number, number, number, number]
+          )
           active.spring.setTarget(toParsed[0])
           this._colorTo = toParsed
         } else {
@@ -441,10 +560,18 @@ export class SpringAnimation {
         if (this._colorFrom && this._colorTo) {
           const t = (state.current - this._colorFrom[0]) * this._colorRangeInv
           const clampedT = Math.max(0, Math.min(1, t))
-          const r = this._colorFrom[0] + (this._colorTo[0] - this._colorFrom[0]) * clampedT
-          const g = this._colorFrom[1] + (this._colorTo[1] - this._colorFrom[1]) * clampedT
-          const b = this._colorFrom[2] + (this._colorTo[2] - this._colorFrom[2]) * clampedT
-          const a = this._colorFrom[3] + (this._colorTo[3] - this._colorFrom[3]) * clampedT
+          const r =
+            this._colorFrom[0] +
+            (this._colorTo[0] - this._colorFrom[0]) * clampedT
+          const g =
+            this._colorFrom[1] +
+            (this._colorTo[1] - this._colorFrom[1]) * clampedT
+          const b =
+            this._colorFrom[2] +
+            (this._colorTo[2] - this._colorFrom[2]) * clampedT
+          const a =
+            this._colorFrom[3] +
+            (this._colorTo[3] - this._colorFrom[3]) * clampedT
           cssProps[active.def.cssName!] = formatColor(r, g, b, a)
         }
       } else {
@@ -457,14 +584,14 @@ export class SpringAnimation {
     }
 
     for (const [prop, val] of Object.entries(cssProps)) {
-      (this.target.style as any)[prop] = val
+      this.target.style.setProperty(prop, val)
     }
   }
 
   private getCurrentProperties(): SpringProperties {
     for (const [propKey, active] of this.props) {
       const state = active.spring.getState()
-      ;(this._reusableProps as any)[propKey] = state.current
+      ;(this._reusableProps as Record<string, number>)[propKey] = state.current
     }
     return this._reusableProps
   }
@@ -516,7 +643,7 @@ export function springFromTo(
 // ---------------------------------------------------------------------------
 
 export interface StaggerOptions extends SpringOptions {
-  delay?: number        // 每个元素之间的延迟（ms）
+  delay?: number // 每个元素之间的延迟（ms）
   from?: 'first' | 'last' | 'center'
 }
 
@@ -534,8 +661,14 @@ export async function springStagger(
     from === 'last'
       ? elements.map((_, i) => elements.length - 1 - i)
       : from === 'center'
-      ? elements.map((_, i) => i).sort((a, b) => Math.abs(a - elements.length / 2) - Math.abs(b - elements.length / 2))
-      : elements.map((_, i) => i)
+        ? elements
+            .map((_, i) => i)
+            .sort(
+              (a, b) =>
+                Math.abs(a - elements.length / 2) -
+                Math.abs(b - elements.length / 2)
+            )
+        : elements.map((_, i) => i)
 
   const promises = elements.map((_, idx) => {
     const actualIndex = order[idx]
@@ -556,14 +689,20 @@ export interface SpringSequenceStep {
   options?: SpringOptions
 }
 
-export async function springSequence(steps: SpringSequenceStep[]): Promise<void> {
+export async function springSequence(
+  steps: SpringSequenceStep[]
+): Promise<void> {
   for (const step of steps) {
     await springFromTo(step.target, step.from || {}, step.to, step.options)
   }
 }
 
-export async function springParallel(steps: SpringSequenceStep[]): Promise<void> {
+export async function springParallel(
+  steps: SpringSequenceStep[]
+): Promise<void> {
   await Promise.all(
-    steps.map((step) => springFromTo(step.target, step.from || {}, step.to, step.options))
+    steps.map((step) =>
+      springFromTo(step.target, step.from || {}, step.to, step.options)
+    )
   )
 }

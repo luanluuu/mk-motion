@@ -18,21 +18,30 @@ export function escapeHtml(s: string) {
 export function copyCode(id: string) {
   const text = document.getElementById(id)!.textContent!
   navigator.clipboard.writeText(text)
-  const btn = document.querySelector(`button[data-code-id="${id}"]`) as HTMLButtonElement
+  const btn = document.querySelector(
+    `button[data-code-id="${id}"]`
+  ) as HTMLButtonElement
   if (!btn) return
   const old = btn.textContent
   btn.textContent = '已复制'
-  setTimeout(() => btn.textContent = old, 1500)
+  setTimeout(() => (btn.textContent = old), 1500)
 }
 
 export function renderToc(ids: string[]) {
   const toc = document.getElementById('toc')!
-  toc.innerHTML = '<div class="doc-toc-title">目录</div>' +
-    ids.map(id => {
-      const el = document.getElementById(id)
-      const text = el ? (el.tagName.match(/^H/i) ? el.textContent : el.previousElementSibling?.textContent || id) : id
-      return `<a href="#${id}" onclick="event.preventDefault();document.getElementById('${id}').scrollIntoView({behavior:'smooth'})">${text}</a>`
-    }).join('')
+  toc.innerHTML =
+    '<div class="doc-toc-title">目录</div>' +
+    ids
+      .map((id) => {
+        const el = document.getElementById(id)
+        const text = el
+          ? el.tagName.match(/^H/i)
+            ? el.textContent
+            : el.previousElementSibling?.textContent || id
+          : id
+        return `<a href="#${id}" onclick="event.preventDefault();document.getElementById('${id}').scrollIntoView({behavior:'smooth'})">${text}</a>`
+      })
+      .join('')
 }
 
 export function codeBlock(text: string): HTMLElement {

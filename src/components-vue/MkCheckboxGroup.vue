@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import { provide, ref, watch } from 'vue'
 
-const props = withDefaults(defineProps<{
-  modelValue?: (string | number)[]
-}>(), {
-  modelValue: () => [],
-})
+const props = withDefaults(
+  defineProps<{
+    modelValue?: (string | number)[]
+  }>(),
+  {
+    modelValue: () => [],
+  }
+)
 
 const emit = defineEmits<{
   'update:modelValue': [value: (string | number)[]]
@@ -14,9 +17,13 @@ const emit = defineEmits<{
 
 const modelValueRef = ref<(string | number)[]>([...props.modelValue])
 
-watch(() => props.modelValue, (v) => {
-  modelValueRef.value = [...(v || [])]
-}, { deep: true })
+watch(
+  () => props.modelValue,
+  (v) => {
+    modelValueRef.value = [...(v || [])]
+  },
+  { deep: true }
+)
 
 function change(value: string | number, checked: boolean) {
   const set = new Set(modelValueRef.value)

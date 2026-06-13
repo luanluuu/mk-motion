@@ -1,14 +1,17 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 
-const props = withDefaults(defineProps<{
-  fluid?: boolean
-  maxWidth?: number | string
-  padding?: number | string
-  centered?: boolean
-}>(), {
-  centered: true,
-})
+const props = withDefaults(
+  defineProps<{
+    fluid?: boolean
+    maxWidth?: number | string
+    padding?: number | string
+    centered?: boolean
+  }>(),
+  {
+    centered: true,
+  }
+)
 
 const containerClass = computed(() => {
   return [
@@ -21,10 +24,14 @@ const containerClass = computed(() => {
 const containerStyle = computed(() => {
   const style: Record<string, string> = {}
   if (props.maxWidth) {
-    style.maxWidth = typeof props.maxWidth === 'number' ? `${props.maxWidth}px` : props.maxWidth
+    style.maxWidth =
+      typeof props.maxWidth === 'number'
+        ? `${props.maxWidth}px`
+        : props.maxWidth
   }
   if (props.padding !== undefined) {
-    style.padding = typeof props.padding === 'number' ? `${props.padding}px` : props.padding
+    style.padding =
+      typeof props.padding === 'number' ? `${props.padding}px` : props.padding
   }
   return Object.keys(style).length ? style : undefined
 })

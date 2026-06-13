@@ -30,7 +30,8 @@ if (!Element.prototype.animate) {
 
 // jsdom exposes canvas APIs but reports them as not implemented. Some visual
 // effects probe getContext during import, so provide a minimal harmless mock.
-HTMLCanvasElement.prototype.getContext = (() => null) as typeof HTMLCanvasElement.prototype.getContext
+HTMLCanvasElement.prototype.getContext = (() =>
+  null) as typeof HTMLCanvasElement.prototype.getContext
 
 // jsdom doesn't support AnimationEvent by default
 if (typeof AnimationEvent === 'undefined') {
@@ -47,5 +48,8 @@ if (typeof AnimationEvent === 'undefined') {
     }
   }
 
-  ;(globalThis as any).AnimationEvent = AnimationEventMock
+  declare global {
+    var AnimationEvent: typeof AnimationEventMock
+  }
+  globalThis.AnimationEvent = AnimationEventMock
 }

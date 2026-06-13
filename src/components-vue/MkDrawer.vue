@@ -27,16 +27,20 @@ const model = defineModel<boolean>({ default: false })
 const visible = ref(false)
 const overlayRef = ref<HTMLDivElement | null>(null)
 
-watch(model, async (val) => {
-  if (val) {
-    visible.value = true
-    await nextTick()
-    emit('open')
-  } else {
-    visible.value = false
-    emit('close')
-  }
-}, { immediate: true })
+watch(
+  model,
+  async (val) => {
+    if (val) {
+      visible.value = true
+      await nextTick()
+      emit('open')
+    } else {
+      visible.value = false
+      emit('close')
+    }
+  },
+  { immediate: true }
+)
 
 const doClose = () => {
   model.value = false
@@ -92,7 +96,8 @@ const sizeStyle = computed(() => {
               @click="doClose"
               @keydown.enter.prevent="doClose"
               @keydown.space.prevent="doClose"
-            >✕</span>
+              >✕</span
+            >
           </div>
           <div class="mk-drawer__body">
             <slot />
@@ -223,11 +228,19 @@ const sizeStyle = computed(() => {
 }
 
 .mk-drawer-enter-from .mk-drawer--right,
-.mk-drawer-leave-to .mk-drawer--right { transform: translateX(100%); }
+.mk-drawer-leave-to .mk-drawer--right {
+  transform: translateX(100%);
+}
 .mk-drawer-enter-from .mk-drawer--left,
-.mk-drawer-leave-to .mk-drawer--left { transform: translateX(-100%); }
+.mk-drawer-leave-to .mk-drawer--left {
+  transform: translateX(-100%);
+}
 .mk-drawer-enter-from .mk-drawer--top,
-.mk-drawer-leave-to .mk-drawer--top { transform: translateY(-100%); }
+.mk-drawer-leave-to .mk-drawer--top {
+  transform: translateY(-100%);
+}
 .mk-drawer-enter-from .mk-drawer--bottom,
-.mk-drawer-leave-to .mk-drawer--bottom { transform: translateY(100%); }
+.mk-drawer-leave-to .mk-drawer--bottom {
+  transform: translateY(100%);
+}
 </style>

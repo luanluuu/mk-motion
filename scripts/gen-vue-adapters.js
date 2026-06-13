@@ -9,7 +9,11 @@ function findTsFiles(dir, files = []) {
     const full = join(dir, entry)
     if (statSync(full).isDirectory()) {
       findTsFiles(full, files)
-    } else if (entry.endsWith('.ts') && !entry.endsWith('.css.ts') && !entry.includes('test')) {
+    } else if (
+      entry.endsWith('.ts') &&
+      !entry.endsWith('.css.ts') &&
+      !entry.includes('test')
+    ) {
       files.push(full)
     }
   }
@@ -17,7 +21,9 @@ function findTsFiles(dir, files = []) {
 }
 
 function parseInterface(content) {
-  const match = content.match(/export\s+interface\s+(\w+Options)\s*\{([^}]+)\}/s)
+  const match = content.match(
+    /export\s+interface\s+(\w+Options)\s*\{([^}]+)\}/s
+  )
   if (!match) return null
   const name = match[1]
   const body = match[2]
@@ -49,64 +55,86 @@ function parseClassMethods(content) {
 }
 
 function tsTypeToVueProp(type) {
-  if (type.includes('boolean') || type === 'boolean') return `{ type: Boolean, default: false }`
-  if (type.includes('number') || type === 'number') return `{ type: Number, default: 0 }`
-  if (type.includes('string') || type === 'string') return `{ type: String, default: '' }`
-  if (type.includes('Function') || type.includes('=>')) return `{ type: Function, default: undefined }`
-  if (type.includes('[]') || type.includes('Array')) return `{ type: Array, default: () => [] }`
-  if (type.includes('Record') || type.includes('object') || type.includes('Object')) return `{ type: Object, default: () => ({}) }`
+  if (type.includes('boolean') || type === 'boolean')
+    return `{ type: Boolean, default: false }`
+  if (type.includes('number') || type === 'number')
+    return `{ type: Number, default: 0 }`
+  if (type.includes('string') || type === 'string')
+    return `{ type: String, default: '' }`
+  if (type.includes('Function') || type.includes('=>'))
+    return `{ type: Function, default: undefined }`
+  if (type.includes('[]') || type.includes('Array'))
+    return `{ type: Array, default: () => [] }`
+  if (
+    type.includes('Record') ||
+    type.includes('object') ||
+    type.includes('Object')
+  )
+    return `{ type: Object, default: () => ({}) }`
   return `{ type: String, default: '' }`
 }
 
 function kebabCase(str) {
-  return str.replace(/([A-Z])/g, '-$1').toLowerCase().replace(/^-/, '')
+  return str
+    .replace(/([A-Z])/g, '-$1')
+    .toLowerCase()
+    .replace(/^-/, '')
 }
 
-function generateVueAdapter(relativePath, componentName, createFn, options, methods) {
+function generateVueAdapter(
+  relativePath,
+  componentName,
+  createFn,
+  options,
+  methods
+) {
   const importPath = relativePath.replace(/\.ts$/, '.js')
   const className = `Mk${componentName}`
 
   const propDefs = options.props
-    .filter(p => !p.key.startsWith('on') && p.key !== 'motion')
-    .map(p => {
+    .filter((p) => !p.key.startsWith('on') && p.key !== 'motion')
+    .map((p) => {
       const vueType = tsTypeToVueProp(p.type)
       return `    ${p.key}: ${vueType},`
     })
     .join('\n')
 
-  const motionProp = options.props.find(p => p.key === 'motion')
-  const motionPropDef = motionProp ? `    motion: { type: Object, default: undefined },` : ''
+  const motionProp = options.props.find((p) => p.key === 'motion')
+  const motionPropDef = motionProp
+    ? `    motion: { type: Object, default: undefined },`
+    : ''
 
   const emitEvents = options.props
-    .filter(p => p.key.startsWith('on') && p.key.length > 2)
-    .map(p => {
+    .filter((p) => p.key.startsWith('on') && p.key.length > 2)
+    .map((p) => {
       const eventName = p.key[2].toLowerCase() + p.key.slice(3)
       return eventName
     })
 
-  const emitDef = emitEvents.length > 0
-    ? `  emits: [${emitEvents.map(e => `'${e}'`).join(', ')}],`
-    : ''
+  const emitDef =
+    emitEvents.length > 0
+      ? `  emits: [${emitEvents.map((e) => `'${e}'`).join(', ')}],`
+      : ''
 
   const setterWatches = methods
-    .filter(m => m.startsWith('set') && m !== 'destroy')
-    .map(m => {
+    .filter((m) => m.startsWith('set') && m !== 'destroy')
+    .map((m) => {
       const propName = m[3].toLowerCase() + m.slice(4)
       return `    watch(() => props.${propName}, (v) => instance?.${m}(v))`
     })
     .join('\n')
 
   const callbackProps = options.props
-    .filter(p => p.key.startsWith('on') && p.key.length > 2)
-    .map(p => {
+    .filter((p) => p.key.startsWith('on') && p.key.length > 2)
+    .map((p) => {
       const eventName = p.key[2].toLowerCase() + p.key.slice(3)
       return `${p.key}: (e) => emit('${eventName}', e),`
     })
     .join('\n      ')
 
   const otherProps = options.props
-    .filter(p => !p.key.startsWith('on') && p.key !== 'motion')
-    .map(p => `${p.key}: props.${p.key},`)
+    .filter((p) => !p.key.startsWith('on') && p.key !== 'motion')
+    .map((p) => `${p.key}: props.${p.key},`)
     .join('\n      ')
 
   const motionPropInCreate = motionProp ? 'motion: props.motion,' : ''
@@ -160,10 +188,18 @@ for (const file of files) {
   const baseName = file.split('/').pop().replace('.ts', '')
   const componentName = baseName[0].toUpperCase() + baseName.slice(1)
 
-  const vueCode = generateVueAdapter(relativePath, componentName, createFn, iface, methods)
+  const vueCode = generateVueAdapter(
+    relativePath,
+    componentName,
+    createFn,
+    iface,
+    methods
+  )
   const vueFile = join(VUE_DIR, `${kebabCase(componentName)}.ts`)
   writeFileSync(vueFile, vueCode)
-  exports.push(`export { Mk${componentName} } from './${kebabCase(componentName)}.js'`)
+  exports.push(
+    `export { Mk${componentName} } from './${kebabCase(componentName)}.js'`
+  )
   console.log(`Generated: src/vue/${kebabCase(componentName)}.ts`)
 }
 

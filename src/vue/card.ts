@@ -1,4 +1,12 @@
-import { defineComponent, h, ref, onMounted, onUnmounted, watch, nextTick } from 'vue'
+import {
+  defineComponent,
+  h,
+  ref,
+  onMounted,
+  onUnmounted,
+  watch,
+  nextTick,
+} from 'vue'
 import { createCard } from '../components/card/card.js'
 import type { CardOptions } from '../components/card/card.js'
 
@@ -50,8 +58,23 @@ export const MkCard = defineComponent({
     }
 
     onMounted(() => nextTick(create))
-    watch(() => [props.title, props.body, props.footer, props.shadow, props.image, props.loading, props.motion], () => nextTick(create), { deep: true })
-    watch(() => props.loading, (v) => instance?.setLoading(v))
+    watch(
+      () => [
+        props.title,
+        props.body,
+        props.footer,
+        props.shadow,
+        props.image,
+        props.loading,
+        props.motion,
+      ],
+      () => nextTick(create),
+      { deep: true }
+    )
+    watch(
+      () => props.loading,
+      (v) => instance?.setLoading(v)
+    )
     onUnmounted(() => instance?.destroy())
 
     return () => h('div', { ref: container })

@@ -15,7 +15,10 @@ export class MkBreadcrumb {
   el: HTMLElement
 
   constructor(container: HTMLElement | string, options: BreadcrumbOptions) {
-    const parent = typeof container === 'string' ? document.querySelector(container)! : container
+    const parent =
+      typeof container === 'string'
+        ? document.querySelector(container)!
+        : container
 
     this.el = document.createElement('nav')
     this.el.className = 'mk-breadcrumb'
@@ -47,7 +50,7 @@ export class MkBreadcrumb {
         const link = document.createElement(item.href ? 'a' : 'span')
         link.className = 'mk-breadcrumb__item is-link'
         if (item.href) {
-          (link as HTMLAnchorElement).href = item.href
+          ;(link as HTMLAnchorElement).href = item.href
         }
         link.textContent = item.label
         link.style.cursor = item.onClick || item.href ? 'pointer' : 'default'
@@ -66,6 +69,9 @@ export class MkBreadcrumb {
   }
 }
 
-export function createBreadcrumb(container: HTMLElement | string, options: BreadcrumbOptions): MkBreadcrumb {
+export function createBreadcrumb(
+  container: HTMLElement | string,
+  options: BreadcrumbOptions
+): MkBreadcrumb {
   return new MkBreadcrumb(container, options)
 }

@@ -19,7 +19,8 @@ export class MkRow {
     this.el = document.createElement('div')
     this.el.className = 'mk-row'
 
-    if (options.justify) this.el.classList.add(`mk-row--justify-${options.justify}`)
+    if (options.justify)
+      this.el.classList.add(`mk-row--justify-${options.justify}`)
     if (options.align) this.el.classList.add(`mk-row--align-${options.align}`)
     if (options.wrap === false) this.el.classList.add('mk-row--no-wrap')
     if (options.gutter) {
@@ -40,7 +41,7 @@ export class MkRow {
       col.classList.add(`mk-col-offset-${options.offset}`)
     }
     if (options?.className) {
-      options.className.split(' ').forEach(c => col.classList.add(c))
+      options.className.split(' ').forEach((c) => col.classList.add(c))
     }
 
     if (typeof content === 'string') {

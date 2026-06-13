@@ -4,15 +4,18 @@ import { springHover } from '../motion/component-spring.ts'
 import type { SpringOptions } from '../core/spring-engine.ts'
 import { withMotion, type MotionOptions } from '../motion/component-motion.ts'
 
-const props = withDefaults(defineProps<{
-  title?: string
-  shadow?: 'always' | 'hover' | 'never'
-  loading?: boolean
-  motion?: MotionOptions
-  spring?: boolean | SpringOptions
-}>(), {
-  shadow: 'never',
-})
+const props = withDefaults(
+  defineProps<{
+    title?: string
+    shadow?: 'always' | 'hover' | 'never'
+    loading?: boolean
+    motion?: MotionOptions
+    spring?: boolean | SpringOptions
+  }>(),
+  {
+    shadow: 'never',
+  }
+)
 
 const cardRef = ref<HTMLDivElement | null>(null)
 let motionCtrl: { destroy: () => void } | null = null
@@ -29,11 +32,20 @@ onMounted(() => {
   if (!cardRef.value) return
   if (props.spring !== undefined && props.spring !== false) {
     const springOpts = props.spring === true ? undefined : props.spring
-    motionCtrl = springHover(cardRef.value, { scale: 1.01, y: -4, shadow: true, spring: springOpts })
+    motionCtrl = springHover(cardRef.value, {
+      scale: 1.01,
+      y: -4,
+      shadow: true,
+      spring: springOpts,
+    })
   } else if (props.motion !== undefined) {
     motionCtrl = withMotion(cardRef.value, props.motion)
   } else {
-    motionCtrl = springHover(cardRef.value, { scale: 1.01, y: -4, shadow: true })
+    motionCtrl = springHover(cardRef.value, {
+      scale: 1.01,
+      y: -4,
+      shadow: true,
+    })
   }
 })
 

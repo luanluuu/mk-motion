@@ -49,12 +49,12 @@ npm install
 
 ## 常用命令
 
-| 命令 | 作用 |
-| --- | --- |
-| `npm run dev` | 启动库开发入口（热更新） |
-| `npm run docs:dev` | 启动文档站开发服务器 → `http://localhost:5173` |
-| `npm run build` | 编译 + 打包（`tsc && vite build && vite build --config vite.entries.config.ts`） |
-| `npm run build:docs` | 构建文档站 |
+| 命令                 | 作用                                                                             |
+| -------------------- | -------------------------------------------------------------------------------- |
+| `npm run dev`        | 启动库开发入口（热更新）                                                         |
+| `npm run docs:dev`   | 启动文档站开发服务器 → `http://localhost:5173`                                   |
+| `npm run build`      | 编译 + 打包（`tsc && vite build && vite build --config vite.entries.config.ts`） |
+| `npm run build:docs` | 构建文档站                                                                       |
 
 ## 开发流程
 

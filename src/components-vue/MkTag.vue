@@ -2,17 +2,20 @@
 import { computed, ref, onMounted, onBeforeUnmount } from 'vue'
 import { withMotion, type MotionOptions } from '../motion/component-motion.ts'
 
-const props = withDefaults(defineProps<{
-  type?: 'default' | 'primary' | 'success' | 'warning' | 'danger' | 'info'
-  size?: 'small' | 'default' | 'large'
-  closable?: boolean
-  round?: boolean
-  plain?: boolean
-  motion?: MotionOptions
-}>(), {
-  type: 'default',
-  size: 'default',
-})
+const props = withDefaults(
+  defineProps<{
+    type?: 'default' | 'primary' | 'success' | 'warning' | 'danger' | 'info'
+    size?: 'small' | 'default' | 'large'
+    closable?: boolean
+    round?: boolean
+    plain?: boolean
+    motion?: MotionOptions
+  }>(),
+  {
+    type: 'default',
+    size: 'default',
+  }
+)
 
 const emit = defineEmits<{
   close: []
@@ -51,7 +54,10 @@ function onCloseKeydown(e: KeyboardEvent) {
 
 onMounted(() => {
   if (tagRef.value) {
-    motionCtrl = withMotion(tagRef.value, props.motion || { hover: 'scale', enter: 'zoomIn', duration: 200 })
+    motionCtrl = withMotion(
+      tagRef.value,
+      props.motion || { hover: 'scale', enter: 'zoomIn', duration: 200 }
+    )
   }
 })
 
@@ -71,7 +77,8 @@ onBeforeUnmount(() => {
       aria-label="Close"
       @click="close"
       @keydown="onCloseKeydown"
-    >×</span>
+      >×</span
+    >
   </span>
 </template>
 

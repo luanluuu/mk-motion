@@ -1,16 +1,19 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 
-const props = withDefaults(defineProps<{
-  type?: 'info' | 'success' | 'warning' | 'danger'
-  title?: string
-  description?: string
-  closable?: boolean
-  showIcon?: boolean
-}>(), {
-  type: 'info',
-  showIcon: true,
-})
+const props = withDefaults(
+  defineProps<{
+    type?: 'info' | 'success' | 'warning' | 'danger'
+    title?: string
+    description?: string
+    closable?: boolean
+    showIcon?: boolean
+  }>(),
+  {
+    type: 'info',
+    showIcon: true,
+  }
+)
 
 const emit = defineEmits<{
   close: []
@@ -54,7 +57,9 @@ function close() {
         <div v-if="title" class="mk-alert__title">{{ title }}</div>
       </slot>
       <slot name="description">
-        <div v-if="description" class="mk-alert__description">{{ description }}</div>
+        <div v-if="description" class="mk-alert__description">
+          {{ description }}
+        </div>
       </slot>
       <slot />
     </div>
@@ -63,7 +68,9 @@ function close() {
       class="mk-alert__close"
       aria-label="Close"
       @click="close"
-    >×</button>
+    >
+      ×
+    </button>
   </div>
 </template>
 

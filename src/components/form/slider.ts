@@ -16,7 +16,8 @@ export class MkSlider {
   private fill: HTMLDivElement
   private thumb: HTMLDivElement
   private valueEl?: HTMLDivElement
-  private options: Required<Omit<SliderOptions, 'onChange'>> & Pick<SliderOptions, 'onChange'>
+  private options: Required<Omit<SliderOptions, 'onChange'>> &
+    Pick<SliderOptions, 'onChange'>
   private _value: number
   private dragging = false
   private _cleanupKey?: () => void
@@ -64,10 +65,26 @@ export class MkSlider {
     this.updateUI()
 
     this._cleanupKey = onKey(this.thumb, [
-      { key: Keys.ArrowLeft, handler: () => this.adjustValue(-this.options.step) },
-      { key: Keys.ArrowRight, handler: () => this.adjustValue(this.options.step) },
-      { key: Keys.Home, handler: () => { this.value = this.options.min } },
-      { key: Keys.End, handler: () => { this.value = this.options.max } },
+      {
+        key: Keys.ArrowLeft,
+        handler: () => this.adjustValue(-this.options.step),
+      },
+      {
+        key: Keys.ArrowRight,
+        handler: () => this.adjustValue(this.options.step),
+      },
+      {
+        key: Keys.Home,
+        handler: () => {
+          this.value = this.options.min
+        },
+      },
+      {
+        key: Keys.End,
+        handler: () => {
+          this.value = this.options.max
+        },
+      },
     ])
 
     this.track.addEventListener('mousedown', (e) => this.onStart(e.clientX))
@@ -80,8 +97,16 @@ export class MkSlider {
     document.addEventListener('mouseup', () => this.onEnd())
 
     // Touch
-    this.track.addEventListener('touchstart', (e) => this.onStart(e.touches[0].clientX), { passive: true })
-    document.addEventListener('touchmove', (e) => this.onMove(e.touches[0].clientX), { passive: true })
+    this.track.addEventListener(
+      'touchstart',
+      (e) => this.onStart(e.touches[0].clientX),
+      { passive: true }
+    )
+    document.addEventListener(
+      'touchmove',
+      (e) => this.onMove(e.touches[0].clientX),
+      { passive: true }
+    )
     document.addEventListener('touchend', () => this.onEnd())
 
     parent.appendChild(this.el)
@@ -104,7 +129,8 @@ export class MkSlider {
   private updateFromPosition(clientX: number): void {
     const rect = this.track.getBoundingClientRect()
     const percent = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width))
-    const raw = this.options.min + percent * (this.options.max - this.options.min)
+    const raw =
+      this.options.min + percent * (this.options.max - this.options.min)
     const stepped = Math.round(raw / this.options.step) * this.options.step
     this.value = Math.max(this.options.min, Math.min(this.options.max, stepped))
   }
@@ -122,7 +148,8 @@ export class MkSlider {
   }
 
   private updateUI(): void {
-    const percent = (this._value - this.options.min) / (this.options.max - this.options.min)
+    const percent =
+      (this._value - this.options.min) / (this.options.max - this.options.min)
     this.fill.style.width = `${percent * 100}%`
     this.thumb.style.left = `${percent * 100}%`
     if (this.valueEl) {
@@ -138,7 +165,10 @@ export class MkSlider {
   }
 
   private adjustValue(delta: number): void {
-    this.value = Math.max(this.options.min, Math.min(this.options.max, this._value + delta))
+    this.value = Math.max(
+      this.options.min,
+      Math.min(this.options.max, this._value + delta)
+    )
   }
 
   destroy(): void {

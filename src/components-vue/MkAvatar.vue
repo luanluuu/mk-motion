@@ -1,16 +1,19 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
 
-const props = withDefaults(defineProps<{
-  src?: string
-  text?: string
-  size?: 'small' | 'default' | 'large'
-  shape?: 'circle' | 'square'
-  icon?: string
-}>(), {
-  size: 'default',
-  shape: 'circle',
-})
+const props = withDefaults(
+  defineProps<{
+    src?: string
+    text?: string
+    size?: 'small' | 'default' | 'large'
+    shape?: 'circle' | 'square'
+    icon?: string
+  }>(),
+  {
+    size: 'default',
+    shape: 'circle',
+  }
+)
 
 const error = ref(false)
 
@@ -35,9 +38,12 @@ const fallbackText = computed(() => {
   return '?'
 })
 
-watch(() => props.src, () => {
-  error.value = false
-})
+watch(
+  () => props.src,
+  () => {
+    error.value = false
+  }
+)
 
 function onError() {
   error.value = true
@@ -52,7 +58,7 @@ function onError() {
       :src="src"
       :alt="text || ''"
       @error="onError"
-    >
+    />
     <span v-else class="mk-avatar__fallback">{{ fallbackText }}</span>
   </div>
 </template>

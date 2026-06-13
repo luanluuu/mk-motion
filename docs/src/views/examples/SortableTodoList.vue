@@ -9,8 +9,18 @@
 
     <div class="example-body">
       <div class="example-toolbar">
-        <MkInput v-model="newTodoText" placeholder="添加新任务…" @keyup.enter="addTodo" style="flex: 1;" />
-        <MkButton type="primary" @click="addTodo" :disabled="!newTodoText.trim()">添加</MkButton>
+        <MkInput
+          v-model="newTodoText"
+          placeholder="添加新任务…"
+          @keyup.enter="addTodo"
+          style="flex: 1"
+        />
+        <MkButton
+          type="primary"
+          @click="addTodo"
+          :disabled="!newTodoText.trim()"
+          >添加</MkButton
+        >
       </div>
 
       <div class="example-hint">
@@ -39,9 +49,14 @@
       </div>
 
       <div class="example-code-hint">
-        <p>核心 API：<code>createDraggableList</code> + <code>spring</code> 释放动画</p>
-        <MkSpace style="margin-top: 12px;">
-          <MkButton size="small" plain @click="resetTodos">重置示例数据</MkButton>
+        <p>
+          核心 API：<code>createDraggableList</code> +
+          <code>spring</code> 释放动画
+        </p>
+        <MkSpace style="margin-top: 12px">
+          <MkButton size="small" plain @click="resetTodos"
+            >重置示例数据</MkButton
+          >
         </MkSpace>
       </div>
     </div>
@@ -99,7 +114,7 @@ function undo() {
     todos.value.splice(
       todos.value.findIndex((t) => t.id === lastDeleted.value!.id - 1) + 1,
       0,
-      lastDeleted.value,
+      lastDeleted.value
     )
   }
   showUndo.value = false
@@ -151,10 +166,20 @@ onUnmounted(() => {
   text-align: center;
   padding: 56px 24px 32px;
 }
-.example-title { font-size: 1.8rem; font-weight: 700; margin: 0 0 8px; }
-.example-desc { font-size: 0.95rem; color: var(--mk-text-secondary); margin: 0; }
+.example-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 0 0 8px;
+}
+.example-desc {
+  font-size: 0.95rem;
+  color: var(--mk-text-secondary);
+  margin: 0;
+}
 
-.example-body { padding: 0 24px; }
+.example-body {
+  padding: 0 24px;
+}
 .example-toolbar {
   display: flex;
   gap: 12px;
@@ -167,7 +192,10 @@ onUnmounted(() => {
   margin-bottom: 20px;
   flex-wrap: wrap;
 }
-.undo-link { cursor: pointer; text-decoration: underline; }
+.undo-link {
+  cursor: pointer;
+  text-decoration: underline;
+}
 
 .todo-list {
   border: 1px solid var(--mk-border);
@@ -184,9 +212,15 @@ onUnmounted(() => {
   transition: background 0.2s;
   cursor: default;
 }
-.todo-item:last-child { border-bottom: none; }
-.todo-item.completed { opacity: 0.6; }
-.todo-item.completed .todo-text { text-decoration: line-through; }
+.todo-item:last-child {
+  border-bottom: none;
+}
+.todo-item.completed {
+  opacity: 0.6;
+}
+.todo-item.completed .todo-text {
+  text-decoration: line-through;
+}
 .todo-drag-handle {
   cursor: grab;
   color: var(--mk-text-tertiary);
@@ -194,8 +228,13 @@ onUnmounted(() => {
   user-select: none;
   padding: 2px;
 }
-.todo-drag-handle:active { cursor: grabbing; }
-.todo-text { flex: 1; font-size: 0.93rem; }
+.todo-drag-handle:active {
+  cursor: grabbing;
+}
+.todo-text {
+  flex: 1;
+  font-size: 0.93rem;
+}
 .todo-delete {
   background: none;
   border: none;
@@ -207,8 +246,13 @@ onUnmounted(() => {
   opacity: 0;
   transition: opacity 0.15s;
 }
-.todo-item:hover .todo-delete { opacity: 1; }
-.todo-delete:hover { color: var(--mk-danger, #f56c6c); background: var(--mk-surface); }
+.todo-item:hover .todo-delete {
+  opacity: 1;
+}
+.todo-delete:hover {
+  color: var(--mk-danger, #f56c6c);
+  background: var(--mk-surface);
+}
 
 .todo-empty {
   padding: 48px 24px;
@@ -218,7 +262,7 @@ onUnmounted(() => {
 }
 
 .todo-placeholder {
-  background: var(--mk-primary-muted, rgba(99,102,241,0.08));
+  background: var(--mk-primary-muted, rgba(99, 102, 241, 0.08));
   border: 2px dashed var(--mk-primary);
   border-radius: 0;
 }

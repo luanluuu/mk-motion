@@ -79,7 +79,10 @@ const maxHeight = (key: string | number) => {
         <span class="mk-collapse__title">
           <slot name="title" :item="item">{{ item.title }}</slot>
         </span>
-        <span class="mk-collapse__arrow" :class="{ 'is-expanded': isActive(item.key) }">
+        <span
+          class="mk-collapse__arrow"
+          :class="{ 'is-expanded': isActive(item.key) }"
+        >
           <svg
             width="12"
             height="12"

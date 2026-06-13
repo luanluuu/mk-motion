@@ -70,7 +70,11 @@ export function MkMotionResolver(options: MkMotionResolverOptions = {}) {
     resolve: (name: string) => {
       if (!ALL_COMPONENTS.includes(name)) return
 
-      const result: any = {
+      const result: {
+        name: string
+        from: string
+        sideEffects?: string
+      } = {
         name,
         from: '@luanlu/mk-motion/vue',
       }

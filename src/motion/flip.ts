@@ -23,14 +23,19 @@ interface ElementState {
 /**
  * Get layout snapshot of matching children
  */
-function getSnapshot(container: HTMLElement, selector?: string): ElementState[] {
+function getSnapshot(
+  container: HTMLElement,
+  selector?: string
+): ElementState[] {
   const children = selector
     ? Array.from(container.querySelectorAll(selector))
     : Array.from(container.children)
-  return children.map((el) => ({
-    el: el as HTMLElement,
-    first: el.getBoundingClientRect(),
-  }))
+  return children
+    .filter((el): el is HTMLElement => el instanceof HTMLElement)
+    .map((el) => ({
+      el,
+      first: el.getBoundingClientRect(),
+    }))
 }
 
 /**
@@ -42,9 +47,10 @@ export function flip(
   changeFn: () => void,
   options: FlipOptions = {}
 ): Promise<void> {
-  const el = typeof container === 'string'
-    ? document.querySelector<HTMLElement>(container)!
-    : container
+  const el =
+    typeof container === 'string'
+      ? document.querySelector<HTMLElement>(container)!
+      : container
 
   if (!el) throw new Error('flip: container not found')
 
@@ -109,7 +115,12 @@ export function flip(
       return
     }
 
-    if (Math.abs(dx) < 0.5 && Math.abs(dy) < 0.5 && Math.abs(dw - 1) < 0.01 && Math.abs(dh - 1) < 0.01) {
+    if (
+      Math.abs(dx) < 0.5 &&
+      Math.abs(dy) < 0.5 &&
+      Math.abs(dw - 1) < 0.01 &&
+      Math.abs(dh - 1) < 0.01
+    ) {
       return
     }
 
@@ -119,7 +130,12 @@ export function flip(
 
     if (useSpring) {
       promises.push(
-        springFromTo(child, { x: dx, y: dy, scale: dw, scaleX: dw, scaleY: dh }, { x: 0, y: 0, scale: 1, scaleX: 1, scaleY: 1 }, spring).then(() => {
+        springFromTo(
+          child,
+          { x: dx, y: dy, scale: dw, scaleX: dw, scaleY: dh },
+          { x: 0, y: 0, scale: 1, scaleX: 1, scaleY: 1 },
+          spring
+        ).then(() => {
           child.style.transform = ''
           child.style.transformOrigin = ''
         })
@@ -154,10 +170,15 @@ export function staggerFlip(
   changeFn: () => void,
   options: FlipOptions & { stagger?: number } = {}
 ): Promise<void> {
-  const { stagger = 40, spring = { stiffness: 180, damping: 28 }, selector } = options
-  const el = typeof container === 'string'
-    ? document.querySelector<HTMLElement>(container)!
-    : container
+  const {
+    stagger = 40,
+    spring = { stiffness: 180, damping: 28 },
+    selector,
+  } = options
+  const el =
+    typeof container === 'string'
+      ? document.querySelector<HTMLElement>(container)!
+      : container
 
   if (!el) throw new Error('staggerFlip: container not found')
 
@@ -190,21 +211,29 @@ export function staggerFlip(
             child.style.transition = `opacity ${duration}ms ${easing}`
             child.style.opacity = isHidden ? '0' : '1'
           })
-          setTimeout(() => {
-            child.style.transition = ''
-            if (isHidden) {
-              child.style.opacity = '0'
-              child.style.display = 'none'
-            } else {
-              child.style.opacity = ''
-            }
-            resolve()
-          }, duration + index * stagger)
+          setTimeout(
+            () => {
+              child.style.transition = ''
+              if (isHidden) {
+                child.style.opacity = '0'
+                child.style.display = 'none'
+              } else {
+                child.style.opacity = ''
+              }
+              resolve()
+            },
+            duration + index * stagger
+          )
         }, index * stagger)
       })
     }
 
-    if (Math.abs(dx) < 0.5 && Math.abs(dy) < 0.5 && Math.abs(dw - 1) < 0.01 && Math.abs(dh - 1) < 0.01) {
+    if (
+      Math.abs(dx) < 0.5 &&
+      Math.abs(dy) < 0.5 &&
+      Math.abs(dw - 1) < 0.01 &&
+      Math.abs(dh - 1) < 0.01
+    ) {
       return Promise.resolve()
     }
 
@@ -213,7 +242,12 @@ export function staggerFlip(
 
     return new Promise<void>((resolve) => {
       setTimeout(() => {
-        springFromTo(child, { x: dx, y: dy, scale: dw, scaleX: dw, scaleY: dh }, { x: 0, y: 0, scale: 1, scaleX: 1, scaleY: 1 }, spring).then(() => {
+        springFromTo(
+          child,
+          { x: dx, y: dy, scale: dw, scaleX: dw, scaleY: dh },
+          { x: 0, y: 0, scale: 1, scaleX: 1, scaleY: 1 },
+          spring
+        ).then(() => {
           child.style.transform = ''
           child.style.transformOrigin = ''
           resolve()

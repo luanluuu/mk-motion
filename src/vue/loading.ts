@@ -1,4 +1,7 @@
-import { showLoading, showFullscreenLoading } from '../components/loading/loading.js'
+import {
+  showLoading,
+  showFullscreenLoading,
+} from '../components/loading/loading.js'
 import type { LoadingOptions } from '../components/loading/loading.js'
 
 export function useMkLoading() {

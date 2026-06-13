@@ -1,18 +1,21 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 
-const props = withDefaults(defineProps<{
-  type?: 'line' | 'circle' | 'dashboard'
-  percent?: number
-  strokeWidth?: number
-  color?: string
-  status?: 'success' | 'exception' | 'active'
-  showInfo?: boolean
-}>(), {
-  type: 'line',
-  percent: 0,
-  showInfo: true,
-})
+const props = withDefaults(
+  defineProps<{
+    type?: 'line' | 'circle' | 'dashboard'
+    percent?: number
+    strokeWidth?: number
+    color?: string
+    status?: 'success' | 'exception' | 'active'
+    showInfo?: boolean
+  }>(),
+  {
+    type: 'line',
+    percent: 0,
+    showInfo: true,
+  }
+)
 
 const progressClass = computed(() => {
   return [
@@ -23,28 +26,44 @@ const progressClass = computed(() => {
   ]
 })
 
-const clampedPercent = computed(() => Math.max(0, Math.min(100, props.percent ?? 0)))
+const clampedPercent = computed(() =>
+  Math.max(0, Math.min(100, props.percent ?? 0))
+)
 
 const size = 120
 const stroke = computed(() => props.strokeWidth || 6)
 const radius = computed(() => (size - stroke.value) / 2)
 const circumference = computed(() => 2 * Math.PI * radius.value)
 const isDashboard = computed(() => props.type === 'dashboard')
-const dashArray = computed(() => isDashboard.value ? circumference.value * 0.75 : circumference.value)
-const dashOffset = computed(() => dashArray.value - (clampedPercent.value / 100) * dashArray.value)
-const circleTransform = computed(() => isDashboard.value ? 'rotate(135deg)' : 'rotate(-90deg)')
+const dashArray = computed(() =>
+  isDashboard.value ? circumference.value * 0.75 : circumference.value
+)
+const dashOffset = computed(
+  () => dashArray.value - (clampedPercent.value / 100) * dashArray.value
+)
+const circleTransform = computed(() =>
+  isDashboard.value ? 'rotate(135deg)' : 'rotate(-90deg)'
+)
 </script>
 
 <template>
   <div :class="progressClass">
     <template v-if="type === 'line'">
-      <div class="mk-progress__track" :style="strokeWidth ? { height: `${strokeWidth}px` } : undefined">
+      <div
+        class="mk-progress__track"
+        :style="strokeWidth ? { height: `${strokeWidth}px` } : undefined"
+      >
         <div
           class="mk-progress__bar"
-          :style="{ width: `${clampedPercent}%`, ...(color ? { background: color } : {}) }"
+          :style="{
+            width: `${clampedPercent}%`,
+            ...(color ? { background: color } : {}),
+          }"
         />
       </div>
-      <span v-if="showInfo" class="mk-progress__text">{{ Math.round(clampedPercent) }}%</span>
+      <span v-if="showInfo" class="mk-progress__text"
+        >{{ Math.round(clampedPercent) }}%</span
+      >
     </template>
 
     <template v-else>
@@ -73,10 +92,16 @@ const circleTransform = computed(() => isDashboard.value ? 'rotate(135deg)' : 'r
           stroke-linecap="round"
           :stroke-dasharray="`${dashArray} ${circumference}`"
           :stroke-dashoffset="dashOffset"
-          :style="{ transform: circleTransform, transformOrigin: '50% 50%', ...(color ? { stroke: color } : {}) }"
+          :style="{
+            transform: circleTransform,
+            transformOrigin: '50% 50%',
+            ...(color ? { stroke: color } : {}),
+          }"
         />
       </svg>
-      <span v-if="showInfo" class="mk-progress__text">{{ Math.round(clampedPercent) }}%</span>
+      <span v-if="showInfo" class="mk-progress__text"
+        >{{ Math.round(clampedPercent) }}%</span
+      >
     </template>
   </div>
 </template>
@@ -153,8 +178,12 @@ const circleTransform = computed(() => isDashboard.value ? 'rotate(135deg)' : 'r
 }
 
 @keyframes mk-progress-active {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
 }
 
 .mk-progress--circle,

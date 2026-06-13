@@ -1,13 +1,29 @@
-import { createButton, Animator, withMotion, springTo, springStagger, springSequence, SpringAnimation, flip, filterGrid, shuffleGrid, DraggableList } from 'mk-motion'
+import { createButton } from 'mk-motion/legacy'
+import {
+  Animator,
+  withMotion,
+  springTo,
+  springStagger,
+  springSequence,
+  SpringAnimation,
+  flip,
+  filterGrid,
+  shuffleGrid,
+  DraggableList,
+} from 'mk-motion'
 
 // ─── Inline: Typewriter ───────────────────────────────────────────
 function typeWrite(el: HTMLElement, text: string, speed = 60) {
   el.textContent = ''
   el.style.borderRight = '2px solid currentColor'
   let i = 0
-  return new Promise<void>(resolve => {
+  return new Promise<void>((resolve) => {
     const tick = () => {
-      if (i >= text.length) { el.style.borderRight = 'none'; resolve(); return }
+      if (i >= text.length) {
+        el.style.borderRight = 'none'
+        resolve()
+        return
+      }
       el.textContent += text[i++]
       setTimeout(tick, speed)
     }
@@ -18,13 +34,16 @@ function typeWrite(el: HTMLElement, text: string, speed = 60) {
 // ─── Inline: CountUp ──────────────────────────────────────────────
 function countUp(el: HTMLElement, end: number, dur = 2000) {
   const start = performance.now()
-  return new Promise<void>(resolve => {
+  return new Promise<void>((resolve) => {
     const tick = (now: number) => {
       const p = Math.min((now - start) / dur, 1)
       const v = Math.floor((1 - Math.pow(1 - p, 3)) * end)
       el.textContent = v.toLocaleString()
       if (p < 1) requestAnimationFrame(tick)
-      else { el.textContent = end.toLocaleString(); resolve() }
+      else {
+        el.textContent = end.toLocaleString()
+        resolve()
+      }
     }
     requestAnimationFrame(tick)
   })
@@ -33,36 +52,51 @@ function countUp(el: HTMLElement, end: number, dur = 2000) {
 // ─── Inline: WaveText ─────────────────────────────────────────────
 function waveText(el: HTMLElement) {
   const text = el.textContent ?? ''
-  el.innerHTML = ''; el.style.display = 'inline-block'
-  const spans = [...text].map(ch => {
+  el.innerHTML = ''
+  el.style.display = 'inline-block'
+  const spans = [...text].map((ch) => {
     const s = document.createElement('span')
     s.textContent = ch === ' ' ? '\u00A0' : ch
     s.style.display = 'inline-block'
     el.appendChild(s)
     return s
   })
-  let t = 0, id = 0
+  let t = 0,
+    id = 0
   const loop = () => {
     t += 0.08
-    spans.forEach((s, i) => s.style.transform = `translateY(${Math.sin(t + i * 0.15) * 12}px)`)
+    spans.forEach(
+      (s, i) =>
+        (s.style.transform = `translateY(${Math.sin(t + i * 0.15) * 12}px)`)
+    )
     id = requestAnimationFrame(loop)
   }
   id = requestAnimationFrame(loop)
-  return () => { cancelAnimationFrame(id); el.style.display = '' }
+  return () => {
+    cancelAnimationFrame(id)
+    el.style.display = ''
+  }
 }
 
 // ─── Inline: Glitch ───────────────────────────────────────────────
 function glitch(el: HTMLElement, dur = 300, intensity = 5) {
-  const orig = el.style.cssText, steps = intensity * 2
-  return new Promise<void>(resolve => {
+  const orig = el.style.cssText,
+    steps = intensity * 2
+  return new Promise<void>((resolve) => {
     let i = 0
     const run = () => {
-      if (i >= steps) { el.style.cssText = orig; el.style.textShadow = ''; resolve(); return }
+      if (i >= steps) {
+        el.style.cssText = orig
+        el.style.textShadow = ''
+        resolve()
+        return
+      }
       const x = (Math.random() - 0.5) * intensity * 4
       el.style.transform = `translateX(${x}px)`
       el.style.clipPath = `inset(${Math.random() * 80}% 0 ${Math.random() * 80}% 0)`
       el.style.textShadow = `#ff0040 ${x}px 0, #00ffff ${-x}px 0`
-      i++; setTimeout(run, dur / steps)
+      i++
+      setTimeout(run, dur / steps)
     }
     run()
   })
@@ -76,28 +110,44 @@ function magnetic(el: HTMLElement) {
     const dx = e.clientX - (r.left + r.width / 2)
     const dy = e.clientY - (r.top + r.height / 2)
     const d = Math.sqrt(dx * dx + dy * dy)
-    if (d < 150) { const f = 0.4 * (1 - d / 150); el.style.transform = `translate(${dx * f}px, ${dy * f}px)` }
-    else el.style.transform = ''
+    if (d < 150) {
+      const f = 0.4 * (1 - d / 150)
+      el.style.transform = `translate(${dx * f}px, ${dy * f}px)`
+    } else el.style.transform = ''
   }
   document.addEventListener('mousemove', onMove)
-  el.addEventListener('mouseleave', () => el.style.transform = '')
+  el.addEventListener('mouseleave', () => (el.style.transform = ''))
   return () => document.removeEventListener('mousemove', onMove)
 }
 
 // ─── Inline: Ripple ───────────────────────────────────────────────
 function addRipple(el: HTMLElement) {
-  el.style.position = 'relative'; el.style.overflow = 'hidden'
+  el.style.position = 'relative'
+  el.style.overflow = 'hidden'
   const handler = (e: MouseEvent) => {
-    const r = el.getBoundingClientRect(), s = Math.max(r.width, r.height)
+    const r = el.getBoundingClientRect(),
+      s = Math.max(r.width, r.height)
     const d = document.createElement('span')
     Object.assign(d.style, {
-      position: 'absolute', borderRadius: '50%',
-      background: 'rgba(255,255,255,0.35)', width: s + 'px', height: s + 'px',
-      left: (e.clientX - r.left - s / 2) + 'px', top: (e.clientY - r.top - s / 2) + 'px',
-      pointerEvents: 'none', transform: 'scale(0)', opacity: '1',
+      position: 'absolute',
+      borderRadius: '50%',
+      background: 'rgba(255,255,255,0.35)',
+      width: s + 'px',
+      height: s + 'px',
+      left: e.clientX - r.left - s / 2 + 'px',
+      top: e.clientY - r.top - s / 2 + 'px',
+      pointerEvents: 'none',
+      transform: 'scale(0)',
+      opacity: '1',
     })
     el.appendChild(d)
-    d.animate([{ transform: 'scale(0)', opacity: 1 }, { transform: 'scale(2.5)', opacity: 0 }], { duration: 600, easing: 'ease-out' }).onfinish = () => d.remove()
+    d.animate(
+      [
+        { transform: 'scale(0)', opacity: 1 },
+        { transform: 'scale(2.5)', opacity: 0 },
+      ],
+      { duration: 600, easing: 'ease-out' }
+    ).onfinish = () => d.remove()
   }
   el.addEventListener('click', handler)
   return () => el.removeEventListener('click', handler)
@@ -106,18 +156,24 @@ function addRipple(el: HTMLElement) {
 // ─── Inline: Shimmer ──────────────────────────────────────────────
 function shimmer(el: HTMLElement) {
   const orig = el.style.cssText
-  el.style.background = '#1e293b'; el.style.position = 'relative'; el.style.overflow = 'hidden'
+  el.style.background = '#1e293b'
+  el.style.position = 'relative'
+  el.style.overflow = 'hidden'
   const s = document.createElement('div')
   s.style.cssText = `position:absolute;inset:0;background:linear-gradient(100deg,transparent 30%,rgba(255,255,255,0.2) 50%,transparent 70%);background-size:200% 100%;animation:mk-shimmer 1.5s infinite linear;pointer-events:none`
   el.appendChild(s)
   if (!document.getElementById('mk-shimmer-style')) {
-    const st = document.createElement('style'); st.id = 'mk-shimmer-style'
-    st.textContent = '@keyframes mk-shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}'
+    const st = document.createElement('style')
+    st.id = 'mk-shimmer-style'
+    st.textContent =
+      '@keyframes mk-shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}'
     document.head.appendChild(st)
   }
-  return () => { s.remove(); el.style.cssText = orig }
+  return () => {
+    s.remove()
+    el.style.cssText = orig
+  }
 }
-
 
 export function renderAnimations(container?: HTMLElement) {
   document.getElementById('toc')!.style.display = 'none'
@@ -405,22 +461,56 @@ export function renderAnimations(container?: HTMLElement) {
 
   setTimeout(() => {
     // ── Preset Buttons ──────────────────────────────────────────
-    const anims = ['fadeIn','fadeOut','slideInUp','slideInDown','slideInLeft','slideInRight','zoomIn','zoomOut','bounceIn','bounceOut','flipInX','flipInY','shake','pulse','rotateIn']
+    const anims = [
+      'fadeIn',
+      'fadeOut',
+      'slideInUp',
+      'slideInDown',
+      'slideInLeft',
+      'slideInRight',
+      'zoomIn',
+      'zoomOut',
+      'bounceIn',
+      'bounceOut',
+      'flipInX',
+      'flipInY',
+      'shake',
+      'pulse',
+      'rotateIn',
+    ]
     const animBox = document.getElementById('anim-box')!
     let animator: Animator | null = null
-    anims.forEach(name => {
-      const btn = createButton(document.getElementById('anim-btn-list')!, { size: 'small', text: name })
+    anims.forEach((name) => {
+      const btn = createButton(document.getElementById('anim-btn-list')!, {
+        size: 'small',
+        text: name,
+      })
       btn.el.addEventListener('click', async () => {
-        if (animator) { animator.stop(); animator.reset() }
+        if (animator) {
+          animator.stop()
+          animator.reset()
+        }
         animator = new Animator(animBox)
-        await animator.animate(name as any, { duration: 500 })
+        await animator.animate(name, { duration: 500 })
       })
     })
 
     // ── withMotion ──────────────────────────────────────────────
-    withMotion(document.getElementById('motion-box1')!, { hover: 'lift', active: 'press', duration: 200 })
-    withMotion(document.getElementById('motion-box2')!, { hover: 'scale', active: 'press', duration: 200 })
-    withMotion(document.getElementById('motion-box3')!, { hover: 'glow', active: 'press', duration: 200 })
+    withMotion(document.getElementById('motion-box1')!, {
+      hover: 'lift',
+      active: 'press',
+      duration: 200,
+    })
+    withMotion(document.getElementById('motion-box2')!, {
+      hover: 'scale',
+      active: 'press',
+      duration: 200,
+    })
+    withMotion(document.getElementById('motion-box3')!, {
+      hover: 'glow',
+      active: 'press',
+      duration: 200,
+    })
 
     // ── Stagger ─────────────────────────────────────────────────
     const staggerContainer = document.getElementById('stagger-container')!
@@ -429,18 +519,30 @@ export function renderAnimations(container?: HTMLElement) {
       items.forEach((el, i) => {
         const htmlEl = el as HTMLElement
         htmlEl.style.opacity = '0'
-        setTimeout(() => {
-          htmlEl.style.transition = 'opacity 400ms ease'
-          htmlEl.style.opacity = '1'
-        }, 100 + i * 80)
+        setTimeout(
+          () => {
+            htmlEl.style.transition = 'opacity 400ms ease'
+            htmlEl.style.opacity = '1'
+          },
+          100 + i * 80
+        )
       })
     }
-    createButton(document.getElementById('btn-stagger')!, { type: 'primary', text: '▶ 重新播放', onClick: playStagger })
+    createButton(document.getElementById('btn-stagger')!, {
+      type: 'primary',
+      text: '▶ 重新播放',
+      onClick: playStagger,
+    })
     setTimeout(playStagger, 300)
 
     // ── Typewriter ──────────────────────────────────────────────
     const twTarget = document.getElementById('typewriter-target')!
-    const typewriterTexts = ['Hello, MotionKit!', '让组件动起来 🚀', 'Zero dependencies.', 'Pure TypeScript + CSS.']
+    const typewriterTexts = [
+      'Hello, MotionKit!',
+      '让组件动起来 🚀',
+      'Zero dependencies.',
+      'Pure TypeScript + CSS.',
+    ]
     let twIdx = 0
     async function playTypewriter() {
       twTarget.textContent = ''
@@ -448,21 +550,37 @@ export function renderAnimations(container?: HTMLElement) {
       await typeWrite(twTarget, typewriterTexts[twIdx], 60)
       twIdx = (twIdx + 1) % typewriterTexts.length
     }
-    createButton(document.getElementById('btn-typewriter')!, { type: 'primary', text: '▶ 开始打字', onClick: playTypewriter })
-    createButton(document.getElementById('btn-typewriter-reset')!, { text: '↺ 下一条', size: 'small', onClick: () => { twTarget.textContent = ''; twTarget.style.borderRight = 'none' } })
+    createButton(document.getElementById('btn-typewriter')!, {
+      type: 'primary',
+      text: '▶ 开始打字',
+      onClick: playTypewriter,
+    })
+    createButton(document.getElementById('btn-typewriter-reset')!, {
+      text: '↺ 下一条',
+      size: 'small',
+      onClick: () => {
+        twTarget.textContent = ''
+        twTarget.style.borderRight = 'none'
+      },
+    })
     setTimeout(() => playTypewriter(), 400)
 
     // ── CountUp ─────────────────────────────────────────────────
     let countupRunning = false
-    createButton(document.getElementById('btn-countup')!, { type: 'primary', text: '▶ 开始滚动', onClick: async () => {
-      if (countupRunning) return; countupRunning = true
-      await Promise.all([
-        countUp(document.getElementById('countup-users')!, 12847, 1500),
-        countUp(document.getElementById('countup-stars')!, 3826, 1500),
-        countUp(document.getElementById('countup-downloads')!, 95420, 1500),
-      ])
-      countupRunning = false
-    }})
+    createButton(document.getElementById('btn-countup')!, {
+      type: 'primary',
+      text: '▶ 开始滚动',
+      onClick: async () => {
+        if (countupRunning) return
+        countupRunning = true
+        await Promise.all([
+          countUp(document.getElementById('countup-users')!, 12847, 1500),
+          countUp(document.getElementById('countup-stars')!, 3826, 1500),
+          countUp(document.getElementById('countup-downloads')!, 95420, 1500),
+        ])
+        countupRunning = false
+      },
+    })
     setTimeout(() => {
       countUp(document.getElementById('countup-users')!, 12847, 1200)
       countUp(document.getElementById('countup-stars')!, 3826, 1200)
@@ -474,19 +592,38 @@ export function renderAnimations(container?: HTMLElement) {
 
     // ── Glitch ──────────────────────────────────────────────────
     const glitchEl = document.getElementById('glitch-target')!
-    let glitchLooping = false, glitchLoopId: ReturnType<typeof setInterval> | null = null
-    createButton(document.getElementById('btn-glitch')!, { type: 'danger', text: '⚡ 触发故障', onClick: () => glitch(glitchEl, 400, 6) })
-    createButton(document.getElementById('btn-glitch-loop')!, { type: 'warning', text: '🔄 持续故障', onClick: () => {
-      if (glitchLooping) {
-        glitchLooping = false
-        if (glitchLoopId) { clearInterval(glitchLoopId); glitchLoopId = null }
-        glitchEl.style.cssText = 'font-size:2rem;font-weight:800;letter-spacing:4px;color:#fff;text-shadow:0 0 20px rgba(99,102,241,0.5);'
-      } else {
-        glitchLooping = true
-        const loop = () => { if (glitchLooping) glitch(glitchEl, 200, 4).then(() => { if (glitchLooping) glitchLoopId = setTimeout(loop, 300 + Math.random() * 500) }) }
-        loop()
-      }
-    }})
+    let glitchLooping = false,
+      glitchLoopId: ReturnType<typeof setInterval> | null = null
+    createButton(document.getElementById('btn-glitch')!, {
+      type: 'danger',
+      text: '⚡ 触发故障',
+      onClick: () => glitch(glitchEl, 400, 6),
+    })
+    createButton(document.getElementById('btn-glitch-loop')!, {
+      type: 'warning',
+      text: '🔄 持续故障',
+      onClick: () => {
+        if (glitchLooping) {
+          glitchLooping = false
+          if (glitchLoopId) {
+            clearInterval(glitchLoopId)
+            glitchLoopId = null
+          }
+          glitchEl.style.cssText =
+            'font-size:2rem;font-weight:800;letter-spacing:4px;color:#fff;text-shadow:0 0 20px rgba(99,102,241,0.5);'
+        } else {
+          glitchLooping = true
+          const loop = () => {
+            if (glitchLooping)
+              glitch(glitchEl, 200, 4).then(() => {
+                if (glitchLooping)
+                  glitchLoopId = setTimeout(loop, 300 + Math.random() * 500)
+              })
+          }
+          loop()
+        }
+      },
+    })
 
     // ── Magnetic ────────────────────────────────────────────────
     magnetic(document.getElementById('magnetic-btn1')!)
@@ -508,24 +645,47 @@ export function renderAnimations(container?: HTMLElement) {
     // ── Shimmer ─────────────────────────────────────────────────
     let stopShimmer: (() => void) | null = null
     const skCard = document.getElementById('skeleton-card')!
-    createButton(document.getElementById('btn-shimmer-on')!, { type: 'primary', text: '▶ 加载中', size: 'small', onClick: () => {
-      if (stopShimmer) stopShimmer()
-      skCard.querySelectorAll('div[style]').forEach((child: any) => {
-        if (child.style.background === 'rgb(226, 232, 240)' || child.style.background === '#e2e8f0') {
-          stopShimmer = shimmer(child as HTMLElement)
+    createButton(document.getElementById('btn-shimmer-on')!, {
+      type: 'primary',
+      text: '▶ 加载中',
+      size: 'small',
+      onClick: () => {
+        if (stopShimmer) stopShimmer()
+        skCard.querySelectorAll('div[style]').forEach((child: Element) => {
+          if (
+            child.style.background === 'rgb(226, 232, 240)' ||
+            child.style.background === '#e2e8f0'
+          ) {
+            stopShimmer = shimmer(child as HTMLElement)
+          }
+        })
+      },
+    })
+    createButton(document.getElementById('btn-shimmer-off')!, {
+      text: '停止',
+      size: 'small',
+      onClick: () => {
+        if (stopShimmer) {
+          stopShimmer()
+          stopShimmer = null
         }
-      })
-    }})
-    createButton(document.getElementById('btn-shimmer-off')!, { text: '停止', size: 'small', onClick: () => {
-      if (stopShimmer) { stopShimmer(); stopShimmer = null }
-    }})
+      },
+    })
 
     // ── Spring Engine Demos ─────────────────────────────────────
     // 弹性缩放 + 位移
     const springBox2 = document.getElementById('spring-box2')!
     springBox2.addEventListener('click', () => {
-      springTo(springBox2, { scale: 1.4, x: 40 }, { stiffness: 200, damping: 15 }).then(() => {
-        springTo(springBox2, { scale: 1, x: 0 }, { stiffness: 180, damping: 20 })
+      springTo(
+        springBox2,
+        { scale: 1.4, x: 40 },
+        { stiffness: 200, damping: 15 }
+      ).then(() => {
+        springTo(
+          springBox2,
+          { scale: 1, x: 0 },
+          { stiffness: 180, damping: 20 }
+        )
       })
     })
 
@@ -536,77 +696,145 @@ export function renderAnimations(container?: HTMLElement) {
     colorBox.style.color = '#fff'
     colorBox.addEventListener('click', () => {
       colorToggle = !colorToggle
-      springTo(colorBox, {
-        backgroundColor: colorToggle ? '#ef4444' : 'var(--mk-primary)',
-        scale: colorToggle ? 1.1 : 1,
-      }, { stiffness: 150, damping: 20 })
+      springTo(
+        colorBox,
+        {
+          backgroundColor: colorToggle ? '#ef4444' : 'var(--mk-primary)',
+          scale: colorToggle ? 1.1 : 1,
+        },
+        { stiffness: 150, damping: 20 }
+      )
     })
 
     // Stagger 弹簧入场
-    createButton(document.getElementById('btn-spring-stagger')!, { type: 'primary', text: '▶ Stagger 入场', onClick: async () => {
-      const items = document.querySelectorAll('.spring-stagger-item') as NodeListOf<HTMLElement>
-      items.forEach((el) => { el.style.opacity = '0'; el.style.transform = 'scale(0.5)' })
-      await springStagger(Array.from(items), { opacity: 1, scale: 1 }, { stiffness: 200, damping: 20, delay: 60 })
-    }})
+    createButton(document.getElementById('btn-spring-stagger')!, {
+      type: 'primary',
+      text: '▶ Stagger 入场',
+      onClick: async () => {
+        const items = document.querySelectorAll(
+          '.spring-stagger-item'
+        ) as NodeListOf<HTMLElement>
+        items.forEach((el) => {
+          el.style.opacity = '0'
+          el.style.transform = 'scale(0.5)'
+        })
+        await springStagger(
+          Array.from(items),
+          { opacity: 1, scale: 1 },
+          { stiffness: 200, damping: 20, delay: 60 }
+        )
+      },
+    })
 
     // Sequence 编排
-    createButton(document.getElementById('btn-spring-seq')!, { type: 'primary', text: '▶ Sequence 编排', onClick: async () => {
-      const s1 = document.getElementById('seq-box1')!
-      const s2 = document.getElementById('seq-box2')!
-      const s3 = document.getElementById('seq-box3')!
-      ;[s1, s2, s3].forEach((el) => { el.style.opacity = '0.3'; el.style.transform = 'scale(0.8)' })
-      await springSequence([
-        { target: s1, to: { opacity: 1, scale: 1.2, rotate: 15 } },
-        { target: s2, to: { opacity: 1, scale: 1.2, rotate: -15 } },
-        { target: s3, to: { opacity: 1, scale: 1.2, rotate: 15 } },
-      ])
-      await springTo(s1, { rotate: 0, scale: 1 }, { stiffness: 300, damping: 25 })
-      await springTo(s2, { rotate: 0, scale: 1 }, { stiffness: 300, damping: 25 })
-      await springTo(s3, { rotate: 0, scale: 1 }, { stiffness: 300, damping: 25 })
-    }})
+    createButton(document.getElementById('btn-spring-seq')!, {
+      type: 'primary',
+      text: '▶ Sequence 编排',
+      onClick: async () => {
+        const s1 = document.getElementById('seq-box1')!
+        const s2 = document.getElementById('seq-box2')!
+        const s3 = document.getElementById('seq-box3')!
+        ;[s1, s2, s3].forEach((el) => {
+          el.style.opacity = '0.3'
+          el.style.transform = 'scale(0.8)'
+        })
+        await springSequence([
+          { target: s1, to: { opacity: 1, scale: 1.2, rotate: 15 } },
+          { target: s2, to: { opacity: 1, scale: 1.2, rotate: -15 } },
+          { target: s3, to: { opacity: 1, scale: 1.2, rotate: 15 } },
+        ])
+        await springTo(
+          s1,
+          { rotate: 0, scale: 1 },
+          { stiffness: 300, damping: 25 }
+        )
+        await springTo(
+          s2,
+          { rotate: 0, scale: 1 },
+          { stiffness: 300, damping: 25 }
+        )
+        await springTo(
+          s3,
+          { rotate: 0, scale: 1 },
+          { stiffness: 300, damping: 25 }
+        )
+      },
+    })
 
     // ── Physics (Elastic Scale) ─────────────────────────────────
     // inline spring-based elastic scale
     function elasticScale(el: HTMLElement, toScale: number) {
-      let v = 0, s = 1, id = 0, running = true
+      let v = 0,
+        s = 1,
+        id = 0,
+        running = true
       const tick = () => {
         if (!running) return
         const force = -170 * (s - toScale) - 26 * v
-        v += force / 60; s += v / 60
+        v += force / 60
+        s += v / 60
         el.style.transform = `scale(${s})`
-        if (Math.abs(s - toScale) < 0.001 && Math.abs(v) < 0.001) { running = false; return }
+        if (Math.abs(s - toScale) < 0.001 && Math.abs(v) < 0.001) {
+          running = false
+          return
+        }
         id = requestAnimationFrame(tick)
       }
       id = requestAnimationFrame(tick)
-      return () => { running = false; cancelAnimationFrame(id) }
+      return () => {
+        running = false
+        cancelAnimationFrame(id)
+      }
     }
     let stopSpring: (() => void) | null = null
     const springBox = document.getElementById('spring-box')!
     springBox.addEventListener('click', () => {
       if (stopSpring) stopSpring()
       stopSpring = elasticScale(springBox, 1.3)
-      setTimeout(() => { if (stopSpring) { stopSpring(); stopSpring = elasticScale(springBox, 1) } }, 300)
+      setTimeout(() => {
+        if (stopSpring) {
+          stopSpring()
+          stopSpring = elasticScale(springBox, 1)
+        }
+      }, 300)
     })
 
     // ── Particle Burst ──────────────────────────────────────────
-    const particleBtn = createButton(document.getElementById('btn-particle')!, { type: 'danger', text: '💥 点我爆炸', size: 'large' })
+    const particleBtn = createButton(document.getElementById('btn-particle')!, {
+      type: 'danger',
+      text: '💥 点我爆炸',
+      size: 'large',
+    })
     particleBtn.el.addEventListener('click', () => {
       const rect = particleBtn.el.getBoundingClientRect()
       const cx = rect.left + rect.width / 2
       const cy = rect.top + rect.height / 2
-      const colors = ['#f56c6c', '#e6a23c', '#67c23a', '#409eff', '#a855f7', '#ec4899']
+      const colors = [
+        '#f56c6c',
+        '#e6a23c',
+        '#67c23a',
+        '#409eff',
+        '#a855f7',
+        '#ec4899',
+      ]
       for (let i = 0; i < 50; i++) {
         const el = document.createElement('div')
         el.style.cssText = `position:fixed;left:${cx}px;top:${cy}px;width:${4 + Math.random() * 6}px;height:${4 + Math.random() * 6}px;border-radius:50%;background:${colors[i % colors.length]};pointer-events:none;z-index:99999;`
         document.body.appendChild(el)
         const angle = (Math.PI * 2 * i) / 50 + Math.random() * 0.5
         const speed = 4 * (0.5 + Math.random())
-        let x = 0, y = 0, vx = Math.cos(angle) * speed, vy = Math.sin(angle) * speed
+        let x = 0,
+          y = 0,
+          vx = Math.cos(angle) * speed,
+          vy = Math.sin(angle) * speed
         const tick = () => {
           vy += 0.25
-          x += vx; y += vy
+          x += vx
+          y += vy
           el.style.transform = `translate(${x}px,${y}px)`
-          el.style.opacity = String(Math.max(0, 1 - Math.sqrt(x*x + y*y) / 180))
+          el.style.opacity = String(
+            Math.max(0, 1 - Math.sqrt(x * x + y * y) / 180)
+          )
           if (parseFloat(el.style.opacity) > 0) requestAnimationFrame(tick)
           else el.remove()
         }
@@ -624,33 +852,51 @@ export function renderAnimations(container?: HTMLElement) {
       dragScale: 1.01,
       onReorder: (oldIndex: number, newIndex: number) => {
         console.log(`[FLIP] 从 ${oldIndex} 移动到 ${newIndex}`)
-      }
+      },
     })
 
     // ── FLIP Grid Filter & Shuffle ──────────────────────────────
     const flipGrid = document.getElementById('flip-grid')!
-    const flipItems = Array.from(flipGrid.querySelectorAll<HTMLElement>('[data-flip-item]'))
+    const flipItems = Array.from(
+      flipGrid.querySelectorAll<HTMLElement>('[data-flip-item]')
+    )
 
-    createButton(document.getElementById('btn-flip-all')!, { type: 'primary', text: '全部', size: 'small' }).el.addEventListener('click', () => {
+    createButton(document.getElementById('btn-flip-all')!, {
+      type: 'primary',
+      text: '全部',
+      size: 'small',
+    }).el.addEventListener('click', () => {
       filterGrid(flipGrid, '[data-flip-item]', () => {
-        flipItems.forEach(el => el.style.display = 'flex')
+        flipItems.forEach((el) => (el.style.display = 'flex'))
       })
     })
-    createButton(document.getElementById('btn-flip-fruits')!, { type: 'success', text: '🍎 水果', size: 'small' }).el.addEventListener('click', () => {
+    createButton(document.getElementById('btn-flip-fruits')!, {
+      type: 'success',
+      text: '🍎 水果',
+      size: 'small',
+    }).el.addEventListener('click', () => {
       filterGrid(flipGrid, '[data-flip-item]', () => {
-        flipItems.forEach(el => {
+        flipItems.forEach((el) => {
           el.style.display = el.dataset.category === 'fruit' ? 'flex' : 'none'
         })
       })
     })
-    createButton(document.getElementById('btn-flip-animals')!, { type: 'warning', text: '🐶 动物', size: 'small' }).el.addEventListener('click', () => {
+    createButton(document.getElementById('btn-flip-animals')!, {
+      type: 'warning',
+      text: '🐶 动物',
+      size: 'small',
+    }).el.addEventListener('click', () => {
       filterGrid(flipGrid, '[data-flip-item]', () => {
-        flipItems.forEach(el => {
+        flipItems.forEach((el) => {
           el.style.display = el.dataset.category === 'animal' ? 'flex' : 'none'
         })
       })
     })
-    createButton(document.getElementById('btn-flip-shuffle')!, { type: 'danger', text: '🔀 打乱', size: 'small' }).el.addEventListener('click', () => {
+    createButton(document.getElementById('btn-flip-shuffle')!, {
+      type: 'danger',
+      text: '🔀 打乱',
+      size: 'small',
+    }).el.addEventListener('click', () => {
       shuffleGrid(flipGrid, '[data-flip-item]')
     })
   }, 0)

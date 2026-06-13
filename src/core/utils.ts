@@ -1,11 +1,21 @@
 export type AnimationName =
-  | 'fadeIn' | 'fadeOut'
-  | 'slideInUp' | 'slideInDown' | 'slideInLeft' | 'slideInRight'
-  | 'slideOutUp' | 'slideOutDown'
-  | 'zoomIn' | 'zoomOut'
-  | 'bounceIn' | 'bounceOut'
-  | 'flipInX' | 'flipInY'
-  | 'shake' | 'pulse' | 'rotateIn'
+  | 'fadeIn'
+  | 'fadeOut'
+  | 'slideInUp'
+  | 'slideInDown'
+  | 'slideInLeft'
+  | 'slideInRight'
+  | 'slideOutUp'
+  | 'slideOutDown'
+  | 'zoomIn'
+  | 'zoomOut'
+  | 'bounceIn'
+  | 'bounceOut'
+  | 'flipInX'
+  | 'flipInY'
+  | 'shake'
+  | 'pulse'
+  | 'rotateIn'
 
 export interface AnimationOptions {
   duration?: number
@@ -25,7 +35,9 @@ export function parseTime(value: number | string): number {
 }
 
 export function toCssTime(ms: number): string {
-  return ms < 1000 ? `${ms}ms` : `${(ms / 1000).toFixed(2).replace(/\.?0+$/, '')}s`
+  return ms < 1000
+    ? `${ms}ms`
+    : `${(ms / 1000).toFixed(2).replace(/\.?0+$/, '')}s`
 }
 
 export function setCSSVariables(
@@ -37,10 +49,7 @@ export function setCSSVariables(
   })
 }
 
-export function removeCSSVariables(
-  el: HTMLElement,
-  keys: string[]
-): void {
+export function removeCSSVariables(el: HTMLElement, keys: string[]): void {
   keys.forEach((key) => {
     el.style.removeProperty(`--mk-${key}`)
   })

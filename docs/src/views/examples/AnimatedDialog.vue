@@ -12,9 +12,13 @@
         <MkTag type="info" size="small">💡 点击按钮查看不同样式的对话框</MkTag>
       </div>
 
-      <MkSpace style="margin-bottom: 32px;">
-        <MkButton type="primary" @click="openDialog('basic')">基础弹窗</MkButton>
-        <MkButton type="success" @click="openDialog('confirm')">确认对话框</MkButton>
+      <MkSpace style="margin-bottom: 32px">
+        <MkButton type="primary" @click="openDialog('basic')"
+          >基础弹窗</MkButton
+        >
+        <MkButton type="success" @click="openDialog('confirm')"
+          >确认对话框</MkButton
+        >
         <MkButton type="warning" @click="openDialog('form')">表单弹窗</MkButton>
       </MkSpace>
 
@@ -24,15 +28,17 @@
         title="弹簧弹窗示例"
         :animation="dialogAnimation"
       >
-        <p style="margin: 0; line-height: 1.7; color: var(--mk-text-secondary);">
-          这个对话框使用了 MotionKit 的弹簧动画引擎。
-          弹出时从 80% 缩放弹性过渡到 100%，带有真实的物理回弹感。
+        <p style="margin: 0; line-height: 1.7; color: var(--mk-text-secondary)">
+          这个对话框使用了 MotionKit 的弹簧动画引擎。 弹出时从 80%
+          缩放弹性过渡到 100%，带有真实的物理回弹感。
           <br /><br />
           遮罩层也带有渐显动画，配合阻尼效果让体验更加流畅。
         </p>
         <template #footer>
           <MkButton @click="dialogStates.basic = false">取消</MkButton>
-          <MkButton type="primary" @click="dialogStates.basic = false">确定</MkButton>
+          <MkButton type="primary" @click="dialogStates.basic = false"
+            >确定</MkButton
+          >
         </template>
       </MkDialog>
 
@@ -42,7 +48,7 @@
         title="确认删除"
         :animation="dialogAnimation"
       >
-        <p style="margin: 0; color: var(--mk-text-secondary);">
+        <p style="margin: 0; color: var(--mk-text-secondary)">
           确定要删除此项吗？此操作不可撤销。
         </p>
         <template #footer>
@@ -57,14 +63,22 @@
         title="编辑信息"
         :animation="dialogAnimation"
       >
-        <MkSpace direction="vertical" size="large" style="width: 100%;">
-          <MkInput v-model="formData.name" placeholder="名称" style="width: 100%;" />
-          <MkInput v-model="formData.email" placeholder="邮箱" style="width: 100%;" />
+        <MkSpace direction="vertical" size="large" style="width: 100%">
+          <MkInput
+            v-model="formData.name"
+            placeholder="名称"
+            style="width: 100%"
+          />
+          <MkInput
+            v-model="formData.email"
+            placeholder="邮箱"
+            style="width: 100%"
+          />
           <MkSelect
             v-model="formData.role"
             :options="roleOptions"
             placeholder="角色"
-            style="width: 100%;"
+            style="width: 100%"
           />
         </MkSpace>
         <template #footer>
@@ -78,7 +92,10 @@
       </div>
 
       <div class="example-code-hint">
-        <p>核心 API：<code>MkDialog</code> 组件 + <code>springOverlay</code> 弹簧动画预设</p>
+        <p>
+          核心 API：<code>MkDialog</code> 组件 +
+          <code>springOverlay</code> 弹簧动画预设
+        </p>
       </div>
     </div>
   </div>
@@ -126,22 +143,49 @@ function showResult(type: string, message: string) {
 </script>
 
 <style scoped>
-.example-page { max-width: 760px; margin: 0 auto; padding-bottom: 80px; }
-.example-hero { text-align: center; padding: 56px 24px 32px; }
-.example-title { font-size: 1.8rem; font-weight: 700; margin: 0 0 8px; }
-.example-desc { font-size: 0.95rem; color: var(--mk-text-secondary); margin: 0; }
+.example-page {
+  max-width: 760px;
+  margin: 0 auto;
+  padding-bottom: 80px;
+}
+.example-hero {
+  text-align: center;
+  padding: 56px 24px 32px;
+}
+.example-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 0 0 8px;
+}
+.example-desc {
+  font-size: 0.95rem;
+  color: var(--mk-text-secondary);
+  margin: 0;
+}
 
-.example-body { padding: 0 24px; }
-.example-hint { margin-bottom: 24px; }
+.example-body {
+  padding: 0 24px;
+}
+.example-hint {
+  margin-bottom: 24px;
+}
 
-.action-result { margin-top: 16px; }
+.action-result {
+  margin-top: 16px;
+}
 .example-code-hint {
-  margin-top: 32px; padding: 16px;
-  background: var(--mk-surface); border-radius: var(--mk-radius-lg);
-  font-size: 0.85rem; color: var(--mk-text-secondary);
+  margin-top: 32px;
+  padding: 16px;
+  background: var(--mk-surface);
+  border-radius: var(--mk-radius-lg);
+  font-size: 0.85rem;
+  color: var(--mk-text-secondary);
 }
 .example-code-hint code {
-  background: var(--mk-bg-elevated); padding: 2px 6px;
-  border-radius: 4px; font-family: ui-monospace, monospace; font-size: 0.82rem;
+  background: var(--mk-bg-elevated);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: ui-monospace, monospace;
+  font-size: 0.82rem;
 }
 </style>

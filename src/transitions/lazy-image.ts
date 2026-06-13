@@ -1,8 +1,8 @@
 export interface LazyImageOptions {
   threshold?: number
   rootMargin?: string
-  blur?: boolean           // 加载前是否模糊
-  placeholder?: string     // 占位背景色
+  blur?: boolean // 加载前是否模糊
+  placeholder?: string // 占位背景色
 }
 
 const DEFAULT_LAZY: Required<LazyImageOptions> = {

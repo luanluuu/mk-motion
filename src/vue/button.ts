@@ -1,4 +1,12 @@
-import { defineComponent, h, ref, onMounted, onUnmounted, watch, nextTick } from 'vue'
+import {
+  defineComponent,
+  h,
+  ref,
+  onMounted,
+  onUnmounted,
+  watch,
+  nextTick,
+} from 'vue'
 import { createButton } from '../components/button/button.js'
 import type { ButtonOptions } from '../components/button/button.js'
 
@@ -13,7 +21,10 @@ export const MkButton = defineComponent({
     disabled: { type: Boolean, default: false },
     loading: { type: Boolean, default: false },
     icon: { type: String, default: '' },
-    motion: { type: Object as () => ButtonOptions['motion'], default: undefined },
+    motion: {
+      type: Object as () => ButtonOptions['motion'],
+      default: undefined,
+    },
   },
   emits: ['click'],
   setup(props, { emit, slots }) {
@@ -44,9 +55,27 @@ export const MkButton = defineComponent({
     }
 
     onMounted(() => nextTick(create))
-    watch(() => [props.type, props.size, props.plain, props.round, props.circle, props.icon, props.motion], () => nextTick(create), { deep: true })
-    watch(() => props.loading, (v) => instance?.setLoading(v))
-    watch(() => props.disabled, (v) => instance?.setDisabled(v))
+    watch(
+      () => [
+        props.type,
+        props.size,
+        props.plain,
+        props.round,
+        props.circle,
+        props.icon,
+        props.motion,
+      ],
+      () => nextTick(create),
+      { deep: true }
+    )
+    watch(
+      () => props.loading,
+      (v) => instance?.setLoading(v)
+    )
+    watch(
+      () => props.disabled,
+      (v) => instance?.setDisabled(v)
+    )
     onUnmounted(() => instance?.destroy())
 
     return () => h('div', { ref: container, style: 'display:inline-block' })

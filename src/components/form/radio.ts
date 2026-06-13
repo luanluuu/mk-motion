@@ -75,7 +75,10 @@ export class MkRadioGroup {
 
   constructor(
     container: HTMLElement | string,
-    options: { value?: string | number; onChange?: (value: string | number) => void } = {}
+    options: {
+      value?: string | number
+      onChange?: (value: string | number) => void
+    } = {}
   ) {
     const parent =
       typeof container === 'string'
@@ -129,8 +132,13 @@ export class MkRadioGroup {
   }
 
   private focusRadio(dir: number): void {
-    let current = this.radios.findIndex((r) => r.el.getAttribute('tabindex') === '0')
-    if (current === -1) current = this.radios.findIndex((r) => r.el.classList.contains('is-checked'))
+    let current = this.radios.findIndex(
+      (r) => r.el.getAttribute('tabindex') === '0'
+    )
+    if (current === -1)
+      current = this.radios.findIndex((r) =>
+        r.el.classList.contains('is-checked')
+      )
     if (current === -1) current = 0
     let next = current
     for (let i = 0; i < this.radios.length; i++) {
@@ -140,7 +148,9 @@ export class MkRadioGroup {
       }
     }
     if (next !== current || this.radios.length === 1) {
-      this.radios.forEach((r, i) => r.el.setAttribute('tabindex', i === next ? '0' : '-1'))
+      this.radios.forEach((r, i) =>
+        r.el.setAttribute('tabindex', i === next ? '0' : '-1')
+      )
       this.radios[next].el.focus()
       this.setValue(this.radios[next].getValue())
     }

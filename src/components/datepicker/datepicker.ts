@@ -32,11 +32,19 @@ function parseDate(str: string, fmt: string): Date | null {
   const day = parseInt(str.slice(dIndex, dIndex + 2), 10)
   if (isNaN(year) || isNaN(month) || isNaN(day)) return null
   const d = new Date(year, month - 1, day)
-  if (d.getFullYear() !== year || d.getMonth() !== month - 1 || d.getDate() !== day) return null
+  if (
+    d.getFullYear() !== year ||
+    d.getMonth() !== month - 1 ||
+    d.getDate() !== day
+  )
+    return null
   return d
 }
 
-function getMonthData(year: number, month: number): { date: Date; isCurrentMonth: boolean }[] {
+function getMonthData(
+  year: number,
+  month: number
+): { date: Date; isCurrentMonth: boolean }[] {
   const firstDay = new Date(year, month, 1)
   const start = new Date(year, month, 1 - firstDay.getDay())
   const days: { date: Date; isCurrentMonth: boolean }[] = []
@@ -49,7 +57,11 @@ function getMonthData(year: number, month: number): { date: Date; isCurrentMonth
 }
 
 function isSameDay(a: Date, b: Date): boolean {
-  return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate()
+  return (
+    a.getFullYear() === b.getFullYear() &&
+    a.getMonth() === b.getMonth() &&
+    a.getDate() === b.getDate()
+  )
 }
 
 export class MkDatePicker {
@@ -64,7 +76,10 @@ export class MkDatePicker {
   private _value: Date | null
   private _outsideClickHandler?: (e: MouseEvent) => void
 
-  constructor(container: HTMLElement | string, options: DatePickerOptions = {}) {
+  constructor(
+    container: HTMLElement | string,
+    options: DatePickerOptions = {}
+  ) {
     const parent =
       typeof container === 'string'
         ? document.querySelector(container)!
@@ -77,11 +92,16 @@ export class MkDatePicker {
 
     const fmt = this.options.format!
     if (this.options.value) {
-      this._value = this.options.value instanceof Date ? this.options.value : parseDate(this.options.value, fmt)
+      this._value =
+        this.options.value instanceof Date
+          ? this.options.value
+          : parseDate(this.options.value, fmt)
     } else {
       this._value = null
     }
-    this.currentMonth = this._value ? new Date(this._value.getFullYear(), this._value.getMonth(), 1) : new Date()
+    this.currentMonth = this._value
+      ? new Date(this._value.getFullYear(), this._value.getMonth(), 1)
+      : new Date()
 
     this.el = document.createElement('div')
     this.el.className = 'mk-datepicker'
@@ -165,11 +185,16 @@ export class MkDatePicker {
   }
 
   private renderCalendar(): void {
-    const title = this.header.querySelector('.mk-datepicker__title') as HTMLSpanElement
+    const title = this.header.querySelector(
+      '.mk-datepicker__title'
+    ) as HTMLSpanElement
     title.textContent = `${this.currentMonth.getFullYear()}年 ${this.currentMonth.getMonth() + 1}月`
 
     this.daysContainer.innerHTML = ''
-    const days = getMonthData(this.currentMonth.getFullYear(), this.currentMonth.getMonth())
+    const days = getMonthData(
+      this.currentMonth.getFullYear(),
+      this.currentMonth.getMonth()
+    )
     const today = new Date()
 
     days.forEach(({ date, isCurrentMonth }) => {
@@ -179,7 +204,8 @@ export class MkDatePicker {
 
       if (!isCurrentMonth) dayEl.classList.add('is-other-month')
       if (isSameDay(date, today)) dayEl.classList.add('is-today')
-      if (this._value && isSameDay(date, this._value)) dayEl.classList.add('is-selected')
+      if (this._value && isSameDay(date, this._value))
+        dayEl.classList.add('is-selected')
 
       dayEl.addEventListener('click', (e) => {
         e.stopPropagation()
@@ -206,7 +232,11 @@ export class MkDatePicker {
     this.input.value = v
     this._value = v ? parseDate(v, this.options.format!) : null
     if (this._value) {
-      this.currentMonth = new Date(this._value.getFullYear(), this._value.getMonth(), 1)
+      this.currentMonth = new Date(
+        this._value.getFullYear(),
+        this._value.getMonth(),
+        1
+      )
     }
     this.renderCalendar()
   }
@@ -216,7 +246,11 @@ export class MkDatePicker {
     this.isOpen = true
     this.calendar.classList.add('is-open')
     if (this._value) {
-      this.currentMonth = new Date(this._value.getFullYear(), this._value.getMonth(), 1)
+      this.currentMonth = new Date(
+        this._value.getFullYear(),
+        this._value.getMonth(),
+        1
+      )
       this.renderCalendar()
     }
   }

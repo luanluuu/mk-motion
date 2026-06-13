@@ -18,7 +18,8 @@ export class MkSpace {
     this.el = document.createElement('div')
     this.el.className = 'mk-space'
 
-    if (options.direction === 'vertical') this.el.classList.add('mk-space--vertical')
+    if (options.direction === 'vertical')
+      this.el.classList.add('mk-space--vertical')
     if (options.size) this.el.classList.add(`mk-space--${options.size}`)
     if (options.wrap !== false) this.el.classList.add('mk-space--wrap')
 

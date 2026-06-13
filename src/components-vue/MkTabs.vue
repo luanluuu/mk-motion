@@ -70,7 +70,8 @@ const setActive = (item: (typeof resolvedItems.value)[number]) => {
   emit('tabClick', item.key, item)
 }
 
-const isActive = (item: (typeof resolvedItems.value)[number]) => activeKey.value === item.key
+const isActive = (item: (typeof resolvedItems.value)[number]) =>
+  activeKey.value === item.key
 </script>
 
 <template>
@@ -79,7 +80,11 @@ const isActive = (item: (typeof resolvedItems.value)[number]) => activeKey.value
       <button
         v-for="item in resolvedItems"
         :key="item.key"
-        :ref="(el) => { itemRefs[item.key] = el as HTMLButtonElement }"
+        :ref="
+          (el) => {
+            itemRefs[item.key] = el as HTMLButtonElement
+          }
+        "
         type="button"
         class="mk-tabs__item"
         :class="{ 'is-active': isActive(item), 'is-disabled': item.disabled }"
@@ -184,8 +189,9 @@ const isActive = (item: (typeof resolvedItems.value)[number]) => activeKey.value
   height: 2px;
   background: var(--mk-primary);
   border-radius: 1px;
-  transition: left var(--mk-duration-normal) var(--mk-ease-out-expo),
-              width var(--mk-duration-normal) var(--mk-ease-out-expo);
+  transition:
+    left var(--mk-duration-normal) var(--mk-ease-out-expo),
+    width var(--mk-duration-normal) var(--mk-ease-out-expo);
 }
 
 .mk-tabs--card .mk-tabs__header {
@@ -222,8 +228,9 @@ const isActive = (item: (typeof resolvedItems.value)[number]) => activeKey.value
   line-height: var(--mk-leading-normal);
   opacity: 0;
   transform: translateY(4px);
-  transition: opacity var(--mk-duration-normal) var(--mk-ease-default),
-              transform var(--mk-duration-normal) var(--mk-ease-out);
+  transition:
+    opacity var(--mk-duration-normal) var(--mk-ease-default),
+    transform var(--mk-duration-normal) var(--mk-ease-out);
 }
 
 .mk-tabs__panel.is-active {

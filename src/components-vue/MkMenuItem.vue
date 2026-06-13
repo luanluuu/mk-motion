@@ -16,10 +16,14 @@ const emit = defineEmits<{
   select: [item: MenuItem]
 }>()
 
-const hasChildren = computed(() => !!props.item.children && props.item.children.length > 0)
+const hasChildren = computed(
+  () => !!props.item.children && props.item.children.length > 0
+)
 const isOpen = computed(() => props.isOpenFn(props.item))
 const isActive = computed(() => props.isActiveFn(props.item))
-const paddingLeft = computed(() => (props.collapse && props.mode === 'vertical' ? 0 : 16 + props.level * 16))
+const paddingLeft = computed(() =>
+  props.collapse && props.mode === 'vertical' ? 0 : 16 + props.level * 16
+)
 
 const onClick = () => {
   if (props.item.disabled) return
@@ -181,7 +185,9 @@ const onKeydown = (e: KeyboardEvent) => {
 
 .mk-menu-submenu-enter-active,
 .mk-menu-submenu-leave-active {
-  transition: max-height 0.3s var(--mk-ease-default), opacity 0.3s var(--mk-ease-default);
+  transition:
+    max-height 0.3s var(--mk-ease-default),
+    opacity 0.3s var(--mk-ease-default);
 }
 
 .mk-menu-submenu-enter-from,
@@ -209,7 +215,9 @@ const onKeydown = (e: KeyboardEvent) => {
   padding: 4px 0;
 }
 
-.mk-menu--horizontal .mk-menu-item.has-children:hover > .mk-menu-submenu--horizontal {
+.mk-menu--horizontal
+  .mk-menu-item.has-children:hover
+  > .mk-menu-submenu--horizontal {
   display: block;
 }
 </style>

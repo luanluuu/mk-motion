@@ -1,7 +1,7 @@
 export interface FlipCardOptions {
-  axis?: 'x' | 'y'         // 翻转轴
-  duration?: number        // 翻转时长
-  perspective?: number     // 透视距离
+  axis?: 'x' | 'y' // 翻转轴
+  duration?: number // 翻转时长
+  perspective?: number // 透视距离
 }
 
 const DEFAULT_FLIP: Required<FlipCardOptions> = {
@@ -18,10 +18,7 @@ export class FlipCard {
   private flipped = false
   private options: Required<FlipCardOptions>
 
-  constructor(
-    container: HTMLElement | string,
-    options: FlipCardOptions = {}
-  ) {
+  constructor(container: HTMLElement | string, options: FlipCardOptions = {}) {
     this.container =
       typeof container === 'string'
         ? document.querySelector<HTMLElement>(container)!
@@ -47,11 +44,15 @@ export class FlipCard {
     `
 
     // 查找 front 和 back
-    this.front = this.container.querySelector('[data-flip="front"]') as HTMLElement
-    this.back = this.container.querySelector('[data-flip="back"]') as HTMLElement
+    this.front = this.container.querySelector<HTMLElement>(
+      '[data-flip="front"]'
+    )!
+    this.back = this.container.querySelector<HTMLElement>('[data-flip="back"]')!
 
     if (!this.front || !this.back) {
-      throw new Error('FlipCard: 需要包含 data-flip="front" 和 data-flip="back" 的子元素')
+      throw new Error(
+        'FlipCard: 需要包含 data-flip="front" 和 data-flip="back" 的子元素'
+      )
     }
 
     const common = `

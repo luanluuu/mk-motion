@@ -67,15 +67,11 @@ export class MkTree {
         parent,
         indeterminate: false,
         loading: false,
-        loaded:
-          !this.options.lazy || !!n.children || n.isLeaf,
+        loaded: !this.options.lazy || !!n.children || n.isLeaf,
       }
       this.nodeMap.set(node.id, node)
       if (node.children) {
-        node.children = this.processNodes(
-          node.children,
-          node
-        )
+        node.children = this.processNodes(node.children, node)
       }
       return node
     })
@@ -95,8 +91,7 @@ export class MkTree {
     level: number,
     filter?: string
   ): HTMLElement | null {
-    const matchesFilter =
-      !filter || node.label.toLowerCase().includes(filter)
+    const matchesFilter = !filter || node.label.toLowerCase().includes(filter)
     let childMatches = false
     if (filter && node.children) {
       childMatches = node.children.some((child) =>
@@ -112,8 +107,7 @@ export class MkTree {
     if (node.disabled) nodeEl.classList.add('is-disabled')
     if (!node.children || node.children.length === 0)
       nodeEl.classList.add('is-leaf')
-    if (matchesFilter && filter)
-      nodeEl.classList.add('is-filtered')
+    if (matchesFilter && filter) nodeEl.classList.add('is-filtered')
 
     const content = document.createElement('div')
     content.className = 'mk-tree-node__content'
@@ -135,8 +129,7 @@ export class MkTree {
       const checkbox = document.createElement('span')
       checkbox.className = 'mk-tree-node__checkbox'
       if (node.checked) checkbox.classList.add('is-checked')
-      if (node.indeterminate)
-        checkbox.classList.add('is-indeterminate')
+      if (node.indeterminate) checkbox.classList.add('is-indeterminate')
       checkbox.addEventListener('click', (e) => {
         e.stopPropagation()
         this.toggleCheck(node)
@@ -147,15 +140,9 @@ export class MkTree {
     const label = document.createElement('span')
     label.className = 'mk-tree-node__label'
     if (matchesFilter && filter) {
-      const safeFilter = filter.replace(
-        /[.*+?^${}()|[\]\\]/g,
-        '\\$&'
-      )
+      const safeFilter = filter.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
       const regex = new RegExp(`(${safeFilter})`, 'gi')
-      label.innerHTML = node.label.replace(
-        regex,
-        '<mark>$1</mark>'
-      )
+      label.innerHTML = node.label.replace(regex, '<mark>$1</mark>')
     } else {
       label.textContent = node.label
     }
@@ -172,11 +159,7 @@ export class MkTree {
 
     nodeEl.appendChild(content)
 
-    if (
-      node.children &&
-      node.children.length > 0 &&
-      node.expanded
-    ) {
+    if (node.children && node.children.length > 0 && node.expanded) {
       const childrenEl = document.createElement('div')
       childrenEl.className = 'mk-tree-node__children'
       node.children.forEach((child) => {
@@ -193,10 +176,7 @@ export class MkTree {
     return nodeEl
   }
 
-  private childMatchesFilter(
-    node: InternalTreeNode,
-    filter: string
-  ): boolean {
+  private childMatchesFilter(node: InternalTreeNode, filter: string): boolean {
     if (node.label.toLowerCase().includes(filter)) return true
     if (node.children) {
       return node.children.some((child) =>
@@ -243,18 +223,12 @@ export class MkTree {
     this.options.onCheck?.(this.getCheckedNodes())
   }
 
-  private setNodeChecked(
-    node: InternalTreeNode,
-    checked: boolean
-  ): void {
+  private setNodeChecked(node: InternalTreeNode, checked: boolean): void {
     node.checked = checked
     node.indeterminate = false
   }
 
-  private updateChildrenCheck(
-    node: InternalTreeNode,
-    checked: boolean
-  ): void {
+  private updateChildrenCheck(node: InternalTreeNode, checked: boolean): void {
     if (!node.children) return
     node.children.forEach((child) => {
       const c = child as InternalTreeNode
@@ -289,8 +263,7 @@ export class MkTree {
     const collect = (nodes: InternalTreeNode[]) => {
       nodes.forEach((n) => {
         if (n.checked) result.push(n)
-        if (n.children)
-          collect(n.children as InternalTreeNode[])
+        if (n.children) collect(n.children as InternalTreeNode[])
       })
     }
     collect(this.nodes)

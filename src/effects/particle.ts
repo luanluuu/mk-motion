@@ -1,11 +1,11 @@
 export interface ParticleOptions {
-  count?: number          // 粒子数量
-  color?: string | string[]  // 颜色
-  speed?: number          // 扩散速度
-  size?: number           // 粒子大小
-  gravity?: number        // 重力
-  fadeOut?: boolean       // 是否淡出
-  duration?: number       // 动画总时长
+  count?: number // 粒子数量
+  color?: string | string[] // 颜色
+  speed?: number // 扩散速度
+  size?: number // 粒子大小
+  gravity?: number // 重力
+  fadeOut?: boolean // 是否淡出
+  duration?: number // 动画总时长
 }
 
 const DEFAULT_PARTICLE: Required<Omit<ParticleOptions, 'color'>> = {

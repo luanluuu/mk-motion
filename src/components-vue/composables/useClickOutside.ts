@@ -10,7 +10,8 @@ export function useClickOutside(
     if (!el) return
     const target = event.target as Node
     if (el.contains(target)) return
-    if (options.ignore?.some((ref) => ref.value && ref.value.contains(target))) return
+    if (options.ignore?.some((ref) => ref.value && ref.value.contains(target)))
+      return
     handler(event)
   }
 

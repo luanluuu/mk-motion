@@ -1,4 +1,12 @@
-import { defineComponent, h, ref, onMounted, onUnmounted, watch, nextTick } from 'vue'
+import {
+  defineComponent,
+  h,
+  ref,
+  onMounted,
+  onUnmounted,
+  watch,
+  nextTick,
+} from 'vue'
 import { MkTable as MkTableClass } from '../components/table/table.js'
 import type { TableColumn, TableOptions } from '../components/table/table.js'
 
@@ -6,12 +14,15 @@ export const MkTable = defineComponent({
   name: 'MkTable',
   props: {
     columns: { type: Array as () => TableColumn[], required: true },
-    data: { type: Array as () => Record<string, any>[], default: () => [] },
+    data: { type: Array as () => Record<string, unknown>[], default: () => [] },
     pageSize: { type: Number, default: 10 },
     virtual: { type: Boolean, default: false },
     itemHeight: { type: Number, default: 44 },
     virtualHeight: { type: Number, default: 400 },
-    selection: { type: String as () => TableOptions['selection'], default: undefined },
+    selection: {
+      type: String as () => TableOptions['selection'],
+      default: undefined,
+    },
   },
   emits: ['edit', 'delete', 'rowClick', 'selectChange'],
   setup(props, { emit }) {
@@ -37,7 +48,19 @@ export const MkTable = defineComponent({
     }
 
     onMounted(() => nextTick(create))
-    watch(() => [props.columns, props.data, props.pageSize, props.virtual, props.itemHeight, props.virtualHeight, props.selection], () => nextTick(create), { deep: true })
+    watch(
+      () => [
+        props.columns,
+        props.data,
+        props.pageSize,
+        props.virtual,
+        props.itemHeight,
+        props.virtualHeight,
+        props.selection,
+      ],
+      () => nextTick(create),
+      { deep: true }
+    )
     onUnmounted(() => instance?.destroy())
 
     return () => h('div', { ref: container })

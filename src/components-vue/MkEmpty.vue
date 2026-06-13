@@ -1,13 +1,16 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 
-const props = withDefaults(defineProps<{
-  description?: string
-  image?: string | 'default'
-  imageStyle?: Record<string, string>
-}>(), {
-  image: 'default',
-})
+const props = withDefaults(
+  defineProps<{
+    description?: string
+    image?: string | 'default'
+    imageStyle?: Record<string, string>
+  }>(),
+  {
+    image: 'default',
+  }
+)
 
 const defaultSvg = `<svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
   <rect x="20" y="30" width="80" height="60" rx="8" stroke="currentColor" stroke-width="1.5" opacity="0.3"/>
@@ -19,16 +22,19 @@ const defaultSvg = `<svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.
 </svg>`
 
 const isDefault = computed(() => props.image === 'default')
-const imageSrc = computed(() => props.image !== 'default' ? props.image : undefined)
+const imageSrc = computed(() =>
+  props.image !== 'default' ? props.image : undefined
+)
 </script>
 
 <template>
   <div class="mk-empty">
     <div class="mk-empty__image" :style="imageStyle">
       <template v-if="isDefault">
+        <!-- eslint-disable-next-line vue/no-v-html -->
         <div v-html="defaultSvg" />
       </template>
-      <img v-else-if="imageSrc" :src="imageSrc" alt="">
+      <img v-else-if="imageSrc" :src="imageSrc" alt="" />
       <slot name="image" />
     </div>
     <p v-if="description" class="mk-empty__description">{{ description }}</p>

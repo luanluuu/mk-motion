@@ -1,9 +1,9 @@
 export interface CursorTrailOptions {
-  count?: number           // 粒子数量
+  count?: number // 粒子数量
   color?: string
   size?: number
-  fadeSpeed?: number       // 淡出速度
-  smoothing?: number       // 平滑度 0~1
+  fadeSpeed?: number // 淡出速度
+  smoothing?: number // 平滑度 0~1
 }
 
 const DEFAULT_TRAIL: Required<CursorTrailOptions> = {
@@ -93,7 +93,7 @@ export function cursorTrail(options: CursorTrailOptions = {}): () => void {
       }
       dot.opacity *= opts.fadeSpeed
 
-      const size = opts.size * (1 - i / opts.count * 0.6)
+      const size = opts.size * (1 - (i / opts.count) * 0.6)
       dot.el.style.transform = `translate(${dot.x - size / 2}px, ${dot.y - size / 2}px)`
       dot.el.style.width = `${size}px`
       dot.el.style.height = `${size}px`

@@ -1,7 +1,13 @@
 export interface ToastOptions {
-  duration?: number        // 显示时长
+  duration?: number // 显示时长
   type?: 'info' | 'success' | 'warning' | 'error'
-  position?: 'top' | 'top-right' | 'top-left' | 'bottom' | 'bottom-right' | 'bottom-left'
+  position?:
+    | 'top'
+    | 'top-right'
+    | 'top-left'
+    | 'bottom'
+    | 'bottom-right'
+    | 'bottom-left'
 }
 
 const DEFAULT_TOAST: Required<ToastOptions> = {
@@ -11,19 +17,19 @@ const DEFAULT_TOAST: Required<ToastOptions> = {
 }
 
 const TYPE_COLORS: Record<string, { bg: string; icon: string }> = {
-  info:    { bg: '#38bdf8', icon: 'ℹ️' },
+  info: { bg: '#38bdf8', icon: 'ℹ️' },
   success: { bg: '#34d399', icon: '✅' },
   warning: { bg: '#fbbf24', icon: '⚠️' },
-  error:   { bg: '#f87171', icon: '❌' },
+  error: { bg: '#f87171', icon: '❌' },
 }
 
 const POSITION_STYLES: Record<string, string> = {
-  top:          'top:20px;left:50%;transform:translateX(-50%)',
-  'top-right':  'top:20px;right:20px',
-  'top-left':   'top:20px;left:20px',
-  bottom:       'bottom:20px;left:50%;transform:translateX(-50%)',
-  'bottom-right':'bottom:20px;right:20px',
-  'bottom-left':'bottom:20px;left:20px',
+  top: 'top:20px;left:50%;transform:translateX(-50%)',
+  'top-right': 'top:20px;right:20px',
+  'top-left': 'top:20px;left:20px',
+  bottom: 'bottom:20px;left:50%;transform:translateX(-50%)',
+  'bottom-right': 'bottom:20px;right:20px',
+  'bottom-left': 'bottom:20px;left:20px',
 }
 
 /**
@@ -80,21 +86,30 @@ export function toast(message: string, options: ToastOptions = {}): () => void {
 /**
  * 显示成功消息
  */
-export function toastSuccess(message: string, options?: Omit<ToastOptions, 'type'>): () => void {
+export function toastSuccess(
+  message: string,
+  options?: Omit<ToastOptions, 'type'>
+): () => void {
   return toast(message, { ...options, type: 'success' })
 }
 
 /**
  * 显示错误消息
  */
-export function toastError(message: string, options?: Omit<ToastOptions, 'type'>): () => void {
+export function toastError(
+  message: string,
+  options?: Omit<ToastOptions, 'type'>
+): () => void {
   return toast(message, { ...options, type: 'error' })
 }
 
 /**
  * 显示警告消息
  */
-export function toastWarning(message: string, options?: Omit<ToastOptions, 'type'>): () => void {
+export function toastWarning(
+  message: string,
+  options?: Omit<ToastOptions, 'type'>
+): () => void {
   return toast(message, { ...options, type: 'warning' })
 }
 

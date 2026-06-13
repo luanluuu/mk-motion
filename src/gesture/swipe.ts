@@ -2,7 +2,10 @@ export interface SwipeOptions {
   threshold?: number
   velocity?: number
   direction?: 'horizontal' | 'vertical' | 'both'
-  onSwipe?: (direction: 'left' | 'right' | 'up' | 'down', distance: number) => void
+  onSwipe?: (
+    direction: 'left' | 'right' | 'up' | 'down',
+    distance: number
+  ) => void
   onSwipeLeft?: () => void
   onSwipeRight?: () => void
   onSwipeUp?: () => void
@@ -17,8 +20,16 @@ interface Point {
 
 export class SwipeRecognizer {
   private element: HTMLElement
-  private options: Required<Omit<SwipeOptions, 'onSwipe' | 'onSwipeLeft' | 'onSwipeRight' | 'onSwipeUp' | 'onSwipeDown'>> &
-    Pick<SwipeOptions, 'onSwipe' | 'onSwipeLeft' | 'onSwipeRight' | 'onSwipeUp' | 'onSwipeDown'>
+  private options: Required<
+    Omit<
+      SwipeOptions,
+      'onSwipe' | 'onSwipeLeft' | 'onSwipeRight' | 'onSwipeUp' | 'onSwipeDown'
+    >
+  > &
+    Pick<
+      SwipeOptions,
+      'onSwipe' | 'onSwipeLeft' | 'onSwipeRight' | 'onSwipeUp' | 'onSwipeDown'
+    >
   private pointerId: number | null = null
   private startPoint: Point | null = null
   private lastPoint: Point | null = null
@@ -90,14 +101,29 @@ export class SwipeRecognizer {
 
     let dir: 'left' | 'right' | 'up' | 'down' | null = null
 
-    if (this.options.direction === 'horizontal' || this.options.direction === 'both') {
-      if (absDx > absDy && absDx >= this.options.threshold && vx >= this.options.velocity * 1000) {
+    if (
+      this.options.direction === 'horizontal' ||
+      this.options.direction === 'both'
+    ) {
+      if (
+        absDx > absDy &&
+        absDx >= this.options.threshold &&
+        vx >= this.options.velocity * 1000
+      ) {
         dir = dx > 0 ? 'right' : 'left'
       }
     }
 
-    if (!dir && (this.options.direction === 'vertical' || this.options.direction === 'both')) {
-      if (absDy >= absDx && absDy >= this.options.threshold && vy >= this.options.velocity * 1000) {
+    if (
+      !dir &&
+      (this.options.direction === 'vertical' ||
+        this.options.direction === 'both')
+    ) {
+      if (
+        absDy >= absDx &&
+        absDy >= this.options.threshold &&
+        vy >= this.options.velocity * 1000
+      ) {
         dir = dy > 0 ? 'down' : 'up'
       }
     }

@@ -2,19 +2,22 @@
 import { computed, ref, watch, onMounted, onBeforeUnmount } from 'vue'
 import { withMotion, type MotionOptions } from '../motion/component-motion.ts'
 
-const props = withDefaults(defineProps<{
-  modelValue?: string
-  placeholder?: string
-  type?: string
-  disabled?: boolean
-  clearable?: boolean
-  showPassword?: boolean
-  validate?: (value: string) => string | null
-  motion?: MotionOptions
-}>(), {
-  modelValue: '',
-  type: 'text',
-})
+const props = withDefaults(
+  defineProps<{
+    modelValue?: string
+    placeholder?: string
+    type?: string
+    disabled?: boolean
+    clearable?: boolean
+    showPassword?: boolean
+    validate?: (value: string) => string | null
+    motion?: MotionOptions
+  }>(),
+  {
+    modelValue: '',
+    type: 'text',
+  }
+)
 
 const emit = defineEmits<{
   'update:modelValue': [value: string]
@@ -101,15 +104,21 @@ function focus() {
   inputRef.value?.focus()
 }
 
-watch(() => props.modelValue, (v) => {
-  if (inputRef.value && inputRef.value.value !== v) {
-    inputRef.value.value = v ?? ''
+watch(
+  () => props.modelValue,
+  (v) => {
+    if (inputRef.value && inputRef.value.value !== v) {
+      inputRef.value.value = v ?? ''
+    }
   }
-})
+)
 
 onMounted(() => {
   if (inputRef.value) {
-    motionCtrl = withMotion(inputRef.value, props.motion || { focus: 'ring', enter: 'fadeIn', duration: 200 })
+    motionCtrl = withMotion(
+      inputRef.value,
+      props.motion || { focus: 'ring', enter: 'fadeIn', duration: 200 }
+    )
   }
 })
 
@@ -141,19 +150,22 @@ defineExpose({ focus, validate, showError, showSuccess, clearError })
         v-if="clearable && modelValue"
         class="mk-input__suffix-item mk-input__clear"
         @click="clear"
-      >✕</span>
+        >✕</span
+      >
       <span
         v-if="showPassword && type === 'password'"
         class="mk-input__suffix-item"
         :title="showPwd ? '隐藏密码' : '显示密码'"
         @click="showPwd = !showPwd"
-      >{{ showPwd ? '🙈' : '👁' }}</span>
+        >{{ showPwd ? '🙈' : '👁' }}</span
+      >
     </span>
     <span
       :id="`${inputId}-error`"
       class="mk-input__errormsg"
       :class="{ show: errorMsg }"
-    >{{ errorMsg }}</span>
+      >{{ errorMsg }}</span
+    >
   </div>
 </template>
 
@@ -179,7 +191,9 @@ defineExpose({ focus, validate, showError, showSuccess, clearError })
   transition: var(--mk-transition);
 }
 
-.mk-input::placeholder { color: var(--mk-text-tertiary); }
+.mk-input::placeholder {
+  color: var(--mk-text-tertiary);
+}
 
 .mk-input:hover {
   border-color: var(--mk-border-hover);
@@ -210,8 +224,11 @@ defineExpose({ focus, validate, showError, showSuccess, clearError })
 .mk-input__suffix-item {
   cursor: pointer;
   font-size: 13px;
-  width: 20px; height: 20px;
-  display: flex; align-items: center; justify-content: center;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border-radius: 4px;
   transition: var(--mk-transition);
 }
@@ -245,8 +262,15 @@ defineExpose({ focus, validate, showError, showSuccess, clearError })
 }
 
 @keyframes mk-input-shake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-4px); }
-  75% { transform: translateX(4px); }
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-4px);
+  }
+  75% {
+    transform: translateX(4px);
+  }
 }
 </style>

@@ -5,7 +5,12 @@
     <main class="doc-main" id="main" :class="{ 'is-home': isHome }">
       <slot />
     </main>
-    <aside v-if="!isHome" class="doc-toc" id="toc" style="display: none;"></aside>
+    <aside
+      v-if="!isHome"
+      class="doc-toc"
+      id="toc"
+      style="display: none"
+    ></aside>
   </div>
 </template>
 
@@ -16,7 +21,10 @@ import DocHeader from './DocHeader.vue'
 import DocSidebar from './DocSidebar.vue'
 
 const route = useRoute()
-const isHome = computed(() => route.path === '/home' || route.path === '/' || route.path === '/examples')
+const isHome = computed(
+  () =>
+    route.path === '/home' || route.path === '/' || route.path === '/examples'
+)
 </script>
 
 <style scoped>

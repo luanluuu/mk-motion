@@ -1,8 +1,8 @@
 export interface BlurRevealOptions {
   duration?: number
-  blurStart?: number       // 初始模糊像素
-  stagger?: number         // 子元素间隔
-  childSelector?: string   // 子元素选择器
+  blurStart?: number // 初始模糊像素
+  stagger?: number // 子元素间隔
+  childSelector?: string // 子元素选择器
 }
 
 const DEFAULT_BLUR: Required<Omit<BlurRevealOptions, 'childSelector'>> = {
@@ -60,12 +60,13 @@ export function blurRevealChildren(
   if (!el) throw new Error('blurRevealChildren: element not found')
 
   const opts = { ...DEFAULT_BLUR, ...options }
-  const children = opts.childSelector
-    ? Array.from(el.querySelectorAll(opts.childSelector))
-    : Array.from(el.children)
+  const children: HTMLElement[] = opts.childSelector
+    ? Array.from(el.querySelectorAll<HTMLElement>(opts.childSelector))
+    : Array.from(el.children).filter(
+        (child): child is HTMLElement => child instanceof HTMLElement
+      )
 
-  children.forEach((child) => {
-    const c = child as HTMLElement
+  children.forEach((c) => {
     c.style.filter = `blur(${opts.blurStart}px)`
     c.style.opacity = '0'
     c.style.transition = `filter ${opts.duration}ms ease, opacity ${opts.duration}ms ease`
@@ -75,9 +76,8 @@ export function blurRevealChildren(
 
   return new Promise((resolve) => {
     let done = 0
-    children.forEach((child, i) => {
+    children.forEach((c, i) => {
       setTimeout(() => {
-        const c = child as HTMLElement
         c.style.filter = 'blur(0px)'
         c.style.opacity = '1'
 

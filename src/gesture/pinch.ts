@@ -28,8 +28,12 @@ export class PinchRecognizer {
     }
 
     this.options = options
-    this.element.addEventListener('touchstart', this.onTouchStart, { passive: true })
-    this.element.addEventListener('touchmove', this.onTouchMove, { passive: true })
+    this.element.addEventListener('touchstart', this.onTouchStart, {
+      passive: true,
+    })
+    this.element.addEventListener('touchmove', this.onTouchMove, {
+      passive: true,
+    })
     this.element.addEventListener('touchend', this.onTouchEnd)
     this.element.addEventListener('touchcancel', this.onTouchEnd)
   }

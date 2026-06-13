@@ -10,12 +10,12 @@ npm install @luanlu/mk-motion
 
 mk-motion 不是一个"组件库"，而是四个独立可用的能力的组合：
 
-| 能力 | 做什么 | 独立使用？ |
-| --- | --- | --- |
-| **Animation Engine** | Spring、FLIP、Timeline、WAAPI、CSS 预设 | `import { springTo, flip } from '@luanlu/mk-motion/motion'` |
-| **Gesture & Interaction** | 拖拽排序、滑动、捏合、磁吸、光标轨迹 | `import { DraggableList, magnetic } from '@luanlu/mk-motion/motion'` |
-| **Vue 3 Components** | 30+ 企业级 SFC 组件 | `import { MkButton, MkTable } from '@luanlu/mk-motion/vue'` |
-| **DevTool Integration** | Vite 插件、Nuxt 3 module、unplugin resolver | 零配置自动导入 |
+| 能力                      | 做什么                                      | 独立使用？                                                           |
+| ------------------------- | ------------------------------------------- | -------------------------------------------------------------------- |
+| **Animation Engine**      | Spring、FLIP、Timeline、WAAPI、CSS 预设     | `import { springTo, flip } from '@luanlu/mk-motion/motion'`          |
+| **Gesture & Interaction** | 拖拽排序、滑动、捏合、磁吸、光标轨迹        | `import { DraggableList, magnetic } from '@luanlu/mk-motion/motion'` |
+| **Vue 3 Components**      | 30+ 企业级 SFC 组件                         | `import { MkButton, MkTable } from '@luanlu/mk-motion/vue'`          |
+| **DevTool Integration**   | Vite 插件、Nuxt 3 module、unplugin resolver | 零配置自动导入                                                       |
 
 每个能力都可以独立引入，不与其它能力耦合。
 
@@ -114,30 +114,30 @@ export default defineNuxtConfig({
 
 **Spring 物理引擎**
 
-| API | 说明 |
-| --- | --- |
-| `springTo(el, options)` | 单元素弹簧动画 |
-| `springFromTo(el, from, to, options)` | 指定起止状态 |
-| `springStagger(els, options)` | 批量交错弹簧动画 |
-| `springSequence(steps)` | 顺序弹簧动画链 |
-| `springParallel(steps)` | 并行弹簧动画 |
+| API                                   | 说明             |
+| ------------------------------------- | ---------------- |
+| `springTo(el, options)`               | 单元素弹簧动画   |
+| `springFromTo(el, from, to, options)` | 指定起止状态     |
+| `springStagger(els, options)`         | 批量交错弹簧动画 |
+| `springSequence(steps)`               | 顺序弹簧动画链   |
+| `springParallel(steps)`               | 并行弹簧动画     |
 
 **FLIP 布局动画**
 
-| API | 说明 |
-| --- | --- |
-| `flip(container, mutate)` | 单容器 FLIP |
-| `staggerFlip(container, mutate)` | 交错 FLIP |
-| `flipGrid(container, mutate, options)` | 网格 FLIP |
+| API                                        | 说明          |
+| ------------------------------------------ | ------------- |
+| `flip(container, mutate)`                  | 单容器 FLIP   |
+| `staggerFlip(container, mutate)`           | 交错 FLIP     |
+| `flipGrid(container, mutate, options)`     | 网格 FLIP     |
 | `filterGrid(container, filterFn, options)` | 过滤网格 FLIP |
 | `shuffleGrid(container, orderFn, options)` | 洗牌网格 FLIP |
 
 **Timeline & Animator**
 
-| API | 说明 |
-| --- | --- |
+| API        | 说明                                                       |
+| ---------- | ---------------------------------------------------------- |
 | `Animator` | 声明式动画控制器，支持 WAAPI / CSS 预设 / play/pause/reset |
-| `Timeline` | 时间线编排，支持 seek、add、label |
+| `Timeline` | 时间线编排，支持 seek、add、label                          |
 
 **CSS 预设动画** — `fadeIn/Out`, `slideIn/Out`, `zoomIn/Out`, `bounceIn/Out`, `flipInX/Y`, `shake`, `pulse`, `rotateIn`
 
@@ -149,19 +149,19 @@ export default defineNuxtConfig({
 
 ### 手势交互 (`@luanlu/mk-motion/motion`)
 
-| API | 说明 |
-| --- | --- |
-| `DraggableList(el, options)` | 拖拽排序列表 |
+| API                                | 说明                   |
+| ---------------------------------- | ---------------------- |
+| `DraggableList(el, options)`       | 拖拽排序列表           |
 | `createDraggableList(el, options)` | DraggableList 工厂函数 |
-| `Draggable(el, options)` | 通用拖拽 |
-| `SwipeRecognizer(el, options)` | 滑动手势识别 |
-| `PinchRecognizer(el, options)` | 捏合手势识别 |
-| `TapRecognizer(el, options)` | 点击/长按识别 |
-| `magnetic(el, options)` | 磁吸跟随 |
-| `magneticText(el, options)` | 文字磁吸 |
-| `CoverFlow` / `createCoverFlow` | 3D 封面流 |
-| `FlipCard` / `createFlipCard` | 卡片翻转 |
-| `cursorTrail(options)` | 光标拖尾 |
+| `Draggable(el, options)`           | 通用拖拽               |
+| `SwipeRecognizer(el, options)`     | 滑动手势识别           |
+| `PinchRecognizer(el, options)`     | 捏合手势识别           |
+| `TapRecognizer(el, options)`       | 点击/长按识别          |
+| `magnetic(el, options)`            | 磁吸跟随               |
+| `magneticText(el, options)`        | 文字磁吸               |
+| `CoverFlow` / `createCoverFlow`    | 3D 封面流              |
+| `FlipCard` / `createFlipCard`      | 卡片翻转               |
+| `cursorTrail(options)`             | 光标拖尾               |
 
 ### Vue 3 组件 (`@luanlu/mk-motion/vue`)
 
@@ -181,13 +181,13 @@ export default defineNuxtConfig({
 
 ### 工程集成
 
-| 入口 | 用途 |
-| --- | --- |
-| `@luanlu/mk-motion/motion` | 轻量动画与交互工具入口，不包含 Vue 组件和 legacy DOM API |
-| `@luanlu/mk-motion/vite` | Vite 插件，自动导入 Vue 组件 |
-| `@luanlu/mk-motion/nuxt` | Nuxt 3 module，自动注册组件 + composables |
-| `@luanlu/mk-motion/resolver` | unplugin-vue-components resolver |
-| `@luanlu/mk-motion/css` | 全部样式（组件 + 动画 + 主题） |
+| 入口                         | 用途                                                     |
+| ---------------------------- | -------------------------------------------------------- |
+| `@luanlu/mk-motion/motion`   | 轻量动画与交互工具入口，不包含 Vue 组件和 legacy DOM API |
+| `@luanlu/mk-motion/vite`     | Vite 插件，自动导入 Vue 组件                             |
+| `@luanlu/mk-motion/nuxt`     | Nuxt 3 module，自动注册组件 + composables                |
+| `@luanlu/mk-motion/resolver` | unplugin-vue-components resolver                         |
+| `@luanlu/mk-motion/css`      | 全部样式（组件 + 动画 + 主题）                           |
 
 ---
 
@@ -199,8 +199,8 @@ export default defineNuxtConfig({
 import { useMkTheme } from '@luanlu/mk-motion/vue'
 
 const { isDark, toggle, setTheme } = useMkTheme()
-toggle()           // 切换暗黑模式
-setTheme('dark')   // 强制暗黑
+toggle() // 切换暗黑模式
+setTheme('dark') // 强制暗黑
 ```
 
 自定义主题只需覆盖 CSS 变量：
@@ -219,7 +219,7 @@ setTheme('dark')   // 强制暗黑
 保留命令式 DOM API，适合非 Vue 页面或旧代码迁移：
 
 ```ts
-import { createButton, createDialog, messageSuccess } from '@luanlu/mk-motion'
+import { createButton, createDialog, messageSuccess } from '@luanlu/mk-motion/legacy'
 import '@luanlu/mk-motion/css'
 
 createButton(document.body, {
@@ -251,15 +251,15 @@ npm run build:docs   # 构建文档站
 
 ### 构建产物
 
-| 文件 | 格式 | 用途 |
-| --- | --- | --- |
-| `dist/mk-motion.js` | ESM | 主入口 |
-| `dist/mk-motion.umd.cjs` | UMD | CDN / require |
-| `dist/vue.js` | ESM | Vue 组件子入口 |
-| `dist/vite.js` | ESM | Vite 插件 |
-| `dist/nuxt.js` | ESM | Nuxt module |
-| `dist/resolver.js` | ESM | 组件 resolver |
-| `dist/style.css` | CSS | 全部样式 |
+| 文件                     | 格式 | 用途           |
+| ------------------------ | ---- | -------------- |
+| `dist/mk-motion.js`      | ESM  | 主入口         |
+| `dist/mk-motion.umd.cjs` | UMD  | CDN / require  |
+| `dist/vue.js`            | ESM  | Vue 组件子入口 |
+| `dist/vite.js`           | ESM  | Vite 插件      |
+| `dist/nuxt.js`           | ESM  | Nuxt module    |
+| `dist/resolver.js`       | ESM  | 组件 resolver  |
+| `dist/style.css`         | CSS  | 全部样式       |
 
 ---
 

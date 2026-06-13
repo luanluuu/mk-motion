@@ -18,7 +18,11 @@ export interface DraggableListOptions {
     item: HTMLElement
   }) => void
   /** Fired when drag ends (before release animation completes) */
-  onDragEnd?: (info: { fromIndex: number; toIndex: number; item: HTMLElement }) => void
+  onDragEnd?: (info: {
+    fromIndex: number
+    toIndex: number
+    item: HTMLElement
+  }) => void
   /** Custom drag handle selector (default: whole item) */
   handle?: string
   /** Direction: vertical or horizontal */
@@ -84,19 +88,33 @@ export function calcDragIndex(
 
 export class DraggableList {
   private container: HTMLElement
-  private options: Required<Pick<DraggableListOptions, 'direction' | 'ghostOpacity' | 'dragScale' | 'duration' | 'easing'>> & DraggableListOptions
+  private options: Required<
+    Pick<
+      DraggableListOptions,
+      'direction' | 'ghostOpacity' | 'dragScale' | 'duration' | 'easing'
+    >
+  > &
+    DraggableListOptions
   private state: DragState | null = null
-  private handlers: { event: string; fn: EventListener; target: EventTarget }[] = []
+  private handlers: {
+    event: string
+    fn: EventListener
+    target: EventTarget
+  }[] = []
   private destroyed = false
   private releaseAnim: Animation | null = null
   private shiftAnimations = new Map<HTMLElement, Animation>()
   private dragLayer: HTMLElement | null = null
   private prefersReducedMotion = false
 
-  constructor(container: HTMLElement | string, options: DraggableListOptions = {}) {
-    this.container = typeof container === 'string'
-      ? document.querySelector<HTMLElement>(container)!
-      : container
+  constructor(
+    container: HTMLElement | string,
+    options: DraggableListOptions = {}
+  ) {
+    this.container =
+      typeof container === 'string'
+        ? document.querySelector<HTMLElement>(container)!
+        : container
     if (!this.container) throw new Error('DraggableList: container not found')
 
     this.options = {
@@ -108,11 +126,11 @@ export class DraggableList {
       ...options,
     }
 
-    this.prefersReducedMotion = this.options.reducedMotion ?? (
-      typeof window !== 'undefined' && window.matchMedia
+    this.prefersReducedMotion =
+      this.options.reducedMotion ??
+      (typeof window !== 'undefined' && window.matchMedia
         ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
-        : false
-    )
+        : false)
 
     this.attachListeners()
   }
@@ -122,11 +140,21 @@ export class DraggableList {
     const onTouchStart = (e: TouchEvent) => this.onPointerDown(e)
 
     this.container.addEventListener('mousedown', onMouseDown)
-    this.container.addEventListener('touchstart', onTouchStart, { passive: false })
+    this.container.addEventListener('touchstart', onTouchStart, {
+      passive: false,
+    })
 
     this.handlers.push(
-      { event: 'mousedown', fn: onMouseDown as EventListener, target: this.container },
-      { event: 'touchstart', fn: onTouchStart as EventListener, target: this.container },
+      {
+        event: 'mousedown',
+        fn: onMouseDown as EventListener,
+        target: this.container,
+      },
+      {
+        event: 'touchstart',
+        fn: onTouchStart as EventListener,
+        target: this.container,
+      }
     )
   }
 
@@ -155,7 +183,8 @@ export class DraggableList {
 
     const placeholder = item.cloneNode(false) as HTMLElement
     placeholder.innerHTML = ''
-    const plcClass = `${item.className || ''} mk-draggable-placeholder${this.options.placeholderClass ? ` ${this.options.placeholderClass}` : ''}`.trim()
+    const plcClass =
+      `${item.className || ''} mk-draggable-placeholder${this.options.placeholderClass ? ` ${this.options.placeholderClass}` : ''}`.trim()
     placeholder.className = plcClass
     Object.assign(placeholder.style, {
       minHeight: `${rect.height}px`,
@@ -163,7 +192,8 @@ export class DraggableList {
       opacity: '1',
       background: 'var(--mk-primary-muted, rgba(64, 158, 255, 0.1))',
       border: '1px dashed var(--mk-primary, #409eff)',
-      boxShadow: 'inset 0 0 0 1px var(--mk-primary-muted, rgba(64, 158, 255, 0.16))',
+      boxShadow:
+        'inset 0 0 0 1px var(--mk-primary-muted, rgba(64, 158, 255, 0.16))',
       pointerEvents: 'none',
       transform: '',
       transition: '',
@@ -200,8 +230,13 @@ export class DraggableList {
     })
 
     Array.from(this.container.children).forEach((child) => {
-      if (child === placeholder || child === item) return
-      ;(child as HTMLElement).style.willChange = 'transform'
+      if (
+        !(child instanceof HTMLElement) ||
+        child === placeholder ||
+        child === item
+      )
+        return
+      child.style.willChange = 'transform'
     })
 
     this.state = {
@@ -234,7 +269,7 @@ export class DraggableList {
       { event: 'mousemove', fn: onMove as EventListener, target: document },
       { event: 'mouseup', fn: onUp as EventListener, target: document },
       { event: 'touchmove', fn: onMove as EventListener, target: document },
-      { event: 'touchend', fn: onUp as EventListener, target: document },
+      { event: 'touchend', fn: onUp as EventListener, target: document }
     )
   }
 
@@ -317,7 +352,10 @@ export class DraggableList {
       return
     }
 
-    if (Math.abs(currentX - targetX) < 0.5 && Math.abs(currentY - targetY) < 0.5) {
+    if (
+      Math.abs(currentX - targetX) < 0.5 &&
+      Math.abs(currentY - targetY) < 0.5
+    ) {
       finish()
       return
     }
@@ -352,7 +390,10 @@ export class DraggableList {
     this.releaseAnim = null
     if (state.placeholder.parentNode) {
       state.placeholder.replaceWith(state.el)
-    } else if (state.originalNextSibling && state.originalNextSibling.parentNode === state.originalParent) {
+    } else if (
+      state.originalNextSibling &&
+      state.originalNextSibling.parentNode === state.originalParent
+    ) {
       state.originalParent.insertBefore(state.el, state.originalNextSibling)
     } else {
       state.originalParent.appendChild(state.el)
@@ -399,19 +440,28 @@ export class DraggableList {
 
   private clearSiblingMotionHints(state: DragState): void {
     Array.from(this.container.children).forEach((child) => {
-      if (child === state.placeholder || child === state.el) return
-      const el = child as HTMLElement
-      el.style.transition = ''
-      el.style.transform = ''
-      el.style.willChange = ''
+      if (
+        !(child instanceof HTMLElement) ||
+        child === state.placeholder ||
+        child === state.el
+      )
+        return
+      child.style.transition = ''
+      child.style.transform = ''
+      child.style.willChange = ''
     })
   }
 
   private findItem(target: HTMLElement): HTMLElement | null {
-    const item = target.closest('[data-flip-item]') as HTMLElement
-      || target.closest('[data-draggable]') as HTMLElement
-      || this.findDirectChild(target)
-    if (item && (item.hasAttribute('data-drag-disabled') || item.closest('[data-drag-disabled]'))) {
+    const item =
+      (target.closest('[data-flip-item]') as HTMLElement) ||
+      (target.closest('[data-draggable]') as HTMLElement) ||
+      this.findDirectChild(target)
+    if (
+      item &&
+      (item.hasAttribute('data-drag-disabled') ||
+        item.closest('[data-drag-disabled]'))
+    ) {
       return null
     }
     return item
@@ -438,10 +488,16 @@ export class DraggableList {
   private findNewIndex(): number {
     if (!this.state) return -1
 
-    const pointer = this.options.direction === 'vertical' ? this.state.currentY : this.state.currentX
+    const pointer =
+      this.options.direction === 'vertical'
+        ? this.state.currentY
+        : this.state.currentX
     const items = Array.from(this.container.children).filter(
-      (c) => c !== this.state!.placeholder && c !== this.state!.el
-    ) as HTMLElement[]
+      (c): c is HTMLElement =>
+        c instanceof HTMLElement &&
+        c !== this.state!.placeholder &&
+        c !== this.state!.el
+    )
 
     return calcDragIndex(items, pointer, this.options.direction)
   }
@@ -450,8 +506,11 @@ export class DraggableList {
     if (!this.state) return
 
     const items = Array.from(this.container.children).filter(
-      (c) => c !== this.state!.placeholder && c !== this.state!.el
-    ) as HTMLElement[]
+      (c): c is HTMLElement =>
+        c instanceof HTMLElement &&
+        c !== this.state!.placeholder &&
+        c !== this.state!.el
+    )
 
     if (newIndex >= items.length) {
       if (this.state.placeholder === this.container.lastElementChild) return
@@ -470,8 +529,13 @@ export class DraggableList {
     this.container.offsetHeight
     const afterMap = new Map<HTMLElement, DOMRect>()
     Array.from(this.container.children).forEach((child) => {
-      if (child === this.state!.placeholder || child === this.state!.el) return
-      afterMap.set(child as HTMLElement, child.getBoundingClientRect())
+      if (
+        !(child instanceof HTMLElement) ||
+        child === this.state!.placeholder ||
+        child === this.state!.el
+      )
+        return
+      afterMap.set(child, child.getBoundingClientRect())
     })
 
     if (this.prefersReducedMotion) return
@@ -496,12 +560,14 @@ export class DraggableList {
         }
       )
       this.shiftAnimations.set(el, anim)
-      anim.finished.then(() => {
-        if (this.shiftAnimations.get(el) === anim) {
-          this.shiftAnimations.delete(el)
-          el.style.transform = ''
-        }
-      }).catch(() => {})
+      anim.finished
+        .then(() => {
+          if (this.shiftAnimations.get(el) === anim) {
+            this.shiftAnimations.delete(el)
+            el.style.transform = ''
+          }
+        })
+        .catch(() => {})
     })
   }
 

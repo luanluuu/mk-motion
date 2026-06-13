@@ -1,12 +1,19 @@
 import './input.css'
-import { withMotion, type MotionOptions } from '../../motion/component-motion.ts'
+import {
+  withMotion,
+  type MotionOptions,
+} from '../../motion/component-motion.ts'
 
-export type InputSize = 'small' | 'default' | 'large' | {
-  height?: string
-  width?: string
-  padding?: string
-  fontSize?: string
-}
+export type InputSize =
+  | 'small'
+  | 'default'
+  | 'large'
+  | {
+      height?: string
+      width?: string
+      padding?: string
+      fontSize?: string
+    }
 
 export interface InputOptions {
   placeholder?: string
@@ -113,7 +120,10 @@ export class MkInput {
 
     parent.appendChild(this.el)
 
-    this.motion = withMotion(this.input, options.motion || { focus: 'ring', enter: 'fadeIn', duration: 200 })
+    this.motion = withMotion(
+      this.input,
+      options.motion || { focus: 'ring', enter: 'fadeIn', duration: 200 }
+    )
   }
 
   get value(): string {

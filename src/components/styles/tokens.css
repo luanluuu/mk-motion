@@ -9,7 +9,7 @@
 /* ----- Core Color Scale (each color: 50-950) ----- */
 :root {
   /* Indigo - Primary */
-  --mk-indigo-50:  #eef2ff;
+  --mk-indigo-50: #eef2ff;
   --mk-indigo-100: #e0e7ff;
   --mk-indigo-200: #c7d2fe;
   --mk-indigo-300: #a5b4fc;
@@ -22,7 +22,7 @@
   --mk-indigo-950: #1e1b4b;
 
   /* Green - Success */
-  --mk-green-50:  #f0fdf4;
+  --mk-green-50: #f0fdf4;
   --mk-green-100: #dcfce7;
   --mk-green-200: #bbf7d0;
   --mk-green-300: #86efac;
@@ -35,7 +35,7 @@
   --mk-green-950: #052e16;
 
   /* Amber - Warning */
-  --mk-amber-50:  #fffbeb;
+  --mk-amber-50: #fffbeb;
   --mk-amber-100: #fef3c7;
   --mk-amber-200: #fde68a;
   --mk-amber-300: #fcd34d;
@@ -48,7 +48,7 @@
   --mk-amber-950: #451a03;
 
   /* Red - Danger */
-  --mk-red-50:  #fef2f2;
+  --mk-red-50: #fef2f2;
   --mk-red-100: #fee2e2;
   --mk-red-200: #fecaca;
   --mk-red-300: #fca5a5;
@@ -61,7 +61,7 @@
   --mk-red-950: #450a0a;
 
   /* Slate - Neutral / Gray */
-  --mk-slate-50:  #f8fafc;
+  --mk-slate-50: #f8fafc;
   --mk-slate-100: #f1f5f9;
   --mk-slate-200: #e2e8f0;
   --mk-slate-300: #cbd5e1;
@@ -74,7 +74,7 @@
   --mk-slate-950: #020617;
 
   /* Sky - Info */
-  --mk-sky-50:  #f0f9ff;
+  --mk-sky-50: #f0f9ff;
   --mk-sky-100: #e0f2fe;
   --mk-sky-200: #bae6fd;
   --mk-sky-300: #7dd3fc;
@@ -90,82 +90,86 @@
 /* ----- Semantic Tokens (dark-first) ----- */
 :root {
   /* Surfaces */
-  --mk-bg:           #09090b;
-  --mk-bg-elevated:  #0c0c14;
-  --mk-surface:      #12121a;
-  --mk-surface-hover:#1a1a25;
-  --mk-surface-active:#22222e;
-  --mk-surface-raised:#1e1e2a;
+  --mk-bg: #09090b;
+  --mk-bg-elevated: #0c0c14;
+  --mk-surface: #12121a;
+  --mk-surface-hover: #1a1a25;
+  --mk-surface-active: #22222e;
+  --mk-surface-raised: #1e1e2a;
 
   /* Borders */
-  --mk-border:        #1e1e2e;
-  --mk-border-hover:  #27273a;
+  --mk-border: #1e1e2e;
+  --mk-border-hover: #27273a;
   --mk-border-active: #3a3a55;
-  --mk-divider:       rgba(255,255,255,0.06);
+  --mk-divider: rgba(255, 255, 255, 0.06);
 
   /* Primary */
-  --mk-primary:        var(--mk-indigo-500);
-  --mk-primary-hover:  var(--mk-indigo-400);
+  --mk-primary: var(--mk-indigo-500);
+  --mk-primary-hover: var(--mk-indigo-400);
   --mk-primary-active: var(--mk-indigo-600);
-  --mk-primary-soft:   rgba(99,102,241,0.12);
-  --mk-primary-muted:  rgba(99,102,241,0.06);
+  --mk-primary-soft: rgba(99, 102, 241, 0.12);
+  --mk-primary-muted: rgba(99, 102, 241, 0.06);
 
   /* Semantic */
-  --mk-success:        var(--mk-green-500);
-  --mk-success-soft:   rgba(34,197,94,0.12);
-  --mk-success-muted:  rgba(34,197,94,0.06);
-  --mk-warning:        var(--mk-amber-500);
-  --mk-warning-soft:   rgba(245,158,11,0.12);
-  --mk-warning-muted:  rgba(245,158,11,0.06);
-  --mk-danger:         var(--mk-red-500);
-  --mk-danger-soft:    rgba(239,68,68,0.12);
-  --mk-danger-muted:   rgba(239,68,68,0.06);
-  --mk-info:           var(--mk-sky-500);
-  --mk-info-soft:      rgba(14,165,233,0.12);
-  --mk-info-muted:     rgba(14,165,233,0.06);
+  --mk-success: var(--mk-green-500);
+  --mk-success-soft: rgba(34, 197, 94, 0.12);
+  --mk-success-muted: rgba(34, 197, 94, 0.06);
+  --mk-warning: var(--mk-amber-500);
+  --mk-warning-soft: rgba(245, 158, 11, 0.12);
+  --mk-warning-muted: rgba(245, 158, 11, 0.06);
+  --mk-danger: var(--mk-red-500);
+  --mk-danger-soft: rgba(239, 68, 68, 0.12);
+  --mk-danger-muted: rgba(239, 68, 68, 0.06);
+  --mk-info: var(--mk-sky-500);
+  --mk-info-soft: rgba(14, 165, 233, 0.12);
+  --mk-info-muted: rgba(14, 165, 233, 0.06);
 
   /* Text */
-  --mk-text:           #f8fafc;
-  --mk-text-primary:   #f1f5f9;
+  --mk-text: #f8fafc;
+  --mk-text-primary: #f1f5f9;
   --mk-text-secondary: #94a3b8;
-  --mk-text-tertiary:  #64748b;
-  --mk-text-disabled:  #475569;
-  --mk-text-inverse:   #0f172a;
+  --mk-text-tertiary: #64748b;
+  --mk-text-disabled: #475569;
+  --mk-text-inverse: #0f172a;
 
   /* Typography */
-  --mk-font-sans:   'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  --mk-font-mono:   'SF Mono', SFMono-Regular, ui-monospace, 'Cascadia Mono', 'Segoe UI Mono', monospace;
+  --mk-font-sans:
+    'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    'Helvetica Neue', Arial, sans-serif;
+  --mk-font-mono:
+    'SF Mono', SFMono-Regular, ui-monospace, 'Cascadia Mono', 'Segoe UI Mono',
+    monospace;
 
-  --mk-text-xs:   0.75rem;   /* 12px */
-  --mk-text-sm:   0.8125rem; /* 13px */
-  --mk-text-base: 0.875rem;  /* 14px */
-  --mk-text-md:   1rem;      /* 16px */
-  --mk-text-lg:   1.125rem;  /* 18px */
-  --mk-text-xl:   1.25rem;   /* 20px */
-  --mk-text-2xl:  1.5rem;    /* 24px */
-  --mk-text-3xl:  1.875rem;  /* 30px */
-  --mk-text-4xl:  2.25rem;   /* 36px */
+  --mk-text-xs: 0.75rem; /* 12px */
+  --mk-text-sm: 0.8125rem; /* 13px */
+  --mk-text-base: 0.875rem; /* 14px */
+  --mk-text-md: 1rem; /* 16px */
+  --mk-text-lg: 1.125rem; /* 18px */
+  --mk-text-xl: 1.25rem; /* 20px */
+  --mk-text-2xl: 1.5rem; /* 24px */
+  --mk-text-3xl: 1.875rem; /* 30px */
+  --mk-text-4xl: 2.25rem; /* 36px */
 
-  --mk-font-normal:   400;
-  --mk-font-medium:   500;
+  --mk-font-normal: 400;
+  --mk-font-medium: 500;
   --mk-font-semibold: 600;
-  --mk-font-bold:     700;
+  --mk-font-bold: 700;
 
-  --mk-leading-none:   1;
-  --mk-leading-tight:  1.25;
-  --mk-leading-snug:   1.375;
+  --mk-leading-none: 1;
+  --mk-leading-tight: 1.25;
+  --mk-leading-snug: 1.375;
   --mk-leading-normal: 1.5;
-  --mk-leading-relaxed:1.625;
+  --mk-leading-relaxed: 1.625;
 
   /* Spacing */
-  --mk-space-0:  0px;
-  --mk-space-1:  4px;
-  --mk-space-2:  8px;
-  --mk-space-3:  12px;
-  --mk-space-4:  16px;
-  --mk-space-5:  20px;
-  --mk-space-6:  24px;
-  --mk-space-8:  32px;
+  --mk-space-0: 0px;
+  --mk-space-1: 4px;
+  --mk-space-2: 8px;
+  --mk-space-3: 12px;
+  --mk-space-4: 16px;
+  --mk-space-5: 20px;
+  --mk-space-6: 24px;
+  --mk-space-8: 32px;
   --mk-space-10: 40px;
   --mk-space-12: 48px;
   --mk-space-16: 64px;
@@ -174,91 +178,103 @@
 
   /* Radius */
   --mk-radius-none: 0px;
-  --mk-radius-sm:   4px;
-  --mk-radius:      8px;
-  --mk-radius-md:   10px;
-  --mk-radius-lg:   12px;
-  --mk-radius-xl:   16px;
-  --mk-radius-2xl:  20px;
+  --mk-radius-sm: 4px;
+  --mk-radius: 8px;
+  --mk-radius-md: 10px;
+  --mk-radius-lg: 12px;
+  --mk-radius-xl: 16px;
+  --mk-radius-2xl: 20px;
   --mk-radius-full: 9999px;
 
   /* Shadows */
-  --mk-shadow-sm:   0 1px 2px rgba(0,0,0,0.3);
-  --mk-shadow:      0 1px 3px rgba(0,0,0,0.3), 0 1px 2px rgba(0,0,0,0.2);
-  --mk-shadow-md:   0 4px 6px -1px rgba(0,0,0,0.3), 0 2px 4px -2px rgba(0,0,0,0.2);
-  --mk-shadow-lg:   0 10px 15px -3px rgba(0,0,0,0.35), 0 4px 6px -4px rgba(0,0,0,0.2);
-  --mk-shadow-xl:   0 20px 25px -5px rgba(0,0,0,0.4), 0 8px 10px -6px rgba(0,0,0,0.2);
-  --mk-shadow-glow: 0 0 20px rgba(99,102,241,0.15);
+  --mk-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --mk-shadow: 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
+  --mk-shadow-md:
+    0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -2px rgba(0, 0, 0, 0.2);
+  --mk-shadow-lg:
+    0 10px 15px -3px rgba(0, 0, 0, 0.35), 0 4px 6px -4px rgba(0, 0, 0, 0.2);
+  --mk-shadow-xl:
+    0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 8px 10px -6px rgba(0, 0, 0, 0.2);
+  --mk-shadow-glow: 0 0 20px rgba(99, 102, 241, 0.15);
 
   /* Overlay / Backdrop */
-  --mk-overlay:        rgba(0, 0, 0, 0.5);
-  --mk-overlay-heavy:  rgba(9, 9, 11, 0.85);
+  --mk-overlay: rgba(0, 0, 0, 0.5);
+  --mk-overlay-heavy: rgba(9, 9, 11, 0.85);
 
   /* Surface alphas (dark theme) */
-  --mk-surface-alpha-weak:    rgba(255,255,255,0.03);
-  --mk-surface-alpha-medium:  rgba(255,255,255,0.05);
-  --mk-surface-alpha-strong:  rgba(255,255,255,0.1);
-  --mk-white-alpha-weak:      rgba(255,255,255,0.2);
-  --mk-white-alpha-medium:    rgba(255,255,255,0.35);
-  --mk-white-alpha-strong:    rgba(255,255,255,0.5);
+  --mk-surface-alpha-weak: rgba(255, 255, 255, 0.03);
+  --mk-surface-alpha-medium: rgba(255, 255, 255, 0.05);
+  --mk-surface-alpha-strong: rgba(255, 255, 255, 0.1);
+  --mk-white-alpha-weak: rgba(255, 255, 255, 0.2);
+  --mk-white-alpha-medium: rgba(255, 255, 255, 0.35);
+  --mk-white-alpha-strong: rgba(255, 255, 255, 0.5);
 
   /* Motion */
-  --mk-duration-fast:    150ms;
-  --mk-duration-normal:  250ms;
-  --mk-duration-slow:    400ms;
-  --mk-duration-slower:  600ms;
+  --mk-duration-fast: 150ms;
+  --mk-duration-normal: 250ms;
+  --mk-duration-slow: 400ms;
+  --mk-duration-slower: 600ms;
 
-  --mk-ease-default:     cubic-bezier(0.4, 0, 0.2, 1);
-  --mk-ease-in:          cubic-bezier(0.4, 0, 1, 1);
-  --mk-ease-out:         cubic-bezier(0, 0, 0.2, 1);
-  --mk-ease-out-expo:    cubic-bezier(0.16, 1, 0.3, 1);
-  --mk-ease-spring:      cubic-bezier(0.34, 1.56, 0.64, 1);
-  --mk-ease-bounce:      cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --mk-ease-default: cubic-bezier(0.4, 0, 0.2, 1);
+  --mk-ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --mk-ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --mk-ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --mk-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --mk-ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
 
-  --mk-transition-colors:   color var(--mk-duration-fast) var(--mk-ease-default), background-color var(--mk-duration-fast) var(--mk-ease-default), border-color var(--mk-duration-fast) var(--mk-ease-default);
-  --mk-transition-transform: transform var(--mk-duration-normal) var(--mk-ease-out-expo);
-  --mk-transition-shadow:    box-shadow var(--mk-duration-normal) var(--mk-ease-default);
-  --mk-transition-opacity:   opacity var(--mk-duration-fast) var(--mk-ease-default);
-  --mk-transition-all:       all var(--mk-duration-fast) var(--mk-ease-default);
+  --mk-transition-colors:
+    color var(--mk-duration-fast) var(--mk-ease-default),
+    background-color var(--mk-duration-fast) var(--mk-ease-default),
+    border-color var(--mk-duration-fast) var(--mk-ease-default);
+  --mk-transition-transform: transform var(--mk-duration-normal)
+    var(--mk-ease-out-expo);
+  --mk-transition-shadow: box-shadow var(--mk-duration-normal)
+    var(--mk-ease-default);
+  --mk-transition-opacity: opacity var(--mk-duration-fast)
+    var(--mk-ease-default);
+  --mk-transition-all: all var(--mk-duration-fast) var(--mk-ease-default);
 
   /* Z-Index Scale */
-  --mk-z-base:     0;
+  --mk-z-base: 0;
   --mk-z-dropdown: 100;
-  --mk-z-sticky:   200;
-  --mk-z-fixed:    300;
+  --mk-z-sticky: 200;
+  --mk-z-fixed: 300;
   --mk-z-modal-backdrop: 400;
-  --mk-z-modal:    500;
-  --mk-z-popover:  600;
-  --mk-z-tooltip:  700;
-  --mk-z-toast:    800;
-  --mk-z-top:      9999;
+  --mk-z-modal: 500;
+  --mk-z-popover: 600;
+  --mk-z-tooltip: 700;
+  --mk-z-toast: 800;
+  --mk-z-top: 9999;
 }
 
 /* ----- Light Theme Override ----- */
-[data-mk-theme="light"] {
-  --mk-bg:           #ffffff;
-  --mk-bg-elevated:  #f8fafc;
-  --mk-surface:      #f1f5f9;
-  --mk-surface-hover:#e2e8f0;
-  --mk-surface-active:#cbd5e1;
-  --mk-surface-raised:#ffffff;
+[data-mk-theme='light'] {
+  --mk-bg: #ffffff;
+  --mk-bg-elevated: #f8fafc;
+  --mk-surface: #f1f5f9;
+  --mk-surface-hover: #e2e8f0;
+  --mk-surface-active: #cbd5e1;
+  --mk-surface-raised: #ffffff;
 
-  --mk-border:        #e2e8f0;
-  --mk-border-hover:  #cbd5e1;
+  --mk-border: #e2e8f0;
+  --mk-border-hover: #cbd5e1;
   --mk-border-active: #94a3b8;
-  --mk-divider:       rgba(0,0,0,0.06);
+  --mk-divider: rgba(0, 0, 0, 0.06);
 
-  --mk-text:           #0f172a;
-  --mk-text-primary:   #1e293b;
+  --mk-text: #0f172a;
+  --mk-text-primary: #1e293b;
   --mk-text-secondary: #475569;
-  --mk-text-tertiary:  #94a3b8;
-  --mk-text-disabled:  #cbd5e1;
-  --mk-text-inverse:   #f8fafc;
+  --mk-text-tertiary: #94a3b8;
+  --mk-text-disabled: #cbd5e1;
+  --mk-text-inverse: #f8fafc;
 
-  --mk-shadow-sm:   0 1px 2px rgba(0,0,0,0.05);
-  --mk-shadow:      0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
-  --mk-shadow-md:   0 4px 6px -1px rgba(0,0,0,0.08), 0 2px 4px -2px rgba(0,0,0,0.04);
-  --mk-shadow-lg:   0 10px 15px -3px rgba(0,0,0,0.08), 0 4px 6px -4px rgba(0,0,0,0.03);
-  --mk-shadow-xl:   0 20px 25px -5px rgba(0,0,0,0.08), 0 8px 10px -6px rgba(0,0,0,0.02);
-  --mk-shadow-glow: 0 0 20px rgba(99,102,241,0.12);
+  --mk-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --mk-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
+  --mk-shadow-md:
+    0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -2px rgba(0, 0, 0, 0.04);
+  --mk-shadow-lg:
+    0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.03);
+  --mk-shadow-xl:
+    0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.02);
+  --mk-shadow-glow: 0 0 20px rgba(99, 102, 241, 0.12);
 }

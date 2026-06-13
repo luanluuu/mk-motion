@@ -1,13 +1,30 @@
-import { defineComponent, h, ref, onMounted, onUnmounted, watch, nextTick } from 'vue'
+import {
+  defineComponent,
+  h,
+  ref,
+  onMounted,
+  onUnmounted,
+  watch,
+  nextTick,
+} from 'vue'
 import { createDropdown } from '../components/dropdown/dropdown.js'
-import type { DropdownOptions, DropdownItem } from '../components/dropdown/dropdown.js'
+import type {
+  DropdownOptions,
+  DropdownItem,
+} from '../components/dropdown/dropdown.js'
 
 export const MkDropdown = defineComponent({
   name: 'MkDropdown',
   props: {
     items: { type: Array as () => DropdownItem[], default: () => [] },
-    trigger: { type: String as () => DropdownOptions['trigger'], default: 'click' },
-    placement: { type: String as () => DropdownOptions['placement'], default: 'bottom' },
+    trigger: {
+      type: String as () => DropdownOptions['trigger'],
+      default: 'click',
+    },
+    placement: {
+      type: String as () => DropdownOptions['placement'],
+      default: 'bottom',
+    },
   },
   emits: ['select'],
   setup(props, { emit }) {
@@ -26,7 +43,11 @@ export const MkDropdown = defineComponent({
     }
 
     onMounted(() => nextTick(create))
-    watch(() => [props.items, props.trigger, props.placement], () => nextTick(create), { deep: true })
+    watch(
+      () => [props.items, props.trigger, props.placement],
+      () => nextTick(create),
+      { deep: true }
+    )
     onUnmounted(() => instance?.destroy())
 
     return () => h('div', { ref: container, style: 'display:inline-block' })

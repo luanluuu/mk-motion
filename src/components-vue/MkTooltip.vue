@@ -21,7 +21,12 @@ const showTimer = ref<ReturnType<typeof setTimeout> | null>(null)
 const hideTimer = ref<ReturnType<typeof setTimeout> | null>(null)
 
 const placementRef = computed(() => props.placement)
-const { position, arrowClass, update } = useFloating(targetRef, tooltipRef, placementRef, 8)
+const { position, arrowClass, update } = useFloating(
+  targetRef,
+  tooltipRef,
+  placementRef,
+  8
+)
 
 const doShow = async () => {
   if (props.disabled) return
@@ -98,8 +103,9 @@ watch(visible, (val) => {
   pointer-events: none;
   opacity: 0;
   transform: scale(0.96) translateY(2px);
-  transition: opacity var(--mk-duration-fast) var(--mk-ease-default),
-              transform var(--mk-duration-fast) var(--mk-ease-out);
+  transition:
+    opacity var(--mk-duration-fast) var(--mk-ease-default),
+    transform var(--mk-duration-fast) var(--mk-ease-out);
   filter: drop-shadow(var(--mk-shadow-md));
   max-width: 280px;
   z-index: var(--mk-z-tooltip);

@@ -3,7 +3,10 @@ import { defineComponent, h } from 'vue'
 export const MkLayout = defineComponent({
   name: 'MkLayout',
   props: {
-    direction: { type: String as () => 'vertical' | 'horizontal', default: 'vertical' },
+    direction: {
+      type: String as () => 'vertical' | 'horizontal',
+      default: 'vertical',
+    },
   },
   setup(props, { slots }) {
     return () =>

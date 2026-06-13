@@ -5,6 +5,64 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.0] - 2026-06-07
+
+### Removed
+
+- **BREAKING**: Vue 3 SFC components are no longer exported from the main entry. Import from `@luanlu/mk-motion/vue` instead.
+- **BREAKING**: Legacy imperative DOM API (`createButton`, `createDialog`, `message`, etc.) are no longer exported from the main entry. Import from `@luanlu/mk-motion/legacy` instead.
+- **BREAKING**: The main entry no longer imports CSS as a side effect. Import `@luanlu/mk-motion/css` explicitly.
+
+### Added
+
+- New subpath export `@luanlu/mk-motion/legacy` for the deprecated imperative DOM API.
+- New `MIGRATION.md` guide for upgrading from v1.x to v2.0.0.
+
+### Changed
+
+- The main entry `@luanlu/mk-motion` now only exports the modern animation and interaction API.
+- Update `README.md` examples to use `@luanlu/mk-motion/legacy` for imperative DOM API.
+- Update `API_STABILITY` metadata so legacy APIs point to the `./legacy` import path.
+
+## [Unreleased]
+
+### Added
+
+- Add `@luanlu/mk-motion/stability` subpath export for API stability metadata.
+- Add `sideEffects: ["*.css"]` to enable JS tree-shaking while preserving CSS side effects.
+- Add `typecheck` script for `tsc --noEmit` validation.
+- Add test coverage support with `@vitest/coverage-v8`.
+
+### Changed
+
+- Set `vue` as external in main build to reduce bundle size.
+- Extract shared animation exports into `src/animation-barrel.ts` to eliminate duplication between main and motion entries.
+- Link `demo-vue` to local package via `file:..` instead of remote npm version.
+
+### Fixed
+
+- Fix duplicate CSS `@keyframes` names between `animations.css` and `element-plus.css`.
+- Fix composables API mismatch in `useMkLoading` and `useMkMessage` for Vue demo.
+- Fix TypeScript module declaration for `@luanlu/mk-motion/css` side-effect import.
+
+## [1.2.5] - 2026-06-12
+
+### Changed
+
+- Improve input component custom sizing support.
+
+## [1.2.4] - 2026-06-12
+
+### Changed
+
+- Maintenance release with version bump.
+
+## [1.2.3] - 2026-06-12
+
+### Added
+
+- Add CD pipeline trigger for automated npm publish and docs deployment.
+
 ## [1.2.2] - 2026-06-11
 
 ### Added

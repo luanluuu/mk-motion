@@ -1,7 +1,7 @@
 export interface ShimmerOptions {
-  duration?: number        //  shimmer 循环周期
-  color?: string           //  shimmer 颜色
-  angle?: number           //  角度 deg
+  duration?: number //  shimmer 循环周期
+  color?: string //  shimmer 颜色
+  angle?: number //  角度 deg
 }
 
 const DEFAULT_SHIMMER: Required<ShimmerOptions> = {

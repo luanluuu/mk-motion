@@ -22,10 +22,7 @@ function parseTime(value: string): { h: number; m: number; s: number } {
 }
 
 function formatTime(h: number, m: number, s: number, fmt: string): string {
-  return fmt
-    .replace('HH', pad(h))
-    .replace('mm', pad(m))
-    .replace('ss', pad(s))
+  return fmt.replace('HH', pad(h)).replace('mm', pad(m)).replace('ss', pad(s))
 }
 
 export class MkTimePicker {
@@ -37,7 +34,10 @@ export class MkTimePicker {
   private _value: string
   private _outsideClickHandler?: (e: MouseEvent) => void
 
-  constructor(container: HTMLElement | string, options: TimePickerOptions = {}) {
+  constructor(
+    container: HTMLElement | string,
+    options: TimePickerOptions = {}
+  ) {
     const parent =
       typeof container === 'string'
         ? document.querySelector(container)!
@@ -70,11 +70,19 @@ export class MkTimePicker {
     this.panel = document.createElement('div')
     this.panel.className = 'mk-timepicker__panel'
 
-    const { h, m, s } = this._value ? parseTime(this._value) : { h: 0, m: 0, s: 0 }
+    const { h, m, s } = this._value
+      ? parseTime(this._value)
+      : { h: 0, m: 0, s: 0 }
 
-    const hoursCol = this.createColumn('时', 0, 23, h, (val) => this.onSelect('h', val))
-    const minutesCol = this.createColumn('分', 0, 59, m, (val) => this.onSelect('m', val))
-    const secondsCol = this.createColumn('秒', 0, 59, s, (val) => this.onSelect('s', val))
+    const hoursCol = this.createColumn('时', 0, 23, h, (val) =>
+      this.onSelect('h', val)
+    )
+    const minutesCol = this.createColumn('分', 0, 59, m, (val) =>
+      this.onSelect('m', val)
+    )
+    const secondsCol = this.createColumn('秒', 0, 59, s, (val) =>
+      this.onSelect('s', val)
+    )
 
     this.panel.appendChild(hoursCol)
     this.panel.appendChild(minutesCol)
@@ -138,20 +146,29 @@ export class MkTimePicker {
     if (type === 'h') current.h = val
     if (type === 'm') current.m = val
     if (type === 's') current.s = val
-    this._value = formatTime(current.h, current.m, current.s, this.options.format!)
+    this._value = formatTime(
+      current.h,
+      current.m,
+      current.s,
+      this.options.format!
+    )
     this.input.value = this._value
     this.updateSelection()
     this.options.onChange?.(this._value)
   }
 
   private updateSelection(): void {
-    const { h, m, s } = this._value ? parseTime(this._value) : { h: 0, m: 0, s: 0 }
+    const { h, m, s } = this._value
+      ? parseTime(this._value)
+      : { h: 0, m: 0, s: 0 }
     const cols = this.panel.querySelectorAll('.mk-timepicker__column')
     const values = [h, m, s]
     cols.forEach((col, idx) => {
       const items = col.querySelectorAll('.mk-timepicker__item')
       items.forEach((item) => item.classList.remove('is-selected'))
-      const selected = Array.from(items).find((item) => parseInt(item.textContent || '', 10) === values[idx])
+      const selected = Array.from(items).find(
+        (item) => parseInt(item.textContent || '', 10) === values[idx]
+      )
       if (selected) {
         selected.classList.add('is-selected')
         selected.scrollIntoView({ block: 'center' })

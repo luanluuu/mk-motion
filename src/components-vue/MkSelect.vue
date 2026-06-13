@@ -25,18 +25,20 @@ const props = withDefaults(defineProps<Props>(), {
   filterable: false,
 })
 
+type ModelValue = string | number | (string | number)[] | undefined
+
 const emit = defineEmits<{
-  change: [value: any]
+  change: [value: ModelValue]
   focus: []
   blur: []
 }>()
 
-const modelValue = defineModel<any>('modelValue')
+const modelValue = defineModel<ModelValue>('modelValue')
 
 defineSlots<{
-  default?: (props: { option: SelectOption; selected: boolean }) => any
-  empty?: () => any
-  prefix?: () => any
+  default?: (props: { option: SelectOption; selected: boolean }) => unknown
+  empty?: () => unknown
+  prefix?: () => unknown
 }>()
 
 const isOpen = ref(false)
@@ -60,7 +62,11 @@ function isSelected(opt: SelectOption): boolean {
 }
 
 const displayLabel = computed(() => {
-  if (props.multiple && Array.isArray(modelValue.value) && modelValue.value.length) {
+  if (
+    props.multiple &&
+    Array.isArray(modelValue.value) &&
+    modelValue.value.length
+  ) {
     const labels = modelValue.value
       .map((v) => allOptions.value.find((o) => o.value === v)?.label)
       .filter(Boolean)
@@ -96,7 +102,7 @@ function onTriggerClick() {
 
 function selectOption(opt: SelectOption) {
   if (opt.disabled || props.disabled) return
-  let value: any
+  let value: ModelValue
   if (props.multiple) {
     const current = Array.isArray(modelValue.value) ? [...modelValue.value] : []
     const idx = current.indexOf(opt.value)
@@ -154,7 +160,11 @@ onUnmounted(() => {
   <div
     ref="triggerRef"
     class="mk-select"
-    :class="{ 'is-filterable': filterable, 'is-open': isOpen, 'is-disabled': disabled }"
+    :class="{
+      'is-filterable': filterable,
+      'is-open': isOpen,
+      'is-disabled': disabled,
+    }"
   >
     <div
       class="mk-select__trigger"
@@ -167,7 +177,14 @@ onUnmounted(() => {
       @keydown="onKeydown"
     >
       <slot name="prefix" />
-      <span v-if="!filterable || !isOpen" class="mk-select__label" :class="{ 'mk-select__placeholder': !modelValue || (Array.isArray(modelValue) && !modelValue.length) }">
+      <span
+        v-if="!filterable || !isOpen"
+        class="mk-select__label"
+        :class="{
+          'mk-select__placeholder':
+            !modelValue || (Array.isArray(modelValue) && !modelValue.length),
+        }"
+      >
         {{ displayLabel }}
       </span>
       <input
@@ -183,7 +200,12 @@ onUnmounted(() => {
       />
       <span class="mk-select__arrow">▼</span>
       <span
-        v-if="clearable && (modelValue !== undefined && modelValue !== '' && (!Array.isArray(modelValue) || modelValue.length))"
+        v-if="
+          clearable &&
+          modelValue !== undefined &&
+          modelValue !== '' &&
+          (!Array.isArray(modelValue) || modelValue.length)
+        "
         class="mk-select__clear"
         @click.stop="clear"
       >
@@ -192,22 +214,23 @@ onUnmounted(() => {
     </div>
 
     <Transition name="mk-select-fade">
-      <div
-        v-show="isOpen"
-        class="mk-select__dropdown"
-        role="listbox"
-      >
+      <div v-show="isOpen" class="mk-select__dropdown" role="listbox">
         <div
           v-for="opt in filteredOptions"
           :key="opt.value"
           class="mk-select__option"
           role="option"
           :aria-selected="isSelected(opt)"
-          :class="{ 'is-selected': isSelected(opt), 'is-disabled': opt.disabled }"
+          :class="{
+            'is-selected': isSelected(opt),
+            'is-disabled': opt.disabled,
+          }"
           @click="selectOption(opt)"
         >
           <slot :option="opt" :selected="isSelected(opt)">
-            <span class="mk-select__check" v-if="multiple && isSelected(opt)">✓</span>
+            <span class="mk-select__check" v-if="multiple && isSelected(opt)"
+              >✓</span
+            >
             {{ opt.label }}
           </slot>
         </div>
@@ -371,7 +394,9 @@ onUnmounted(() => {
 
 .mk-select-fade-enter-active,
 .mk-select-fade-leave-active {
-  transition: opacity 0.15s ease, transform 0.15s ease;
+  transition:
+    opacity 0.15s ease,
+    transform 0.15s ease;
 }
 
 .mk-select-fade-enter-from,

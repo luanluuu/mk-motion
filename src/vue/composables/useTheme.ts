@@ -4,7 +4,10 @@ const isDark = ref(false)
 
 function setDOMTheme(dark: boolean) {
   if (typeof document !== 'undefined') {
-    document.documentElement.setAttribute('data-mk-theme', dark ? 'dark' : 'light')
+    document.documentElement.setAttribute(
+      'data-mk-theme',
+      dark ? 'dark' : 'light'
+    )
   }
 }
 

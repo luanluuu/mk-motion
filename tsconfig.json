@@ -15,6 +15,7 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "declaration": true,
+    "rootDir": ".",
     "outDir": "dist"
   },
   "include": ["src/**/*.ts"],
@@ -22,6 +23,7 @@
     "src/__tests__/**/*.ts",
     "src/vue/**/*.ts",
     "src/nuxt/**/*.ts",
-    "src/vite/**/*.ts"
+    "src/vite/**/*.ts",
+    "src/components-vue/**/*.ts"
   ]
 }

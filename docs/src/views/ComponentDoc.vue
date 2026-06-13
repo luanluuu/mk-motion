@@ -5,15 +5,11 @@
 
     <template v-if="doc">
       <h2 class="doc-h2" id="examples">示例</h2>
-      <div
-        v-for="(demo, i) in doc.demos"
-        :key="i"
-        class="demo-section"
-      >
+      <div v-for="(demo, i) in doc.demos" :key="i" class="demo-section">
         <h3 class="doc-h3" :id="`demo-${i}`">{{ demo.title }}</h3>
         <div class="doc-demo">
           <div class="doc-demo-stage">
-            <div :ref="el => setStageRef(el, i)" style="width: 100%;"></div>
+            <div :ref="(el) => setStageRef(el, i)" style="width: 100%"></div>
           </div>
           <div class="doc-demo-code">
             <button
@@ -29,11 +25,7 @@
       </div>
 
       <h2 class="doc-h2" id="api">API</h2>
-      <MkTable
-        :columns="apiColumns"
-        :data="apiData"
-        :pageSize="100"
-      />
+      <MkTable :columns="apiColumns" :data="apiData" :page-size="100" />
     </template>
   </div>
 </template>
@@ -41,23 +33,36 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, watch, nextTick } from 'vue'
 import { MkTable } from 'mk-motion/vue'
-import { componentDocs } from '../data/component-docs.js'
+import {
+  componentDocs,
+  type ComponentDoc,
+} from '../data/component-docs.js'
 
 const props = defineProps<{ name: string }>()
 
-const doc = computed(() => (componentDocs as any)[props.name])
+const doc = computed(() => componentDocs[props.name])
 const stageRefs = ref<Record<number, HTMLElement | null>>({})
 const copiedIndex = ref<number | null>(null)
 
 const apiColumns = [
-  { key: 'prop', title: '属性', render: (v: string) => `<code style="color:var(--mk-indigo-400);font-family:var(--mk-font-mono);font-size:0.85em;">${v}</code>` },
-  { key: 'type', title: '类型', render: (v: string) => `<span style="color:var(--mk-green-400);">${v}</span>` },
+  {
+    key: 'prop',
+    title: '属性',
+    render: (v: string) =>
+      `<code style="color:var(--mk-indigo-400);font-family:var(--mk-font-mono);font-size:0.85em;">${v}</code>`,
+  },
+  {
+    key: 'type',
+    title: '类型',
+    render: (v: string) =>
+      `<span style="color:var(--mk-green-400);">${v}</span>`,
+  },
   { key: 'default', title: '默认值' },
   { key: 'desc', title: '说明' },
 ]
 const apiData = computed(() => doc.value?.api || [])
 
-function setStageRef(el: any, i: number) {
+function setStageRef(el: HTMLElement | null, i: number) {
   if (el) stageRefs.value[i] = el
 }
 
@@ -72,7 +77,7 @@ function copyCode(code: string, index: number) {
 function renderDemos() {
   if (!doc.value) return
   nextTick(() => {
-    doc.value.demos.forEach((demo: any, i: number) => {
+    doc.value.demos.forEach((demo: ComponentDoc['demos'][number], i: number) => {
       const el = stageRefs.value[i]
       if (el) {
         el.innerHTML = ''
@@ -91,20 +96,34 @@ function renderToc() {
     return
   }
   toc.style.display = 'block'
-  const ids = ['examples', ...doc.value.demos.map((_: any, i: number) => `demo-${i}`), 'api']
-  toc.innerHTML = '<div class="doc-toc-title">目录</div>' +
-    ids.map(id => {
-      const el = document.getElementById(id)
-      const text = el ? (el.tagName.match(/^H/i) ? el.textContent : el.previousElementSibling?.textContent || id) : id
-      return `<a href="#${id}" onclick="event.preventDefault();document.getElementById('${id}').scrollIntoView({behavior:'smooth'})">${text}</a>`
-    }).join('')
+  const ids = [
+    'examples',
+    ...doc.value.demos.map((_, i: number) => `demo-${i}`),
+    'api',
+  ]
+  toc.innerHTML =
+    '<div class="doc-toc-title">目录</div>' +
+    ids
+      .map((id) => {
+        const el = document.getElementById(id)
+        const text = el
+          ? el.tagName.match(/^H/i)
+            ? el.textContent
+            : el.previousElementSibling?.textContent || id
+          : id
+        return `<a href="#${id}" onclick="event.preventDefault();document.getElementById('${id}').scrollIntoView({behavior:'smooth'})">${text}</a>`
+      })
+      .join('')
 }
 
 onMounted(renderDemos)
-watch(() => props.name, () => {
-  stageRefs.value = {}
-  renderDemos()
-})
+watch(
+  () => props.name,
+  () => {
+    stageRefs.value = {}
+    renderDemos()
+  }
+)
 </script>
 
 <style scoped>

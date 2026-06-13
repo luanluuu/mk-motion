@@ -7,7 +7,10 @@ const props = defineProps<{
 
 const footerStyle = computed(() => {
   if (props.height !== undefined) {
-    return { height: typeof props.height === 'number' ? `${props.height}px` : props.height }
+    return {
+      height:
+        typeof props.height === 'number' ? `${props.height}px` : props.height,
+    }
   }
   return undefined
 })

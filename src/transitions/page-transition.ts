@@ -30,22 +30,10 @@ const KEYFRAMES: Record<string, Record<string, Keyframe[]>> = {
     ],
   },
   fade: {
-    forwardEnter: [
-      { opacity: 0 },
-      { opacity: 1 },
-    ],
-    forwardLeave: [
-      { opacity: 1 },
-      { opacity: 0 },
-    ],
-    backEnter: [
-      { opacity: 0 },
-      { opacity: 1 },
-    ],
-    backLeave: [
-      { opacity: 1 },
-      { opacity: 0 },
-    ],
+    forwardEnter: [{ opacity: 0 }, { opacity: 1 }],
+    forwardLeave: [{ opacity: 1 }, { opacity: 0 }],
+    backEnter: [{ opacity: 0 }, { opacity: 1 }],
+    backLeave: [{ opacity: 1 }, { opacity: 0 }],
   },
   zoom: {
     forwardEnter: [
@@ -124,12 +112,20 @@ export function pageTransition(
 
     styleEl.textContent = `
       @keyframes ${enterClass}-anim {
-        from { ${Object.entries(enterKf[0]).map(([k, v]) => `${k}:${v}`).join(';')} }
-        to   { ${Object.entries(enterKf[1]).map(([k, v]) => `${k}:${v}`).join(';')} }
+        from { ${Object.entries(enterKf[0])
+          .map(([k, v]) => `${k}:${v}`)
+          .join(';')} }
+        to   { ${Object.entries(enterKf[1])
+          .map(([k, v]) => `${k}:${v}`)
+          .join(';')} }
       }
       @keyframes ${leaveClass}-anim {
-        from { ${Object.entries(leaveKf[0]).map(([k, v]) => `${k}:${v}`).join(';')} }
-        to   { ${Object.entries(leaveKf[1]).map(([k, v]) => `${k}:${v}`).join(';')} }
+        from { ${Object.entries(leaveKf[0])
+          .map(([k, v]) => `${k}:${v}`)
+          .join(';')} }
+        to   { ${Object.entries(leaveKf[1])
+          .map(([k, v]) => `${k}:${v}`)
+          .join(';')} }
       }
     `
     document.head.appendChild(styleEl)
@@ -138,21 +134,30 @@ export function pageTransition(
   enterEl.style.display = ''
   leaveEl.style.display = ''
 
-  const enterAnim = enterEl.animate(getKeyframes(opts.name, opts.direction, 'enter'), {
-    duration: opts.duration,
-    easing: 'ease',
-    fill: 'both',
-  })
+  const enterAnim = enterEl.animate(
+    getKeyframes(opts.name, opts.direction, 'enter'),
+    {
+      duration: opts.duration,
+      easing: 'ease',
+      fill: 'both',
+    }
+  )
 
-  const leaveAnim = leaveEl.animate(getKeyframes(opts.name, opts.direction, 'leave'), {
-    duration: opts.duration,
-    easing: 'ease',
-    fill: 'both',
-  })
+  const leaveAnim = leaveEl.animate(
+    getKeyframes(opts.name, opts.direction, 'leave'),
+    {
+      duration: opts.duration,
+      easing: 'ease',
+      fill: 'both',
+    }
+  )
 
   return new Promise((resolve) => {
     const checkDone = () => {
-      if (enterAnim.playState === 'finished' && leaveAnim.playState === 'finished') {
+      if (
+        enterAnim.playState === 'finished' &&
+        leaveAnim.playState === 'finished'
+      ) {
         enterAnim.commitStyles?.()
         leaveAnim.commitStyles?.()
         enterAnim.cancel()
@@ -178,7 +183,10 @@ export function createPageTransitionRouter(
   let currentEl: HTMLElement | null = null
   let isNavigating = false
 
-  async function navigate(path: string, options?: PageTransitionOptions): Promise<void> {
+  async function navigate(
+    path: string,
+    options?: PageTransitionOptions
+  ): Promise<void> {
     if (isNavigating) return
     const factory = routes[path]
     if (!factory) return

@@ -12,10 +12,16 @@ export const MkContainer = defineComponent({
     const style = computed(() => {
       const s: Record<string, string> = {}
       if (props.maxWidth !== undefined) {
-        s.maxWidth = typeof props.maxWidth === 'number' ? `${props.maxWidth}px` : props.maxWidth
+        s.maxWidth =
+          typeof props.maxWidth === 'number'
+            ? `${props.maxWidth}px`
+            : props.maxWidth
       }
       if (props.padding !== undefined) {
-        s.padding = typeof props.padding === 'number' ? `${props.padding}px` : props.padding
+        s.padding =
+          typeof props.padding === 'number'
+            ? `${props.padding}px`
+            : props.padding
       }
       return s
     })
@@ -26,7 +32,10 @@ export const MkContainer = defineComponent({
         {
           class: [
             'mk-container',
-            { 'mk-container--fluid': props.fluid, 'mk-container--centered': props.centered },
+            {
+              'mk-container--fluid': props.fluid,
+              'mk-container--centered': props.centered,
+            },
           ],
           style: style.value,
         },

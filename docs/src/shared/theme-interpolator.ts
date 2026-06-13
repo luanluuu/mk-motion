@@ -29,9 +29,12 @@ const darkTokens: TokenMap = {
   '--mk-text-inverse': '#0f172a',
   '--mk-shadow-sm': '0 1px 2px rgba(0,0,0,0.3)',
   '--mk-shadow': '0 1px 3px rgba(0,0,0,0.3), 0 1px 2px rgba(0,0,0,0.2)',
-  '--mk-shadow-md': '0 4px 6px -1px rgba(0,0,0,0.3), 0 2px 4px -2px rgba(0,0,0,0.2)',
-  '--mk-shadow-lg': '0 10px 15px -3px rgba(0,0,0,0.35), 0 4px 6px -4px rgba(0,0,0,0.2)',
-  '--mk-shadow-xl': '0 20px 25px -5px rgba(0,0,0,0.4), 0 8px 10px -6px rgba(0,0,0,0.2)',
+  '--mk-shadow-md':
+    '0 4px 6px -1px rgba(0,0,0,0.3), 0 2px 4px -2px rgba(0,0,0,0.2)',
+  '--mk-shadow-lg':
+    '0 10px 15px -3px rgba(0,0,0,0.35), 0 4px 6px -4px rgba(0,0,0,0.2)',
+  '--mk-shadow-xl':
+    '0 20px 25px -5px rgba(0,0,0,0.4), 0 8px 10px -6px rgba(0,0,0,0.2)',
   '--mk-shadow-glow': '0 0 20px rgba(99,102,241,0.15)',
 }
 
@@ -55,9 +58,12 @@ const lightTokens: TokenMap = {
   '--mk-text-inverse': '#f8fafc',
   '--mk-shadow-sm': '0 1px 2px rgba(0,0,0,0.05)',
   '--mk-shadow': '0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04)',
-  '--mk-shadow-md': '0 4px 6px -1px rgba(0,0,0,0.08), 0 2px 4px -2px rgba(0,0,0,0.04)',
-  '--mk-shadow-lg': '0 10px 15px -3px rgba(0,0,0,0.08), 0 4px 6px -4px rgba(0,0,0,0.03)',
-  '--mk-shadow-xl': '0 20px 25px -5px rgba(0,0,0,0.08), 0 8px 10px -6px rgba(0,0,0,0.02)',
+  '--mk-shadow-md':
+    '0 4px 6px -1px rgba(0,0,0,0.08), 0 2px 4px -2px rgba(0,0,0,0.04)',
+  '--mk-shadow-lg':
+    '0 10px 15px -3px rgba(0,0,0,0.08), 0 4px 6px -4px rgba(0,0,0,0.03)',
+  '--mk-shadow-xl':
+    '0 20px 25px -5px rgba(0,0,0,0.08), 0 8px 10px -6px rgba(0,0,0,0.02)',
   '--mk-shadow-glow': '0 0 20px rgba(99,102,241,0.12)',
 }
 
@@ -66,14 +72,25 @@ const lightTokens: TokenMap = {
 function parseHex(hex: string): [number, number, number] {
   const h = hex.replace('#', '')
   if (h.length === 3) {
-    return [parseInt(h[0] + h[0], 16), parseInt(h[1] + h[1], 16), parseInt(h[2] + h[2], 16)]
+    return [
+      parseInt(h[0] + h[0], 16),
+      parseInt(h[1] + h[1], 16),
+      parseInt(h[2] + h[2], 16),
+    ]
   }
-  return [parseInt(h.substring(0, 2), 16), parseInt(h.substring(2, 4), 16), parseInt(h.substring(4, 6), 16)]
+  return [
+    parseInt(h.substring(0, 2), 16),
+    parseInt(h.substring(2, 4), 16),
+    parseInt(h.substring(4, 6), 16),
+  ]
 }
 
 function rgbToHsl(r: number, g: number, b: number): [number, number, number] {
-  const rn = r / 255, gn = g / 255, bn = b / 255
-  const max = Math.max(rn, gn, bn), min = Math.min(rn, gn, bn)
+  const rn = r / 255,
+    gn = g / 255,
+    bn = b / 255
+  const max = Math.max(rn, gn, bn),
+    min = Math.min(rn, gn, bn)
   const d = max - min
   let h = 0
   const l = (max + min) / 2
@@ -89,7 +106,9 @@ function rgbToHsl(r: number, g: number, b: number): [number, number, number] {
 }
 
 function hslToRgb(h: number, s: number, l: number): [number, number, number] {
-  const hn = h / 360, sn = s / 100, ln = l / 100
+  const hn = h / 360,
+    sn = s / 100,
+    ln = l / 100
   let r: number, g: number, b: number
 
   if (sn === 0) {
@@ -143,8 +162,8 @@ function clamp(v: number, lo: number, hi: number): number {
 // ---- 背景亮度（用于文字对比度夹持）----
 
 // 预计算两端背景的 HSL 亮度
-const darkBgL = hexToHsl(darkTokens['--mk-bg'])[2]   // ~3.9
-const lightBgL = hexToHsl(lightTokens['--mk-bg'])[2]  // ~100
+const darkBgL = hexToHsl(darkTokens['--mk-bg'])[2] // ~3.9
+const lightBgL = hexToHsl(lightTokens['--mk-bg'])[2] // ~100
 
 /** 当前 t 对应的背景亮度 */
 function bgLightness(t: number): number {
@@ -166,7 +185,12 @@ const TEXT_MIN_GAP: Record<string, number> = {
  * - 文字亮度 floor = 当前背景亮度 + 各层级的最小对比度
  * - --mk-text-inverse 反过来：ceiling = 背景亮度 - 40
  */
-function textLightness(darkL: number, lightL: number, t: number, name: string): number {
+function textLightness(
+  darkL: number,
+  lightL: number,
+  t: number,
+  name: string
+): number {
   const bgL = bgLightness(t)
 
   if (name === '--mk-text-inverse') {
@@ -198,7 +222,12 @@ function textLightness(darkL: number, lightL: number, t: number, name: string): 
 function parseRgba(rgba: string): [number, number, number, number] {
   const m = rgba.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?\)/)
   if (!m) throw new Error(`Cannot parse rgba: ${rgba}`)
-  return [parseInt(m[1]), parseInt(m[2]), parseInt(m[3]), m[4] ? parseFloat(m[4]) : 1]
+  return [
+    parseInt(m[1]),
+    parseInt(m[2]),
+    parseInt(m[3]),
+    m[4] ? parseFloat(m[4]) : 1,
+  ]
 }
 
 function toRgba([r, g, b, a]: [number, number, number, number]): string {
@@ -207,7 +236,12 @@ function toRgba([r, g, b, a]: [number, number, number, number]): string {
 
 // ---- 颜色插值 ----
 
-function interpolateHex(dark: string, light: string, t: number, name: string): string {
+function interpolateHex(
+  dark: string,
+  light: string,
+  t: number,
+  name: string
+): string {
   const [dh, ds, dl] = hexToHsl(dark)
   const [lh, ls, ll] = hexToHsl(light)
 
@@ -221,7 +255,12 @@ function interpolateHex(dark: string, light: string, t: number, name: string): s
   return hslToHex([lerpHue(dh, lh, t), lerp(ds, ls, t), clamp(outL, 0, 100)])
 }
 
-function interpolateColor(dark: string, light: string, t: number, name: string): string {
+function interpolateColor(
+  dark: string,
+  light: string,
+  t: number,
+  name: string
+): string {
   if (dark.startsWith('#') && light.startsWith('#')) {
     return interpolateHex(dark, light, t, name)
   }
@@ -257,7 +296,7 @@ function interpolateShadow(dark: string, light: string, t: number): string {
           Math.round(lerp(dr[1], lr[1], t)),
           Math.round(lerp(dr[2], lr[2], t)),
           +(dr[3] + (lr[3] - dr[3]) * t).toFixed(4),
-        ]),
+        ])
       )
     }
   }

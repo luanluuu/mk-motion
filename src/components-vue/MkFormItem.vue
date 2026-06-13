@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { computed, inject, onMounted, onUnmounted, ref, watch } from 'vue'
-import { formContextKey, type FormRule, validateValue } from './formInjection.js'
+import {
+  formContextKey,
+  type FormRule,
+  validateValue,
+} from './formInjection.js'
 
 interface Props {
   prop?: string
@@ -11,8 +15,8 @@ interface Props {
 const props = defineProps<Props>()
 
 defineSlots<{
-  default?: () => any
-  label?: () => any
+  default?: () => unknown
+  label?: () => unknown
 }>()
 
 const form = inject(formContextKey, null)
@@ -21,7 +25,8 @@ const error = ref('')
 const resolvedRules = computed(() => {
   const list: FormRule[] = []
   if (props.rules) list.push(...props.rules)
-  if (props.prop && form?.rules?.[props.prop]) list.push(...form.rules[props.prop])
+  if (props.prop && form?.rules?.[props.prop])
+    list.push(...form.rules[props.prop])
   return list
 })
 
@@ -32,12 +37,16 @@ const fieldValue = computed(() => {
 
 function validate(): string | undefined {
   if (!props.prop) return undefined
-  const msg = validateValue(fieldValue.value, resolvedRules.value, props.label || props.prop)
+  const msg = validateValue(
+    fieldValue.value,
+    resolvedRules.value,
+    props.label || props.prop
+  )
   error.value = msg || ''
   return msg
 }
 
-function onInput(value: any) {
+function onInput(value: unknown) {
   if (props.prop && form) {
     form.updateFieldValue(props.prop, value)
   }
@@ -87,8 +96,15 @@ const labelAlign = computed(() => {
       <slot name="label">{{ label }}</slot>
     </label>
     <div class="mk-form__content">
-      <slot :on-input="onInput" :on-blur="onBlur" :value="fieldValue" :error="error" />
-      <span class="mk-form__error" :class="{ 'is-visible': error }">{{ error }}</span>
+      <slot
+        :on-input="onInput"
+        :on-blur="onBlur"
+        :value="fieldValue"
+        :error="error"
+      />
+      <span class="mk-form__error" :class="{ 'is-visible': error }">{{
+        error
+      }}</span>
     </div>
   </div>
 </template>

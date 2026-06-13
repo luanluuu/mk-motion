@@ -79,7 +79,7 @@ const examples = [
   },
 ]
 
-function navigate(example: typeof examples[number]) {
+function navigate(example: (typeof examples)[number]) {
   if (example.status !== 'ready') return
   router.push(`/examples/${example.id}`)
 }
@@ -94,7 +94,11 @@ function navigate(example: typeof examples[number]) {
 .examples-hero {
   text-align: center;
   padding: 80px 24px 48px;
-  background: linear-gradient(180deg, var(--mk-bg) 0%, var(--mk-bg-secondary) 100%);
+  background: linear-gradient(
+    180deg,
+    var(--mk-bg) 0%,
+    var(--mk-bg-secondary) 100%
+  );
   border-bottom: 1px solid var(--mk-border);
 }
 

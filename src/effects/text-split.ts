@@ -1,11 +1,13 @@
 export interface TextSplitOptions {
-  type?: 'char' | 'word'       // 按字符拆分还是按词
-  stagger?: number             // 每个元素间隔毫秒
-  duration?: number            // 单个动画时长
+  type?: 'char' | 'word' // 按字符拆分还是按词
+  stagger?: number // 每个元素间隔毫秒
+  duration?: number // 单个动画时长
   animation?: 'fadeUp' | 'fadeDown' | 'zoomIn' | 'rotateIn' | 'slideLeft'
 }
 
-const DEFAULT_SPLIT: Required<Omit<TextSplitOptions, 'type'>> & { type: 'char' } = {
+const DEFAULT_SPLIT: Required<Omit<TextSplitOptions, 'type'>> & {
+  type: 'char'
+} = {
   type: 'char',
   stagger: 40,
   duration: 500,
@@ -13,11 +15,26 @@ const DEFAULT_SPLIT: Required<Omit<TextSplitOptions, 'type'>> & { type: 'char' }
 }
 
 const ANIMATION_PRESETS: Record<string, { from: string; to: string }> = {
-  fadeUp:    { from: 'opacity:0;transform:translateY(20px)',   to: 'opacity:1;transform:translateY(0)' },
-  fadeDown:  { from: 'opacity:0;transform:translateY(-20px)',  to: 'opacity:1;transform:translateY(0)' },
-  zoomIn:    { from: 'opacity:0;transform:scale(0.5)',         to: 'opacity:1;transform:scale(1)' },
-  rotateIn:  { from: 'opacity:0;transform:rotate(-180deg)',    to: 'opacity:1;transform:rotate(0)' },
-  slideLeft: { from: 'opacity:0;transform:translateX(-30px)',  to: 'opacity:1;transform:translateX(0)' },
+  fadeUp: {
+    from: 'opacity:0;transform:translateY(20px)',
+    to: 'opacity:1;transform:translateY(0)',
+  },
+  fadeDown: {
+    from: 'opacity:0;transform:translateY(-20px)',
+    to: 'opacity:1;transform:translateY(0)',
+  },
+  zoomIn: {
+    from: 'opacity:0;transform:scale(0.5)',
+    to: 'opacity:1;transform:scale(1)',
+  },
+  rotateIn: {
+    from: 'opacity:0;transform:rotate(-180deg)',
+    to: 'opacity:1;transform:rotate(0)',
+  },
+  slideLeft: {
+    from: 'opacity:0;transform:translateX(-30px)',
+    to: 'opacity:1;transform:translateX(0)',
+  },
 }
 
 export class TextSplit {
@@ -26,9 +43,7 @@ export class TextSplit {
 
   constructor(element: HTMLElement | string) {
     this.element =
-      typeof element === 'string'
-        ? document.querySelector(element)!
-        : element
+      typeof element === 'string' ? document.querySelector(element)! : element
 
     if (!this.element) {
       throw new Error('TextSplit: element not found')

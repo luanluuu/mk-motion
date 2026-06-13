@@ -56,7 +56,9 @@ export class MkPopover {
         }
       }
       document.addEventListener('click', onDocClick)
-      this.cleanupFns.push(() => document.removeEventListener('click', onDocClick))
+      this.cleanupFns.push(() =>
+        document.removeEventListener('click', onDocClick)
+      )
     } else {
       const onEnter = () => {
         if (this.hideTimer) {
@@ -78,8 +80,12 @@ export class MkPopover {
       target.addEventListener('focus', onEnter)
       target.addEventListener('blur', onLeave)
 
-      this.cleanupFns.push(() => target.removeEventListener('mouseenter', onEnter))
-      this.cleanupFns.push(() => target.removeEventListener('mouseleave', onLeave))
+      this.cleanupFns.push(() =>
+        target.removeEventListener('mouseenter', onEnter)
+      )
+      this.cleanupFns.push(() =>
+        target.removeEventListener('mouseleave', onLeave)
+      )
       this.cleanupFns.push(() => target.removeEventListener('focus', onEnter))
       this.cleanupFns.push(() => target.removeEventListener('blur', onLeave))
 
@@ -95,8 +101,12 @@ export class MkPopover {
         }
         this.popoverEl.addEventListener('mouseenter', onPopoverEnter)
         this.popoverEl.addEventListener('mouseleave', onPopoverLeave)
-        this.cleanupFns.push(() => this.popoverEl!.removeEventListener('mouseenter', onPopoverEnter))
-        this.cleanupFns.push(() => this.popoverEl!.removeEventListener('mouseleave', onPopoverLeave))
+        this.cleanupFns.push(() =>
+          this.popoverEl!.removeEventListener('mouseenter', onPopoverEnter)
+        )
+        this.cleanupFns.push(() =>
+          this.popoverEl!.removeEventListener('mouseleave', onPopoverLeave)
+        )
       }
     }
 
@@ -108,7 +118,10 @@ export class MkPopover {
     this.popoverEl.className = 'mk-popover'
     this.popoverEl.style.position = 'absolute'
     this.popoverEl.style.zIndex = 'var(--mk-z-popover)'
-    this.popoverEl.setAttribute('role', this.options.trigger === 'click' ? 'dialog' : 'tooltip')
+    this.popoverEl.setAttribute(
+      'role',
+      this.options.trigger === 'click' ? 'dialog' : 'tooltip'
+    )
     if (this.options.trigger === 'click') {
       this.popoverEl.setAttribute('tabindex', '-1')
     }

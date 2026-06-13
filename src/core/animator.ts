@@ -16,9 +16,7 @@ export class Animator {
 
   constructor(element: HTMLElement | string) {
     this.element =
-      typeof element === 'string'
-        ? document.querySelector(element)!
-        : element
+      typeof element === 'string' ? document.querySelector(element)! : element
 
     if (!this.element) {
       throw new Error(`Animator: element not found`)

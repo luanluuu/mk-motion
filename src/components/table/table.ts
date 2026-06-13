@@ -7,21 +7,25 @@ export interface TableColumn {
   width?: string
   sortable?: boolean
   editable?: boolean
-  render?: (value: any, row: Record<string, any>, index: number) => HTMLElement | string
+  render?: (
+    value: unknown,
+    row: Record<string, unknown>,
+    index: number
+  ) => HTMLElement | string
 }
 
 export interface TableOptions {
   columns: TableColumn[]
-  data: Record<string, any>[]
+  data: Record<string, unknown>[]
   pageSize?: number
   virtual?: boolean
   itemHeight?: number
   virtualHeight?: number
   selection?: 'single' | 'multiple'
-  onEdit?: (row: Record<string, any>, rowIndex: number) => void
-  onDelete?: (row: Record<string, any>, rowIndex: number) => void
-  onRowClick?: (row: Record<string, any>, rowIndex: number) => void
-  onSelectChange?: (selected: Record<string, any>[]) => void
+  onEdit?: (row: Record<string, unknown>, rowIndex: number) => void
+  onDelete?: (row: Record<string, unknown>, rowIndex: number) => void
+  onRowClick?: (row: Record<string, unknown>, rowIndex: number) => void
+  onSelectChange?: (selected: Record<string, unknown>[]) => void
 }
 
 const DEFAULT_ITEM_HEIGHT = 44
@@ -34,22 +38,25 @@ export class MkTable {
   private tbody: HTMLTableSectionElement
   private scrollContainer?: HTMLDivElement
   private columns: TableColumn[]
-  private data: Record<string, any>[]
+  private data: Record<string, unknown>[]
   private pageSize: number
   private currentPage = 1
   private sortState: { key: string; order: 'asc' | 'desc' } | null = null
   private editingRow: number | null = null
-  private editCache: Record<string, any> | null = null
-  private filteredData: Record<string, any>[]
+  private editCache: Record<string, unknown> | null = null
+  private filteredData: Record<string, unknown>[]
   private _isVirtual = false
   private _itemHeight = DEFAULT_ITEM_HEIGHT
   private _virtualHeight = DEFAULT_VIRTUAL_HEIGHT
   private _scrollHandler?: () => void
 
-  private selectedRows = new Set<Record<string, any>>()
+  private selectedRows = new Set<Record<string, unknown>>()
   private selectionMode?: 'single' | 'multiple'
 
-  private callbacks: Pick<TableOptions, 'onEdit' | 'onDelete' | 'onRowClick' | 'onSelectChange'>
+  private callbacks: Pick<
+    TableOptions,
+    'onEdit' | 'onDelete' | 'onRowClick' | 'onSelectChange'
+  >
 
   constructor(container: HTMLElement | string, options: TableOptions) {
     const parent =
@@ -131,11 +138,11 @@ export class MkTable {
     return this.columns.length + (this.selectionMode ? 1 : 0)
   }
 
-  private getDisplayData(): Record<string, any>[] {
+  private getDisplayData(): Record<string, unknown>[] {
     if (this.sortState) {
       const sorted = [...this.filteredData].sort((a, b) => {
-        const av = a[this.sortState!.key]
-        const bv = b[this.sortState!.key]
+        const av = a[this.sortState!.key] as string | number
+        const bv = b[this.sortState!.key] as string | number
         if (av < bv) return this.sortState!.order === 'asc' ? -1 : 1
         if (av > bv) return this.sortState!.order === 'asc' ? 1 : -1
         return 0
@@ -214,7 +221,7 @@ export class MkTable {
     bottomCell.colSpan = this.colCount
     bottomCell.style.padding = '0'
     bottomCell.style.border = 'none'
-    bottomCell.style.height = `${(totalCount) * this._itemHeight}px`
+    bottomCell.style.height = `${totalCount * this._itemHeight}px`
     bottomSpacer.appendChild(bottomCell)
     this.tbody.appendChild(bottomSpacer)
   }
@@ -225,24 +232,38 @@ export class MkTable {
     const displayData = this.getDisplayData()
     const totalCount = displayData.length
     const scrollTop = this.scrollContainer.scrollTop
-    const containerHeight = this.scrollContainer.clientHeight || this._virtualHeight
+    const containerHeight =
+      this.scrollContainer.clientHeight || this._virtualHeight
 
-    const startIndex = Math.max(0, Math.floor(scrollTop / this._itemHeight) - BUFFER_COUNT)
+    const startIndex = Math.max(
+      0,
+      Math.floor(scrollTop / this._itemHeight) - BUFFER_COUNT
+    )
     const visibleCount = Math.ceil(containerHeight / this._itemHeight)
-    const endIndex = Math.min(totalCount, startIndex + visibleCount + BUFFER_COUNT * 2)
+    const endIndex = Math.min(
+      totalCount,
+      startIndex + visibleCount + BUFFER_COUNT * 2
+    )
 
     // Remove old visible rows (between spacers)
     const oldRows = this.tbody.querySelectorAll('.mk-table__virtual-row')
     oldRows.forEach((el) => el.remove())
 
     // Update spacer heights
-    const topSpacer = this.tbody.querySelector('.mk-table__virtual-spacer-top td') as HTMLTableCellElement
-    const bottomSpacer = this.tbody.querySelector('.mk-table__virtual-spacer-bottom td') as HTMLTableCellElement
+    const topSpacer = this.tbody.querySelector(
+      '.mk-table__virtual-spacer-top td'
+    ) as HTMLTableCellElement
+    const bottomSpacer = this.tbody.querySelector(
+      '.mk-table__virtual-spacer-bottom td'
+    ) as HTMLTableCellElement
     if (topSpacer) topSpacer.style.height = `${startIndex * this._itemHeight}px`
-    if (bottomSpacer) bottomSpacer.style.height = `${(totalCount - endIndex) * this._itemHeight}px`
+    if (bottomSpacer)
+      bottomSpacer.style.height = `${(totalCount - endIndex) * this._itemHeight}px`
 
     // Render visible rows (insert between spacers)
-    const bottomSpacerRow = this.tbody.querySelector('.mk-table__virtual-spacer-bottom')
+    const bottomSpacerRow = this.tbody.querySelector(
+      '.mk-table__virtual-spacer-bottom'
+    )
     for (let i = startIndex; i < endIndex; i++) {
       const rowData = displayData[i]
       if (!rowData) continue
@@ -257,12 +278,15 @@ export class MkTable {
     }
   }
 
-  private renderRow(rowData: Record<string, any>, rowIndex: number): void {
+  private renderRow(rowData: Record<string, unknown>, rowIndex: number): void {
     const tr = this.createRowElement(rowData, rowIndex)
     this.tbody.appendChild(tr)
   }
 
-  private createRowElement(rowData: Record<string, any>, rowIndex: number): HTMLTableRowElement {
+  private createRowElement(
+    rowData: Record<string, unknown>,
+    rowIndex: number
+  ): HTMLTableRowElement {
     const tr = document.createElement('tr')
     tr.setAttribute('role', 'row')
     if (this.editingRow === rowIndex) tr.classList.add('is-editing')
@@ -280,7 +304,11 @@ export class MkTable {
     this.columns.forEach((col) => {
       const td = document.createElement('td')
       td.setAttribute('role', 'cell')
-      if (this.editingRow === rowIndex && col.editable && col.key !== 'actions') {
+      if (
+        this.editingRow === rowIndex &&
+        col.editable &&
+        col.key !== 'actions'
+      ) {
         const input = document.createElement('input')
         input.className = 'mk-table__edit-input'
         input.value = String(this.editCache![col.key] ?? rowData[col.key] ?? '')
@@ -302,7 +330,8 @@ export class MkTable {
           td.textContent = String(rendered)
         }
       } else {
-        td.textContent = rowData[col.key] !== undefined ? String(rowData[col.key]) : ''
+        td.textContent =
+          rowData[col.key] !== undefined ? String(rowData[col.key]) : ''
       }
       tr.appendChild(td)
     })
@@ -320,7 +349,9 @@ export class MkTable {
       }
     })
     if (this.sortState) {
-      const colIndex = this.columns.findIndex((c) => c.key === this.sortState!.key)
+      const colIndex = this.columns.findIndex(
+        (c) => c.key === this.sortState!.key
+      )
       if (colIndex >= 0) {
         const offset = this.selectionMode ? 1 : 0
         const th = headers[colIndex + offset]
@@ -330,7 +361,10 @@ export class MkTable {
           icon.textContent = this.sortState.order === 'asc' ? '↑' : '↓'
         }
         if (th) {
-          th.setAttribute('aria-sort', this.sortState.order === 'asc' ? 'ascending' : 'descending')
+          th.setAttribute(
+            'aria-sort',
+            this.sortState.order === 'asc' ? 'ascending' : 'descending'
+          )
         }
       }
     }
@@ -444,14 +478,14 @@ export class MkTable {
     return btn
   }
 
-  setData(data: Record<string, any>[]): void {
+  setData(data: Record<string, unknown>[]): void {
     this.data = data
     this.filteredData = [...data]
     this.currentPage = 1
     this.render()
   }
 
-  filter(predicate: (row: Record<string, any>) => boolean): void {
+  filter(predicate: (row: Record<string, unknown>) => boolean): void {
     this.filteredData = this.data.filter(predicate)
     this.currentPage = 1
     this.render()
@@ -467,7 +501,9 @@ export class MkTable {
     this.editingRow = rowIndex
     this.editCache = { ...this.filteredData[rowIndex] }
     this.render()
-    const input = this.tbody.querySelector('.mk-table__edit-input') as HTMLInputElement
+    const input = this.tbody.querySelector(
+      '.mk-table__edit-input'
+    ) as HTMLInputElement
     input?.focus()
   }
 
@@ -476,7 +512,8 @@ export class MkTable {
       const rowData = this.editCache
       this.filteredData[this.editingRow] = rowData
       const origIndex = this.data.findIndex(
-        (r, i) => i === this.editingRow || JSON.stringify(r) === JSON.stringify(rowData)
+        (r, i) =>
+          i === this.editingRow || JSON.stringify(r) === JSON.stringify(rowData)
       )
       if (origIndex >= 0) this.data[origIndex] = rowData
       this.callbacks.onEdit?.(rowData, this.editingRow)
@@ -498,7 +535,10 @@ export class MkTable {
     this.filteredData = this.filteredData.filter((r) => r !== row)
     this.selectedRows.delete(row)
     this.callbacks.onDelete?.(row, rowIndex)
-    if (this.filteredData.length <= (this.currentPage - 1) * this.pageSize && this.currentPage > 1) {
+    if (
+      this.filteredData.length <= (this.currentPage - 1) * this.pageSize &&
+      this.currentPage > 1
+    ) {
       this.currentPage--
     }
     this.render()
@@ -508,7 +548,9 @@ export class MkTable {
     const label = document.createElement('label')
     label.className = 'mk-checkbox'
     label.setAttribute('role', 'checkbox')
-    const allSelected = this.filteredData.length > 0 && this.filteredData.every((r) => this.selectedRows.has(r))
+    const allSelected =
+      this.filteredData.length > 0 &&
+      this.filteredData.every((r) => this.selectedRows.has(r))
     label.setAttribute('aria-checked', String(allSelected))
     if (allSelected) label.classList.add('is-checked')
 
@@ -533,7 +575,9 @@ export class MkTable {
     return label
   }
 
-  private createRowSelectionCheckbox(rowData: Record<string, any>): HTMLLabelElement {
+  private createRowSelectionCheckbox(
+    rowData: Record<string, unknown>
+  ): HTMLLabelElement {
     const label = document.createElement('label')
     label.className = 'mk-checkbox'
     label.setAttribute('role', 'checkbox')
@@ -557,7 +601,7 @@ export class MkTable {
     return label
   }
 
-  private toggleRowSelection(rowData: Record<string, any>): void {
+  private toggleRowSelection(rowData: Record<string, unknown>): void {
     if (this.selectionMode === 'single') {
       this.selectedRows.clear()
       this.selectedRows.add(rowData)
@@ -572,7 +616,7 @@ export class MkTable {
     this.callbacks.onSelectChange?.(this.getSelectedRows())
   }
 
-  getSelectedRows(): Record<string, any>[] {
+  getSelectedRows(): Record<string, unknown>[] {
     return Array.from(this.selectedRows)
   }
 
@@ -597,6 +641,9 @@ export class MkTable {
   }
 }
 
-export function createTable(container: HTMLElement | string, options: TableOptions): MkTable {
+export function createTable(
+  container: HTMLElement | string,
+  options: TableOptions
+): MkTable {
   return new MkTable(container, options)
 }

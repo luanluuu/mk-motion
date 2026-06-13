@@ -1,16 +1,21 @@
 <script setup lang="ts">
 import { computed, provide } from 'vue'
 
-const props = withDefaults(defineProps<{
-  direction?: 'vertical' | 'horizontal'
-}>(), {
-  direction: 'vertical',
-})
+const props = withDefaults(
+  defineProps<{
+    direction?: 'vertical' | 'horizontal'
+  }>(),
+  {
+    direction: 'vertical',
+  }
+)
 
 const layoutClass = computed(() => {
   return [
     'mk-layout',
-    props.direction === 'horizontal' ? 'mk-layout--horizontal' : 'mk-layout--vertical',
+    props.direction === 'horizontal'
+      ? 'mk-layout--horizontal'
+      : 'mk-layout--vertical',
   ]
 })
 

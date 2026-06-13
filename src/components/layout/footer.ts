@@ -18,7 +18,9 @@ export class MkFooter {
 
     if (options.height !== undefined) {
       this.el.style.height =
-        typeof options.height === 'number' ? `${options.height}px` : options.height
+        typeof options.height === 'number'
+          ? `${options.height}px`
+          : options.height
     }
 
     parent.appendChild(this.el)

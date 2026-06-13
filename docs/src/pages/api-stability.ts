@@ -57,14 +57,17 @@ function renderLevels() {
 
 function renderApiTable(level: string) {
   const el = document.getElementById(`stability-${level}`)!
-  const apis = API_STABILITY.filter(e => e.level === level)
+  const apis = API_STABILITY.filter((e) => e.level === level)
   if (apis.length === 0) {
     el.innerHTML = '<p class="doc-p">暂无此级别的 API。</p>'
     return
   }
-  const rows = apis.map(a =>
-    `<tr><td><code>${a.name}</code></td><td>${a.description}</td><td><code>@luanlu/mk-motion</code></td></tr>`
-  ).join('')
+  const rows = apis
+    .map(
+      (a) =>
+        `<tr><td><code>${a.name}</code></td><td>${a.description}</td><td><code>@luanlu/mk-motion</code></td></tr>`
+    )
+    .join('')
   el.innerHTML = `
     <table class="doc-table">
       <thead><tr><th>API</th><th>说明</th><th>导入路径</th></tr></thead>

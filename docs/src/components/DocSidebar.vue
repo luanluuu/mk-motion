@@ -3,7 +3,7 @@
     <MkMenu
       mode="vertical"
       :items="menuItems"
-      :defaultActive="activeIndex"
+      :default-active="activeIndex"
       @select="onMenuSelect"
     />
   </aside>
@@ -13,13 +13,13 @@
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { MkMenu } from 'mk-motion/vue'
-import type { MenuItem } from 'mk-motion'
+import type { MenuItem } from 'mk-motion/vue'
 import { sidebarMenuItems } from '../data/nav.js'
 import { goTo } from '../router.js'
 
 const route = useRoute()
 
-const menuItems: MenuItem[] = sidebarMenuItems.map(item => ({
+const menuItems: MenuItem[] = sidebarMenuItems.map((item) => ({
   index: item.index,
   label: item.label,
   icon: item.icon,

@@ -27,7 +27,10 @@ const DEFAULT_VIRTUAL_THRESHOLD = 50
 const DEFAULT_DEBOUNCE = 300
 const BUFFER_COUNT = 5
 
-function debounce<T extends (...args: any[]) => void>(fn: T, ms: number): (...args: Parameters<T>) => void {
+function debounce<T extends (...args: never[]) => void>(
+  fn: T,
+  ms: number
+): (...args: Parameters<T>) => void {
   let timer: ReturnType<typeof setTimeout> | null = null
   return (...args: Parameters<T>) => {
     if (timer) clearTimeout(timer)
@@ -94,7 +97,8 @@ export class MkSelect {
       this._searchInput = document.createElement('input')
       this._searchInput.className = 'mk-select__search-input'
       this._searchInput.type = 'text'
-      this._searchInput.placeholder = this.getSelectedLabel() || options.placeholder || '请选择'
+      this._searchInput.placeholder =
+        this.getSelectedLabel() || options.placeholder || '请选择'
       this._searchInput.style.display = 'none'
       this._searchInput.addEventListener('input', (e) => {
         const query = (e.target as HTMLInputElement).value
@@ -118,7 +122,10 @@ export class MkSelect {
       })
       this.trigger.appendChild(this._searchInput)
 
-      this._debouncedSearch = debounce((query: string) => this.doSearch(query), options.debounce ?? DEFAULT_DEBOUNCE)
+      this._debouncedSearch = debounce(
+        (query: string) => this.doSearch(query),
+        options.debounce ?? DEFAULT_DEBOUNCE
+      )
     }
 
     const arrow = document.createElement('span')
@@ -149,10 +156,13 @@ export class MkSelect {
     this._cleanupKey = onKey(this.trigger, [
       { key: Keys.ArrowDown, handler: () => this.moveSelection(1) },
       { key: Keys.ArrowUp, handler: () => this.moveSelection(-1) },
-      { key: Keys.Enter, handler: () => {
-        if (this.isOpen) this.close()
-        else this.open()
-      }},
+      {
+        key: Keys.Enter,
+        handler: () => {
+          if (this.isOpen) this.close()
+          else this.open()
+        },
+      },
       { key: Keys.Escape, handler: () => this.close() },
     ])
 
@@ -307,9 +317,15 @@ export class MkSelect {
     const containerHeight = this.dropdown.clientHeight || 240
     const totalCount = this.options.options.length
 
-    const startIndex = Math.max(0, Math.floor(scrollTop / this.itemHeight) - BUFFER_COUNT)
+    const startIndex = Math.max(
+      0,
+      Math.floor(scrollTop / this.itemHeight) - BUFFER_COUNT
+    )
     const visibleCount = Math.ceil(containerHeight / this.itemHeight)
-    const endIndex = Math.min(totalCount, startIndex + visibleCount + BUFFER_COUNT * 2)
+    const endIndex = Math.min(
+      totalCount,
+      startIndex + visibleCount + BUFFER_COUNT * 2
+    )
 
     // Remove old visible items (but keep spacers)
     const oldItems = this.dropdown.querySelectorAll('.mk-select__option')
@@ -415,7 +431,10 @@ export class MkSelect {
     if (index >= 0) {
       const scrollPos = index * this.itemHeight
       const containerHeight = this.dropdown.clientHeight || 240
-      this.dropdown.scrollTop = Math.max(0, scrollPos - containerHeight / 2 + this.itemHeight / 2)
+      this.dropdown.scrollTop = Math.max(
+        0,
+        scrollPos - containerHeight / 2 + this.itemHeight / 2
+      )
       this.renderVirtualWindow()
     }
   }
@@ -427,7 +446,10 @@ export class MkSelect {
     this.dropdown.classList.remove('is-open')
     this.hideSearchInput()
     // Reset filterable options
-    if ((this.options.filterable || this.options.remote) && this._allOptions.length) {
+    if (
+      (this.options.filterable || this.options.remote) &&
+      this._allOptions.length
+    ) {
       this.options.options = [...this._allOptions]
       this._isVirtual = this.shouldVirtualize()
       this.rebuildVirtual()
@@ -440,10 +462,13 @@ export class MkSelect {
     if (!this.isOpen) {
       this.open()
     }
-    const currentIndex = this.options.options.findIndex((o) => o.value === this._value)
+    const currentIndex = this.options.options.findIndex(
+      (o) => o.value === this._value
+    )
     let next = currentIndex
     for (let i = 0; i < this.options.options.length; i++) {
-      next = (next + dir + this.options.options.length) % this.options.options.length
+      next =
+        (next + dir + this.options.options.length) % this.options.options.length
       if (!this.options.options[next].disabled) {
         this.setValue(this.options.options[next].value)
         if (this._isVirtual) {

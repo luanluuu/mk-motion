@@ -9,12 +9,16 @@
           <span class="mk-hero__subtitle">面向现代 Web 的动画驱动 UI 系统</span>
         </h1>
         <p class="mk-hero__lead">
-          50+ Vue 3 组件深度绑定物理弹簧引擎。
-          FLIP 布局动画、手势交互、滚动驱动 — 全部开箱即用。
+          50+ Vue 3 组件深度绑定物理弹簧引擎。 FLIP 布局动画、手势交互、滚动驱动
+          — 全部开箱即用。
         </p>
         <MkSpace size="large" class="mk-hero__actions">
-          <MkButton type="primary" size="large" @click="goTo('components')">开始使用</MkButton>
-          <MkButton size="large" plain @click="scrollTo('playground')">在线体验</MkButton>
+          <MkButton type="primary" size="large" @click="goTo('components')"
+            >开始使用</MkButton
+          >
+          <MkButton size="large" plain @click="scrollTo('playground')"
+            >在线体验</MkButton
+          >
         </MkSpace>
       </div>
     </section>
@@ -67,8 +71,10 @@ app.use(MkMotion)</code></pre>
 &lt;/template&gt;</code></pre>
         </div>
       </div>
-      <MkSpace justify="center" style="margin-top: 28px;">
-        <MkButton type="primary" @click="goTo('components')">浏览全部组件</MkButton>
+      <MkSpace justify="center" style="margin-top: 28px">
+        <MkButton type="primary" @click="goTo('components')"
+          >浏览全部组件</MkButton
+        >
         <MkButton plain @click="goTo('animations')">动画引擎文档</MkButton>
       </MkSpace>
     </section>
@@ -76,7 +82,9 @@ app.use(MkMotion)</code></pre>
     <!-- Playground: Interactive demo -->
     <section class="mk-section" id="playground">
       <h2 class="mk-section__title">实时交互体验</h2>
-      <p class="mk-section__desc">以下组件全部来自 MotionKit，点击、拖拽、输入 — 感受弹簧反馈。</p>
+      <p class="mk-section__desc">
+        以下组件全部来自 MotionKit，点击、拖拽、输入 — 感受弹簧反馈。
+      </p>
 
       <MkRow :gutter="24">
         <!-- Buttons -->
@@ -95,8 +103,13 @@ app.use(MkMotion)</code></pre>
         <!-- Input + Switch -->
         <MkCol :span="12" :md="24">
           <MkCard title="输入与开关" class="mk-play-card">
-            <MkSpace direction="vertical" size="large" style="width: 100%;">
-              <MkInput v-model="demoText" placeholder="输入点什么，感受聚焦动画…" clearable style="width: 100%;" />
+            <MkSpace direction="vertical" size="large" style="width: 100%">
+              <MkInput
+                v-model="demoText"
+                placeholder="输入点什么，感受聚焦动画…"
+                clearable
+                style="width: 100%"
+              />
               <MkSpace>
                 <MkSwitch v-model="demoSwitch" />
                 <MkTag :type="demoSwitch ? 'success' : 'info'">
@@ -120,13 +133,26 @@ app.use(MkMotion)</code></pre>
         <!-- Progress + Alert -->
         <MkCol :span="12" :md="24">
           <MkCard title="进度与反馈" class="mk-play-card">
-            <MkSpace direction="vertical" size="large" style="width: 100%;">
+            <MkSpace direction="vertical" size="large" style="width: 100%">
               <MkProgress :percentage="progress" status="active" />
               <MkSpace>
-                <MkButton size="small" @click="progress = Math.max(0, progress - 20)">-</MkButton>
-                <MkButton size="small" @click="progress = Math.min(100, progress + 20)">+</MkButton>
+                <MkButton
+                  size="small"
+                  @click="progress = Math.max(0, progress - 20)"
+                  >-</MkButton
+                >
+                <MkButton
+                  size="small"
+                  @click="progress = Math.min(100, progress + 20)"
+                  >+</MkButton
+                >
               </MkSpace>
-              <MkAlert v-if="progress >= 100" type="success" title="完成" :closable="false">
+              <MkAlert
+                v-if="progress >= 100"
+                type="success"
+                title="完成"
+                :closable="false"
+              >
                 进度已达 100%，弹簧填充动画完成。
               </MkAlert>
             </MkSpace>
@@ -141,7 +167,7 @@ app.use(MkMotion)</code></pre>
               :options="selectOptions"
               placeholder="选择一个动画"
               clearable
-              style="width: 240px;"
+              style="width: 240px"
             />
             <p class="mk-play-card__hint">你选择了：{{ demoSelect || '无' }}</p>
           </MkCard>
@@ -154,7 +180,7 @@ app.use(MkMotion)</code></pre>
               :columns="tableColumns"
               :data="tableData"
               :page-size="4"
-              style="width: 100%;"
+              style="width: 100%"
             />
           </MkCard>
         </MkCol>
@@ -166,8 +192,12 @@ app.use(MkMotion)</code></pre>
       <h2 class="mk-cta__title">准备好让界面动起来了？</h2>
       <p class="mk-cta__desc">MotionKit 完全开源，MIT 协议。</p>
       <MkSpace justify="center">
-        <MkButton type="primary" size="large" @click="goTo('components')">浏览组件</MkButton>
-        <MkButton size="large" plain @click="goTo('theme-generator')">主题生成器</MkButton>
+        <MkButton type="primary" size="large" @click="goTo('components')"
+          >浏览组件</MkButton
+        >
+        <MkButton size="large" plain @click="goTo('theme-generator')"
+          >主题生成器</MkButton
+        >
       </MkSpace>
     </section>
   </div>
@@ -221,9 +251,21 @@ const demoText = ref('')
 const demoSwitch = ref(true)
 const activeTab = ref('spring')
 const tabItems: TabItem[] = [
-  { key: 'spring', label: '弹簧', content: 'MotionKit 的弹簧物理引擎让每一次交互都有真实的重量感。' },
-  { key: 'flip', label: 'FLIP', content: '布局变化自动计算 First / Last / Invert / Play，元素平滑补位。' },
-  { key: 'gesture', label: '手势', content: 'Pan、Swipe、Pinch、Tap、LongPress 全部内置，释放即弹簧回弹。' },
+  {
+    key: 'spring',
+    label: '弹簧',
+    content: 'MotionKit 的弹簧物理引擎让每一次交互都有真实的重量感。',
+  },
+  {
+    key: 'flip',
+    label: 'FLIP',
+    content: '布局变化自动计算 First / Last / Invert / Play，元素平滑补位。',
+  },
+  {
+    key: 'gesture',
+    label: '手势',
+    content: 'Pan、Swipe、Pinch、Tap、LongPress 全部内置，释放即弹簧回弹。',
+  },
 ]
 const progress = ref(40)
 const demoSelect = ref('')
@@ -275,7 +317,11 @@ function scrollTo(id: string) {
   width: 800px;
   height: 800px;
   transform: translateX(-50%);
-  background: radial-gradient(circle, rgba(99,102,241,0.18) 0%, transparent 60%);
+  background: radial-gradient(
+    circle,
+    rgba(99, 102, 241, 0.18) 0%,
+    transparent 60%
+  );
   z-index: 0;
   pointer-events: none;
 }
@@ -417,7 +463,7 @@ function scrollTo(id: string) {
 /* ── CTA ── */
 .mk-cta {
   text-align: center;
-  background: linear-gradient(180deg, transparent, rgba(99,102,241,0.05));
+  background: linear-gradient(180deg, transparent, rgba(99, 102, 241, 0.05));
   max-width: 100%;
 }
 .mk-cta__title {
@@ -431,8 +477,14 @@ function scrollTo(id: string) {
 }
 
 @media (max-width: 768px) {
-  .mk-section { padding: 56px 20px; }
-  .mk-hero__title { font-size: 1.9rem; }
-  .mk-hero { min-height: 60vh; }
+  .mk-section {
+    padding: 56px 20px;
+  }
+  .mk-hero__title {
+    font-size: 1.9rem;
+  }
+  .mk-hero {
+    min-height: 60vh;
+  }
 }
 </style>

@@ -39,7 +39,10 @@ export class MkDrawer {
     this.drawer.setAttribute('role', 'dialog')
     this.drawer.setAttribute('aria-modal', 'true')
     if (this.options.size) {
-      if (this.options.direction === 'right' || this.options.direction === 'left') {
+      if (
+        this.options.direction === 'right' ||
+        this.options.direction === 'left'
+      ) {
         this.drawer.style.width = `${this.options.size}px`
       } else {
         this.drawer.style.height = `${this.options.size}px`
@@ -157,8 +160,15 @@ export class MkDrawer {
       else to.y = d === 'top' ? -100 : 100
 
       Promise.all([
-        springTo(this.el, { opacity: 0 }, { ...springOpts, stiffness: (springOpts.stiffness ?? 300) * 1.5 }),
-        springTo(this.drawer, to, { ...springOpts, stiffness: (springOpts.stiffness ?? 300) * 1.5 }),
+        springTo(
+          this.el,
+          { opacity: 0 },
+          { ...springOpts, stiffness: (springOpts.stiffness ?? 300) * 1.5 }
+        ),
+        springTo(this.drawer, to, {
+          ...springOpts,
+          stiffness: (springOpts.stiffness ?? 300) * 1.5,
+        }),
       ]).then(() => {
         this.el.style.display = 'none'
         this.options.onClose?.()

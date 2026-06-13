@@ -10,15 +10,60 @@ export interface MkMotionOptions {
 }
 
 const ALL_COMPONENTS = [
-  'Button', 'Input', 'Switch', 'Radio', 'RadioGroup', 'Checkbox', 'CheckboxGroup', 'Slider',
-  'Card', 'Tag', 'Alert', 'Progress', 'Empty', 'Avatar', 'Divider', 'Space',
-  'Row', 'Col', 'Container', 'Layout', 'Header', 'Aside', 'Main', 'Footer',
-  'Dialog', 'Drawer', 'Menu', 'MenuItem', 'Tabs', 'Popover', 'Dropdown', 'Tooltip',
-  'Breadcrumb', 'Steps', 'Loading', 'Message', 'Collapse', 'Select', 'Table', 'Pagination',
-  'Tree', 'DatePicker', 'TimePicker', 'Upload', 'Form', 'FormItem',
+  'Button',
+  'Input',
+  'Switch',
+  'Radio',
+  'RadioGroup',
+  'Checkbox',
+  'CheckboxGroup',
+  'Slider',
+  'Card',
+  'Tag',
+  'Alert',
+  'Progress',
+  'Empty',
+  'Avatar',
+  'Divider',
+  'Space',
+  'Row',
+  'Col',
+  'Container',
+  'Layout',
+  'Header',
+  'Aside',
+  'Main',
+  'Footer',
+  'Dialog',
+  'Drawer',
+  'Menu',
+  'MenuItem',
+  'Tabs',
+  'Popover',
+  'Dropdown',
+  'Tooltip',
+  'Breadcrumb',
+  'Steps',
+  'Loading',
+  'Message',
+  'Collapse',
+  'Select',
+  'Table',
+  'Pagination',
+  'Tree',
+  'DatePicker',
+  'TimePicker',
+  'Upload',
+  'Form',
+  'FormItem',
 ]
 
-const COMPOSABLES = ['useMkTheme', 'useMkMotion', 'useMkLoading', 'useMkMessage']
+const COMPOSABLES = [
+  'useMkTheme',
+  'useMkMotion',
+  'useMkLoading',
+  'useMkMessage',
+]
 
 // Match both @luanlu/mk-motion/vue and mk-motion/vue (alias)
 const MK_VUE_SOURCE_RE = /@luanlu\/mk-motion\/vue|mk-motion\/vue/
@@ -34,7 +79,12 @@ export function mkMotion(options: MkMotionOptions = {}): Plugin {
     transform(code, id) {
       // Only process Vue SFC files (original file, not virtual modules)
       // Skip internal library components to avoid duplicating their manual imports
-      if (!id.endsWith('.vue') || id.includes('?vue&') || id.includes('components-vue')) return
+      if (
+        !id.endsWith('.vue') ||
+        id.includes('?vue&') ||
+        id.includes('components-vue')
+      )
+        return
 
       let transformed = code
       let hasChanges = false
@@ -53,20 +103,32 @@ export function mkMotion(options: MkMotionOptions = {}): Plugin {
 
         // Check if already imported (from any mk-motion/vue source)
         const alreadyImported = usedComponents.every((n) => {
-          const regex = new RegExp(`import\\s*\\{[^}]*\\bMk${n}\\b[^}]*\\}\\s*from\\s*['"](${MK_VUE_SOURCE_RE.source})['"]`)
+          const regex = new RegExp(
+            `import\\s*\\{[^}]*\\bMk${n}\\b[^}]*\\}\\s*from\\s*['"](${MK_VUE_SOURCE_RE.source})['"]`
+          )
           return regex.test(code)
         })
 
         if (!alreadyImported) {
           // Find <script setup> or <script> block and insert after the tag
-          const scriptMatch = code.match(/<script\s+setup[^>]*>/i) || code.match(/<script[^>]*>/i)
+          const scriptMatch =
+            code.match(/<script\s+setup[^>]*>/i) || code.match(/<script[^>]*>/i)
           if (scriptMatch) {
             const insertPos = scriptMatch.index! + scriptMatch[0].length
             // Only add CSS import if not already present
-            const cssImportLine = importStyle && !code.includes("@luanlu/mk-motion/css") && !code.includes("mk-motion/css")
-              ? `\nimport '@luanlu/mk-motion/css'`
-              : ''
-            transformed = transformed.slice(0, insertPos) + '\n' + importLine + cssImportLine + '\n' + transformed.slice(insertPos)
+            const cssImportLine =
+              importStyle &&
+              !code.includes('@luanlu/mk-motion/css') &&
+              !code.includes('mk-motion/css')
+                ? `\nimport '@luanlu/mk-motion/css'`
+                : ''
+            transformed =
+              transformed.slice(0, insertPos) +
+              '\n' +
+              importLine +
+              cssImportLine +
+              '\n' +
+              transformed.slice(insertPos)
             hasChanges = true
           }
         }
@@ -85,15 +147,24 @@ export function mkMotion(options: MkMotionOptions = {}): Plugin {
           const importLine = `import { ${importNames} } from '@luanlu/mk-motion/vue'`
 
           const alreadyImported = usedComposables.every((n) => {
-            const regex = new RegExp(`import\\s*\\{[^}]*\\b${n}\\b[^}]*\\}\\s*from\\s*['"](${MK_VUE_SOURCE_RE.source})['"]`)
+            const regex = new RegExp(
+              `import\\s*\\{[^}]*\\b${n}\\b[^}]*\\}\\s*from\\s*['"](${MK_VUE_SOURCE_RE.source})['"]`
+            )
             return regex.test(code)
           })
 
           if (!alreadyImported) {
-            const scriptMatch = code.match(/<script\s+setup[^>]*>/i) || code.match(/<script[^>]*>/i)
+            const scriptMatch =
+              code.match(/<script\s+setup[^>]*>/i) ||
+              code.match(/<script[^>]*>/i)
             if (scriptMatch) {
               const insertPos = scriptMatch.index! + scriptMatch[0].length
-              transformed = transformed.slice(0, insertPos) + '\n' + importLine + '\n' + transformed.slice(insertPos)
+              transformed =
+                transformed.slice(0, insertPos) +
+                '\n' +
+                importLine +
+                '\n' +
+                transformed.slice(insertPos)
               hasChanges = true
             }
           }

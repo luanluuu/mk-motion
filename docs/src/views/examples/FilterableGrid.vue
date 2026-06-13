@@ -9,21 +9,28 @@
 
     <div class="example-body">
       <div class="controls">
-        <MkInput v-model="searchText" placeholder="搜索卡片…" clearable style="flex: 1; max-width: 260px;" />
+        <MkInput
+          v-model="searchText"
+          placeholder="搜索卡片…"
+          clearable
+          style="flex: 1; max-width: 260px"
+        />
 
-        <MkSpace style="flex-wrap: wrap;">
+        <MkSpace style="flex-wrap: wrap">
           <MkButton
             size="small"
             :type="activeFilter === 'all' ? 'primary' : undefined"
             @click="setFilter('all')"
-          >全部</MkButton>
+            >全部</MkButton
+          >
           <MkButton
             v-for="cat in categories"
             :key="cat"
             size="small"
             :type="activeFilter === cat ? 'primary' : undefined"
             @click="setFilter(cat)"
-          >{{ cat }}</MkButton>
+            >{{ cat }}</MkButton
+          >
         </MkSpace>
 
         <MkSpace>
@@ -57,7 +64,10 @@
       </div>
 
       <div class="example-code-hint">
-        <p>核心 API：<code>filterGrid</code> / <code>shuffleGrid</code> / <code>sortGrid</code> + <code>&lt;TransitionGroup&gt;</code></p>
+        <p>
+          核心 API：<code>filterGrid</code> / <code>shuffleGrid</code> /
+          <code>sortGrid</code> + <code>&lt;TransitionGroup&gt;</code>
+        </p>
       </div>
     </div>
   </div>
@@ -81,7 +91,13 @@ const cards = ref<Card[]>([
   { id: 3, name: 'MkTable', category: '数据', icon: '📋', color: '#06b6d4' },
   { id: 4, name: 'MkTabs', category: '导航', icon: '📑', color: '#f59e0b' },
   { id: 5, name: 'MkDialog', category: '反馈', icon: '💬', color: '#ef4444' },
-  { id: 6, name: 'MkDatePicker', category: '表单', icon: '📅', color: '#10b981' },
+  {
+    id: 6,
+    name: 'MkDatePicker',
+    category: '表单',
+    icon: '📅',
+    color: '#10b981',
+  },
   { id: 7, name: 'MkSelect', category: '表单', icon: '🔽', color: '#84cc16' },
   { id: 8, name: 'MkProgress', category: '反馈', icon: '📊', color: '#f97316' },
 ])
@@ -137,12 +153,29 @@ async function sortByName() {
 </script>
 
 <style scoped>
-.example-page { max-width: 800px; margin: 0 auto; padding-bottom: 80px; }
-.example-hero { text-align: center; padding: 56px 24px 32px; }
-.example-title { font-size: 1.8rem; font-weight: 700; margin: 0 0 8px; }
-.example-desc { font-size: 0.95rem; color: var(--mk-text-secondary); margin: 0; }
+.example-page {
+  max-width: 800px;
+  margin: 0 auto;
+  padding-bottom: 80px;
+}
+.example-hero {
+  text-align: center;
+  padding: 56px 24px 32px;
+}
+.example-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 0 0 8px;
+}
+.example-desc {
+  font-size: 0.95rem;
+  color: var(--mk-text-secondary);
+  margin: 0;
+}
 
-.example-body { padding: 0 24px; }
+.example-body {
+  padding: 0 24px;
+}
 .controls {
   display: flex;
   flex-wrap: wrap;
@@ -150,7 +183,9 @@ async function sortByName() {
   align-items: center;
   margin-bottom: 12px;
 }
-.example-hint { margin-bottom: 20px; }
+.example-hint {
+  margin-bottom: 20px;
+}
 
 .card-grid {
   display: grid;
@@ -164,14 +199,23 @@ async function sortByName() {
   border-radius: var(--mk-radius-lg);
   padding: 20px 16px;
   text-align: center;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
 }
 .grid-card:hover {
   border-color: var(--mk-primary);
   box-shadow: 0 2px 16px var(--mk-shadow);
 }
-.grid-card__icon { font-size: 2rem; margin-bottom: 8px; }
-.grid-card__name { font-size: 0.9rem; font-weight: 600; margin-bottom: 8px; }
+.grid-card__icon {
+  font-size: 2rem;
+  margin-bottom: 8px;
+}
+.grid-card__name {
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
 
 .grid-empty {
   grid-column: 1 / -1;
@@ -201,12 +245,18 @@ async function sortByName() {
 }
 
 .example-code-hint {
-  margin-top: 32px; padding: 16px;
-  background: var(--mk-surface); border-radius: var(--mk-radius-lg);
-  font-size: 0.85rem; color: var(--mk-text-secondary);
+  margin-top: 32px;
+  padding: 16px;
+  background: var(--mk-surface);
+  border-radius: var(--mk-radius-lg);
+  font-size: 0.85rem;
+  color: var(--mk-text-secondary);
 }
 .example-code-hint code {
-  background: var(--mk-bg-elevated); padding: 2px 6px;
-  border-radius: 4px; font-family: ui-monospace, monospace; font-size: 0.82rem;
+  background: var(--mk-bg-elevated);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: ui-monospace, monospace;
+  font-size: 0.82rem;
 }
 </style>

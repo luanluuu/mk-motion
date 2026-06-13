@@ -8,12 +8,16 @@ export interface TableColumn {
   width?: string
   sortable?: boolean
   editable?: boolean
-  render?: (value: any, row: Record<string, any>, index: number) => any
+  render?: (
+    value: unknown,
+    row: Record<string, unknown>,
+    index: number
+  ) => HTMLElement | string
 }
 
 interface Props {
   columns: TableColumn[]
-  data: Record<string, any>[]
+  data: Record<string, unknown>[]
   pageSize?: number
   virtual?: boolean
   selection?: 'single' | 'multiple'
@@ -28,25 +32,31 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emit = defineEmits<{
   sortChange: [key: string, order: 'asc' | 'desc' | null]
-  selectChange: [selected: Record<string, any>[]]
-  rowClick: [row: Record<string, any>, index: number]
-  edit: [row: Record<string, any>, index: number]
-  delete: [row: Record<string, any>, index: number]
+  selectChange: [selected: Record<string, unknown>[]]
+  rowClick: [row: Record<string, unknown>, index: number]
+  edit: [row: Record<string, unknown>, index: number]
+  delete: [row: Record<string, unknown>, index: number]
 }>()
 
-defineSlots<{
-  empty?: () => any
-} & {
-  [K in `column-${string}`]?: (props: { value: any; row: Record<string, any>; index: number }) => any
-}>()
+defineSlots<
+  {
+    empty?: () => unknown
+  } & {
+    [K in `column-${string}`]?: (props: {
+      value: unknown
+      row: Record<string, unknown>
+      index: number
+    }) => unknown
+  }
+>()
 
 const currentPageModel = defineModel<number>('currentPage', { default: 1 })
 const pageSizeModel = defineModel<number>('pageSize', { default: 10 })
 
 const sortState = ref<{ key: string; order: 'asc' | 'desc' } | null>(null)
-const selectedRows = ref<Set<Record<string, any>>>(new Set())
+const selectedRows = ref<Set<Record<string, unknown>>>(new Set())
 const editingRow = ref<number | null>(null)
-const editCache = ref<Record<string, any> | null>(null)
+const editCache = ref<Record<string, unknown> | null>(null)
 
 const DEFAULT_ITEM_HEIGHT = 44
 const DEFAULT_VIRTUAL_HEIGHT = 400
@@ -60,8 +70,8 @@ const sortedData = computed(() => {
   if (!sortState.value) return props.data
   const { key, order } = sortState.value
   return [...props.data].sort((a, b) => {
-    const av = a[key]
-    const bv = b[key]
+    const av = a[key] as string | number
+    const bv = b[key] as string | number
     if (av < bv) return order === 'asc' ? -1 : 1
     if (av > bv) return order === 'asc' ? 1 : -1
     return 0
@@ -77,12 +87,24 @@ const paginatedData = computed(() => {
 })
 
 const virtualState = computed(() => {
-  if (!props.virtual) return { startIndex: 0, endIndex: paginatedData.value.length, topHeight: 0, bottomHeight: 0 }
+  if (!props.virtual)
+    return {
+      startIndex: 0,
+      endIndex: paginatedData.value.length,
+      topHeight: 0,
+      bottomHeight: 0,
+    }
   const totalCount = sortedData.value.length
   const itemHeight = DEFAULT_ITEM_HEIGHT
-  const startIndex = Math.max(0, Math.floor(scrollTop.value / itemHeight) - BUFFER_COUNT)
+  const startIndex = Math.max(
+    0,
+    Math.floor(scrollTop.value / itemHeight) - BUFFER_COUNT
+  )
   const visibleCount = Math.ceil(containerHeight.value / itemHeight)
-  const endIndex = Math.min(totalCount, startIndex + visibleCount + BUFFER_COUNT * 2)
+  const endIndex = Math.min(
+    totalCount,
+    startIndex + visibleCount + BUFFER_COUNT * 2
+  )
   return {
     startIndex,
     endIndex,
@@ -93,7 +115,10 @@ const virtualState = computed(() => {
 
 const visibleData = computed(() => {
   if (!props.virtual) return paginatedData.value
-  return sortedData.value.slice(virtualState.value.startIndex, virtualState.value.endIndex)
+  return sortedData.value.slice(
+    virtualState.value.startIndex,
+    virtualState.value.endIndex
+  )
 })
 
 function handleSort(key: string) {
@@ -111,7 +136,8 @@ function handleSort(key: string) {
 function onScroll() {
   if (!scrollContainer.value || !props.virtual) return
   scrollTop.value = scrollContainer.value.scrollTop
-  containerHeight.value = scrollContainer.value.clientHeight || DEFAULT_VIRTUAL_HEIGHT
+  containerHeight.value =
+    scrollContainer.value.clientHeight || DEFAULT_VIRTUAL_HEIGHT
 }
 
 function onPageChange(page: number) {
@@ -124,7 +150,10 @@ function onSizeChange(size: number) {
 }
 
 const allSelected = computed(() => {
-  return paginatedData.value.length > 0 && paginatedData.value.every((r) => selectedRows.value.has(r))
+  return (
+    paginatedData.value.length > 0 &&
+    paginatedData.value.every((r) => selectedRows.value.has(r))
+  )
 })
 
 function toggleHeaderSelection() {
@@ -137,7 +166,7 @@ function toggleHeaderSelection() {
   emit('selectChange', Array.from(selectedRows.value))
 }
 
-function toggleRowSelection(row: Record<string, any>) {
+function toggleRowSelection(row: Record<string, unknown>) {
   if (props.selection === 'single') {
     selectedRows.value.clear()
     selectedRows.value.add(row)
@@ -148,11 +177,11 @@ function toggleRowSelection(row: Record<string, any>) {
   emit('selectChange', Array.from(selectedRows.value))
 }
 
-function isSelected(row: Record<string, any>) {
+function isSelected(row: Record<string, unknown>) {
   return selectedRows.value.has(row)
 }
 
-function onRowClick(row: Record<string, any>, index: number) {
+function onRowClick(row: Record<string, unknown>, index: number) {
   emit('rowClick', row, index)
 }
 
@@ -160,7 +189,9 @@ function startEdit(rowIndex: number) {
   editingRow.value = rowIndex
   editCache.value = { ...paginatedData.value[rowIndex] }
   nextTick(() => {
-    const input = document.querySelector('.mk-table__edit-input') as HTMLInputElement | null
+    const input = document.querySelector(
+      '.mk-table__edit-input'
+    ) as HTMLInputElement | null
     input?.focus()
   })
 }
@@ -168,7 +199,8 @@ function startEdit(rowIndex: number) {
 function saveEdit() {
   if (editingRow.value !== null && editCache.value) {
     const row = editCache.value
-    const origIndex = (currentPageModel.value - 1) * pageSizeModel.value + editingRow.value
+    const origIndex =
+      (currentPageModel.value - 1) * pageSizeModel.value + editingRow.value
     emit('edit', row, origIndex)
   }
   editingRow.value = null
@@ -180,12 +212,16 @@ function cancelEdit() {
   editCache.value = null
 }
 
-function deleteRow(row: Record<string, any>, index: number) {
+function deleteRow(row: Record<string, unknown>, index: number) {
   const origIndex = (currentPageModel.value - 1) * pageSizeModel.value + index
   emit('delete', row, origIndex)
 }
 
-function getCellValue(row: Record<string, any>, col: TableColumn, pageIndex: number) {
+function getCellValue(
+  row: Record<string, unknown>,
+  col: TableColumn,
+  pageIndex: number
+) {
   if (editingRow.value === pageIndex && col.editable && col.key !== 'actions') {
     return editCache.value?.[col.key] ?? row[col.key] ?? ''
   }
@@ -196,10 +232,14 @@ function onEditInput(col: TableColumn, value: string) {
   if (editCache.value) editCache.value[col.key] = value
 }
 
-watch(() => props.data, () => {
-  currentPageModel.value = 1
-  selectedRows.value.clear()
-}, { deep: true })
+watch(
+  () => props.data,
+  () => {
+    currentPageModel.value = 1
+    selectedRows.value.clear()
+  },
+  { deep: true }
+)
 
 defineExpose({ startEdit, saveEdit, cancelEdit, deleteRow })
 </script>
@@ -235,7 +275,13 @@ defineExpose({ startEdit, saveEdit, cancelEdit, deleteRow })
               role="columnheader"
               :style="col.width ? { width: col.width } : undefined"
               :class="{ 'is-sortable': col.sortable }"
-              :aria-sort="sortState?.key === col.key ? (sortState.order === 'asc' ? 'ascending' : 'descending') : 'none'"
+              :aria-sort="
+                sortState?.key === col.key
+                  ? sortState.order === 'asc'
+                    ? 'ascending'
+                    : 'descending'
+                  : 'none'
+              "
               @click="col.sortable && handleSort(col.key)"
             >
               {{ col.title }}
@@ -244,20 +290,37 @@ defineExpose({ startEdit, saveEdit, cancelEdit, deleteRow })
                 class="mk-table__sort-icon"
                 :class="{ 'is-active': sortState?.key === col.key }"
               >
-                {{ sortState?.key === col.key ? (sortState.order === 'asc' ? '↑' : '↓') : '⇅' }}
+                {{
+                  sortState?.key === col.key
+                    ? sortState.order === 'asc'
+                      ? '↑'
+                      : '↓'
+                    : '⇅'
+                }}
               </span>
             </th>
           </tr>
         </thead>
         <tbody role="rowgroup">
           <tr v-if="sortedData.length === 0" role="row">
-            <td :colspan="columns.length + (selection ? 1 : 0)" class="mk-table__empty" role="cell">
+            <td
+              :colspan="columns.length + (selection ? 1 : 0)"
+              class="mk-table__empty"
+              role="cell"
+            >
               <slot name="empty">暂无数据</slot>
             </td>
           </tr>
           <template v-else>
             <tr class="mk-table__virtual-spacer-top">
-              <td :colspan="columns.length + (selection ? 1 : 0)" :style="{ padding: 0, border: 'none', height: `${virtualState.topHeight}px` }"></td>
+              <td
+                :colspan="columns.length + (selection ? 1 : 0)"
+                :style="{
+                  padding: 0,
+                  border: 'none',
+                  height: `${virtualState.topHeight}px`,
+                }"
+              ></td>
             </tr>
             <tr
               v-for="(row, i) in visibleData"
@@ -280,16 +343,18 @@ defineExpose({ startEdit, saveEdit, cancelEdit, deleteRow })
                   </span>
                 </label>
               </td>
-              <td
-                v-for="col in columns"
-                :key="col.key"
-                role="cell"
-              >
+              <td v-for="col in columns" :key="col.key" role="cell">
                 <input
-                  v-if="editingRow === i + virtualState.startIndex && col.editable && col.key !== 'actions'"
+                  v-if="
+                    editingRow === i + virtualState.startIndex &&
+                    col.editable &&
+                    col.key !== 'actions'
+                  "
                   class="mk-table__edit-input"
                   :value="getCellValue(row, col, i + virtualState.startIndex)"
-                  @input="onEditInput(col, ($event.target as HTMLInputElement).value)"
+                  @input="
+                    onEditInput(col, ($event.target as HTMLInputElement).value)
+                  "
                   @keydown.enter="saveEdit"
                   @keydown.esc="cancelEdit"
                 />
@@ -300,11 +365,20 @@ defineExpose({ startEdit, saveEdit, cancelEdit, deleteRow })
                   :row="row"
                   :index="i + virtualState.startIndex"
                 />
-                <template v-else>{{ row[col.key] !== undefined ? String(row[col.key]) : '' }}</template>
+                <template v-else>{{
+                  row[col.key] !== undefined ? String(row[col.key]) : ''
+                }}</template>
               </td>
             </tr>
             <tr class="mk-table__virtual-spacer-bottom">
-              <td :colspan="columns.length + (selection ? 1 : 0)" :style="{ padding: 0, border: 'none', height: `${virtualState.bottomHeight}px` }"></td>
+              <td
+                :colspan="columns.length + (selection ? 1 : 0)"
+                :style="{
+                  padding: 0,
+                  border: 'none',
+                  height: `${virtualState.bottomHeight}px`,
+                }"
+              ></td>
             </tr>
           </template>
         </tbody>
@@ -334,7 +408,13 @@ defineExpose({ startEdit, saveEdit, cancelEdit, deleteRow })
               role="columnheader"
               :style="col.width ? { width: col.width } : undefined"
               :class="{ 'is-sortable': col.sortable }"
-              :aria-sort="sortState?.key === col.key ? (sortState.order === 'asc' ? 'ascending' : 'descending') : 'none'"
+              :aria-sort="
+                sortState?.key === col.key
+                  ? sortState.order === 'asc'
+                    ? 'ascending'
+                    : 'descending'
+                  : 'none'
+              "
               @click="col.sortable && handleSort(col.key)"
             >
               {{ col.title }}
@@ -343,14 +423,24 @@ defineExpose({ startEdit, saveEdit, cancelEdit, deleteRow })
                 class="mk-table__sort-icon"
                 :class="{ 'is-active': sortState?.key === col.key }"
               >
-                {{ sortState?.key === col.key ? (sortState.order === 'asc' ? '↑' : '↓') : '⇅' }}
+                {{
+                  sortState?.key === col.key
+                    ? sortState.order === 'asc'
+                      ? '↑'
+                      : '↓'
+                    : '⇅'
+                }}
               </span>
             </th>
           </tr>
         </thead>
         <tbody role="rowgroup">
           <tr v-if="paginatedData.length === 0" role="row">
-            <td :colspan="columns.length + (selection ? 1 : 0)" class="mk-table__empty" role="cell">
+            <td
+              :colspan="columns.length + (selection ? 1 : 0)"
+              class="mk-table__empty"
+              role="cell"
+            >
               <slot name="empty">暂无数据</slot>
             </td>
           </tr>
@@ -358,7 +448,10 @@ defineExpose({ startEdit, saveEdit, cancelEdit, deleteRow })
             v-for="(row, i) in paginatedData"
             :key="i"
             role="row"
-            :class="{ 'is-editing': editingRow === (currentPageModel - 1) * pageSizeModel + i }"
+            :class="{
+              'is-editing':
+                editingRow === (currentPageModel - 1) * pageSizeModel + i,
+            }"
             @click="onRowClick(row, (currentPageModel - 1) * pageSizeModel + i)"
           >
             <td v-if="selection" role="cell">
@@ -374,16 +467,24 @@ defineExpose({ startEdit, saveEdit, cancelEdit, deleteRow })
                 </span>
               </label>
             </td>
-            <td
-              v-for="col in columns"
-              :key="col.key"
-              role="cell"
-            >
+            <td v-for="col in columns" :key="col.key" role="cell">
               <input
-                v-if="editingRow === (currentPageModel - 1) * pageSizeModel + i && col.editable && col.key !== 'actions'"
+                v-if="
+                  editingRow === (currentPageModel - 1) * pageSizeModel + i &&
+                  col.editable &&
+                  col.key !== 'actions'
+                "
                 class="mk-table__edit-input"
-                :value="getCellValue(row, col, (currentPageModel - 1) * pageSizeModel + i)"
-                @input="onEditInput(col, ($event.target as HTMLInputElement).value)"
+                :value="
+                  getCellValue(
+                    row,
+                    col,
+                    (currentPageModel - 1) * pageSizeModel + i
+                  )
+                "
+                @input="
+                  onEditInput(col, ($event.target as HTMLInputElement).value)
+                "
                 @keydown.enter="saveEdit"
                 @keydown.esc="cancelEdit"
               />
@@ -394,7 +495,9 @@ defineExpose({ startEdit, saveEdit, cancelEdit, deleteRow })
                 :row="row"
                 :index="(currentPageModel - 1) * pageSizeModel + i"
               />
-              <template v-else>{{ row[col.key] !== undefined ? String(row[col.key]) : '' }}</template>
+              <template v-else>{{
+                row[col.key] !== undefined ? String(row[col.key]) : ''
+              }}</template>
             </td>
           </tr>
         </tbody>

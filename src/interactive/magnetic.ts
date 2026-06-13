@@ -1,6 +1,6 @@
 export interface MagneticOptions {
-  strength?: number        // 磁力强度 0~1
-  radius?: number          // 作用半径像素
+  strength?: number // 磁力强度 0~1
+  radius?: number // 作用半径像素
 }
 
 const DEFAULT_MAGNETIC: Required<MagneticOptions> = {

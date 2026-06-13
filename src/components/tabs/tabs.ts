@@ -107,8 +107,16 @@ export class MkTabs {
     })
 
     this.headerEl.addEventListener('keydown', (e) => {
-      if (![Keys.ArrowLeft, Keys.ArrowRight, Keys.Home, Keys.End].includes(e.key as any)) return
-      const tabs = this.tabItems.filter((_, i) => !this.options.items?.[i]?.disabled)
+      const navKeys: string[] = [
+        Keys.ArrowLeft,
+        Keys.ArrowRight,
+        Keys.Home,
+        Keys.End,
+      ]
+      if (!navKeys.includes(e.key)) return
+      const tabs = this.tabItems.filter(
+        (_, i) => !this.options.items?.[i]?.disabled
+      )
       const activeTab = this.tabItems[this.currentIndex]
       let currentIdx = tabs.indexOf(activeTab)
       if (currentIdx === -1) currentIdx = 0

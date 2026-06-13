@@ -146,7 +146,7 @@ export interface TableColumn {
   width?: string
   sortable?: boolean
   editable?: boolean
-  render?: (value: any, row: Record<string, any>, index: number) => any
+  render?: (value: unknown, row: Record<string, unknown>, index: number) => unknown
 }
 
 export interface TreeNode {
@@ -173,7 +173,7 @@ export interface UploadFile {
   status?: 'ready' | 'uploading' | 'success' | 'error'
   progress?: number
   raw?: File
-  response?: any
+  response?: unknown
 }
 
 export type { FormRule } from './formInjection.js'

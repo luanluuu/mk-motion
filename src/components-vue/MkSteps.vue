@@ -31,14 +31,26 @@ const emit = defineEmits<{
 
 const resolvedItems = computed(() =>
   props.items.map((item, index) => {
-    const status = item.status ?? (index < props.current ? 'finish' : index === props.current ? 'process' : 'wait')
+    const status =
+      item.status ??
+      (index < props.current
+        ? 'finish'
+        : index === props.current
+          ? 'process'
+          : 'wait')
     return { ...item, status, index, isLast: index === props.items.length - 1 }
   })
 )
 
 const stepIcon = (item: StepItem, index: number) => {
   if (item.icon) return item.icon
-  const status = item.status ?? (index < props.current ? 'finish' : index === props.current ? 'process' : 'wait')
+  const status =
+    item.status ??
+    (index < props.current
+      ? 'finish'
+      : index === props.current
+        ? 'process'
+        : 'wait')
   if (status === 'finish') return '✓'
   if (status === 'error') return '✕'
   return String(index + 1)
@@ -50,7 +62,10 @@ const onStepClick = (index: number) => {
 </script>
 
 <template>
-  <div class="mk-steps" :class="[`mk-steps--${direction}`, { 'mk-steps--small': size === 'small' }]">
+  <div
+    class="mk-steps"
+    :class="[`mk-steps--${direction}`, { 'mk-steps--small': size === 'small' }]"
+  >
     <div
       v-for="item in resolvedItems"
       :key="item.index"
@@ -64,7 +79,9 @@ const onStepClick = (index: number) => {
       </div>
       <div class="mk-step__main">
         <div class="mk-step__title">{{ item.title }}</div>
-        <div v-if="item.description" class="mk-step__description">{{ item.description }}</div>
+        <div v-if="item.description" class="mk-step__description">
+          {{ item.description }}
+        </div>
       </div>
     </div>
   </div>

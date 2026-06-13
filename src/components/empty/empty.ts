@@ -63,7 +63,9 @@ export class MkEmpty {
 
   setDescription(text: string): void {
     this.options.description = text
-    let desc = this.el.querySelector('.mk-empty__description') as HTMLParagraphElement | null
+    let desc = this.el.querySelector(
+      '.mk-empty__description'
+    ) as HTMLParagraphElement | null
     if (!desc) {
       desc = document.createElement('p')
       desc.className = 'mk-empty__description'

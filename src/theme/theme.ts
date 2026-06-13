@@ -49,10 +49,20 @@ export class ThemeManager {
     if (typeof document === 'undefined') return
     const root = document.documentElement
     const props = [
-      'bg', 'surface', 'surface-hover', 'border', 'border-hover',
-      'primary', 'primary-hover', 'primary-active',
-      'success', 'warning', 'danger',
-      'text', 'text-secondary', 'text-tertiary',
+      'bg',
+      'surface',
+      'surface-hover',
+      'border',
+      'border-hover',
+      'primary',
+      'primary-hover',
+      'primary-active',
+      'success',
+      'warning',
+      'danger',
+      'text',
+      'text-secondary',
+      'text-tertiary',
     ]
     props.forEach((p) => root.style.removeProperty(`--mk-${p}`))
   }

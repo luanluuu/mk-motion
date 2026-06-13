@@ -57,12 +57,48 @@ interface SpringEntry {
 }
 
 const SPRINGS: SpringEntry[] = [
-  { name: 'Default', stiffness: 170, damping: 26, mass: 1, useCase: '通用弹窗、卡片展开' },
-  { name: 'Gentle', stiffness: 120, damping: 14, mass: 1, useCase: '柔和进入、背景遮罩' },
-  { name: 'Wobbly', stiffness: 180, damping: 12, mass: 1, useCase: '趣味弹性、徽章跳动' },
-  { name: 'Stiff', stiffness: 210, damping: 20, mass: 1, useCase: '快速响应、按钮按下' },
-  { name: 'Slow', stiffness: 80, damping: 20, mass: 2, useCase: '重型面板、侧边栏' },
-  { name: 'Bouncy', stiffness: 300, damping: 10, mass: 1, useCase: '庆祝动效、成功提示' },
+  {
+    name: 'Default',
+    stiffness: 170,
+    damping: 26,
+    mass: 1,
+    useCase: '通用弹窗、卡片展开',
+  },
+  {
+    name: 'Gentle',
+    stiffness: 120,
+    damping: 14,
+    mass: 1,
+    useCase: '柔和进入、背景遮罩',
+  },
+  {
+    name: 'Wobbly',
+    stiffness: 180,
+    damping: 12,
+    mass: 1,
+    useCase: '趣味弹性、徽章跳动',
+  },
+  {
+    name: 'Stiff',
+    stiffness: 210,
+    damping: 20,
+    mass: 1,
+    useCase: '快速响应、按钮按下',
+  },
+  {
+    name: 'Slow',
+    stiffness: 80,
+    damping: 20,
+    mass: 2,
+    useCase: '重型面板、侧边栏',
+  },
+  {
+    name: 'Bouncy',
+    stiffness: 300,
+    damping: 10,
+    mass: 1,
+    useCase: '庆祝动效、成功提示',
+  },
 ]
 
 interface EasingEntry {
@@ -72,12 +108,28 @@ interface EasingEntry {
 }
 
 const EASINGS: EasingEntry[] = [
-  { name: 'ease-default', value: 'cubic-bezier(0.4, 0, 0.2, 1)', desc: '默认缓动，最通用' },
+  {
+    name: 'ease-default',
+    value: 'cubic-bezier(0.4, 0, 0.2, 1)',
+    desc: '默认缓动，最通用',
+  },
   { name: 'ease-out', value: 'cubic-bezier(0, 0, 0.2, 1)', desc: '减速出场' },
-  { name: 'ease-out-expo', value: 'cubic-bezier(0.16, 1, 0.3, 1)', desc: '急速减速，对话框推荐' },
-  { name: 'ease-in-out', value: 'cubic-bezier(0.4, 0, 0.2, 1)', desc: '对称加减速' },
+  {
+    name: 'ease-out-expo',
+    value: 'cubic-bezier(0.16, 1, 0.3, 1)',
+    desc: '急速减速，对话框推荐',
+  },
+  {
+    name: 'ease-in-out',
+    value: 'cubic-bezier(0.4, 0, 0.2, 1)',
+    desc: '对称加减速',
+  },
   { name: 'ease-spring', value: 'linear', desc: '弹簧动画使用 JS 物理模拟' },
-  { name: 'ease-bounce', value: 'cubic-bezier(0.34, 1.56, 0.64, 1)', desc: '轻微回弹' },
+  {
+    name: 'ease-bounce',
+    value: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
+    desc: '轻微回弹',
+  },
 ]
 
 function renderDurations() {
@@ -95,13 +147,15 @@ function renderDurations() {
       </tr>
     </thead>
     <tbody>
-      ${DURATIONS.map((d, i) => `
+      ${DURATIONS.map(
+        (d, i) => `
         <tr style="border-bottom:1px solid var(--mk-border);${i % 2 === 0 ? 'background:var(--mk-surface);' : ''}">
           <td style="padding:10px 12px;color:var(--mk-text);font-family:var(--mk-font-mono);">${d.component}</td>
           <td style="padding:10px 12px;color:var(--mk-text);font-family:var(--mk-font-mono);">${d.ms}ms</td>
           <td style="padding:10px 12px;color:var(--mk-text-secondary);">${d.useCase}</td>
         </tr>
-      `).join('')}
+      `
+      ).join('')}
     </tbody>
   `
   el.appendChild(table)

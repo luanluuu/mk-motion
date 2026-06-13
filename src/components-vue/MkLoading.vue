@@ -16,7 +16,11 @@ withDefaults(defineProps<LoadingProps>(), {
   <div class="mk-loading" :class="{ 'is-fullscreen': fullscreen }">
     <slot />
     <Transition name="mk-loading-fade">
-      <div v-if="loading" class="mk-loading-mask" :class="{ 'is-fullscreen': fullscreen }">
+      <div
+        v-if="loading"
+        class="mk-loading-mask"
+        :class="{ 'is-fullscreen': fullscreen }"
+      >
         <div class="mk-loading__spinner" />
         <div v-if="text" class="mk-loading__text">{{ text }}</div>
       </div>
@@ -64,7 +68,9 @@ withDefaults(defineProps<LoadingProps>(), {
 }
 
 @keyframes mk-spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .mk-loading-fade-enter-active,

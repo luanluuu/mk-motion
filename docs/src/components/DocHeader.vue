@@ -27,7 +27,9 @@
           class="slider-container"
           @change="onSliderChange"
         />
-        <span class="theme-icon" title="亮色" @click="sliderValue = 100">☀️</span>
+        <span class="theme-icon" title="亮色" @click="sliderValue = 100"
+          >☀️</span
+        >
       </div>
     </div>
   </header>

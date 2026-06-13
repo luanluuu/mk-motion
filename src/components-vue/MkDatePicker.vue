@@ -42,11 +42,19 @@ function parseDate(str: string, fmt: string): Date | null {
   const day = parseInt(str.slice(dIndex, dIndex + 2), 10)
   if (isNaN(year) || isNaN(month) || isNaN(day)) return null
   const d = new Date(year, month - 1, day)
-  if (d.getFullYear() !== year || d.getMonth() !== month - 1 || d.getDate() !== day) return null
+  if (
+    d.getFullYear() !== year ||
+    d.getMonth() !== month - 1 ||
+    d.getDate() !== day
+  )
+    return null
   return d
 }
 
-function getMonthData(year: number, month: number): { date: Date; isCurrentMonth: boolean }[] {
+function getMonthData(
+  year: number,
+  month: number
+): { date: Date; isCurrentMonth: boolean }[] {
   const firstDay = new Date(year, month, 1)
   const start = new Date(year, month, 1 - firstDay.getDay())
   const days: { date: Date; isCurrentMonth: boolean }[] = []
@@ -59,16 +67,24 @@ function getMonthData(year: number, month: number): { date: Date; isCurrentMonth
 }
 
 function isSameDay(a: Date, b: Date): boolean {
-  return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate()
+  return (
+    a.getFullYear() === b.getFullYear() &&
+    a.getMonth() === b.getMonth() &&
+    a.getDate() === b.getDate()
+  )
 }
 
 const parsedValue = computed(() => {
   if (!props.modelValue) return null
-  return props.modelValue instanceof Date ? props.modelValue : parseDate(props.modelValue, props.format)
+  return props.modelValue instanceof Date
+    ? props.modelValue
+    : parseDate(props.modelValue, props.format)
 })
 
 const currentMonth = ref<Date>(
-  parsedValue.value ? new Date(parsedValue.value.getFullYear(), parsedValue.value.getMonth(), 1) : new Date()
+  parsedValue.value
+    ? new Date(parsedValue.value.getFullYear(), parsedValue.value.getMonth(), 1)
+    : new Date()
 )
 
 const isOpen = ref(false)
@@ -99,7 +115,11 @@ function open() {
   if (props.disabled) return
   isOpen.value = true
   if (parsedValue.value) {
-    currentMonth.value = new Date(parsedValue.value.getFullYear(), parsedValue.value.getMonth(), 1)
+    currentMonth.value = new Date(
+      parsedValue.value.getFullYear(),
+      parsedValue.value.getMonth(),
+      1
+    )
   }
 }
 
@@ -127,7 +147,8 @@ function onClickOutside(e: MouseEvent) {
 }
 
 watch(isOpen, (openValue) => {
-  if (openValue) document.addEventListener('click', onClickOutside, { capture: true })
+  if (openValue)
+    document.addEventListener('click', onClickOutside, { capture: true })
   else document.removeEventListener('click', onClickOutside, { capture: true })
 })
 
@@ -137,7 +158,11 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div ref="pickerRef" class="mk-datepicker" :class="{ 'is-disabled': disabled }">
+  <div
+    ref="pickerRef"
+    class="mk-datepicker"
+    :class="{ 'is-disabled': disabled }"
+  >
     <input
       type="text"
       class="mk-datepicker__input"
@@ -156,11 +181,24 @@ onUnmounted(() => {
           :style="calendarStyle"
         >
           <div class="mk-datepicker__header">
-            <button type="button" class="mk-datepicker__nav" @click.stop="changeMonth(-1)">‹</button>
+            <button
+              type="button"
+              class="mk-datepicker__nav"
+              @click.stop="changeMonth(-1)"
+            >
+              ‹
+            </button>
             <span class="mk-datepicker__title">
-              {{ currentMonth.getFullYear() }}年 {{ currentMonth.getMonth() + 1 }}月
+              {{ currentMonth.getFullYear() }}年
+              {{ currentMonth.getMonth() + 1 }}月
             </span>
-            <button type="button" class="mk-datepicker__nav" @click.stop="changeMonth(1)">›</button>
+            <button
+              type="button"
+              class="mk-datepicker__nav"
+              @click.stop="changeMonth(1)"
+            >
+              ›
+            </button>
           </div>
 
           <div class="mk-datepicker__weekdays">
@@ -175,7 +213,9 @@ onUnmounted(() => {
               :class="{
                 'is-other-month': !isCurrentMonth,
                 'is-today': isSameDay(date, today),
-                'is-selected': parsedValue ? isSameDay(date, parsedValue) : false,
+                'is-selected': parsedValue
+                  ? isSameDay(date, parsedValue)
+                  : false,
               }"
               @click.stop="selectDate(date)"
             >
@@ -324,7 +364,9 @@ onUnmounted(() => {
 
 .mk-datepicker-fade-enter-active,
 .mk-datepicker-fade-leave-active {
-  transition: opacity 0.15s ease, transform 0.15s ease;
+  transition:
+    opacity 0.15s ease,
+    transform 0.15s ease;
 }
 
 .mk-datepicker-fade-enter-from,
