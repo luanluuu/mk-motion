@@ -323,4 +323,245 @@ describe('DraggableList', () => {
     expect(dl).toBeInstanceOf(DraggableList)
     dl.destroy()
   })
+
+  it('performs a full vertical drag and calls onReorder', async () => {
+    const onReorder = vi.fn()
+    const onDragStart = vi.fn()
+    const onDragMove = vi.fn()
+    const onDragEnd = vi.fn()
+
+    container.innerHTML = `
+      <div data-draggable data-id="0" style="height:50px">Item 1</div>
+      <div data-draggable data-id="1" style="height:50px">Item 2</div>
+      <div data-draggable data-id="2" style="height:50px">Item 3</div>
+    `
+    const rects: Record<string, { top: number; height: number; left: number; width: number }> = {
+      '0': { top: 0, height: 50, left: 0, width: 100 },
+      '1': { top: 50, height: 50, left: 0, width: 100 },
+      '2': { top: 100, height: 50, left: 0, width: 100 },
+    }
+    const rectSpy = vi
+      .spyOn(Element.prototype, 'getBoundingClientRect')
+      .mockImplementation(function (this: Element) {
+        const id = (this as HTMLElement).dataset.id
+        const r = id ? rects[id] : { top: 0, height: 0, left: 0, width: 0 }
+        return {
+          top: r.top,
+          left: r.left,
+          bottom: r.top + r.height,
+          right: r.left + r.width,
+          width: r.width,
+          height: r.height,
+          x: r.left,
+          y: r.top,
+          toJSON: () => ({}),
+        }
+      })
+
+    const dl = new DraggableList(container, {
+      onReorder,
+      onDragStart,
+      onDragMove,
+      onDragEnd,
+    })
+
+    const item = container.querySelector('[data-id="0"]') as HTMLElement
+
+    // Start drag on first item
+    item.dispatchEvent(
+      new MouseEvent('mousedown', {
+        bubbles: true,
+        button: 0,
+        clientX: 10,
+        clientY: 10,
+      })
+    )
+    expect(onDragStart).toHaveBeenCalledWith(
+      expect.objectContaining({ index: 0, item })
+    )
+
+    // Move pointer below second item's midpoint (mid=75)
+    document.dispatchEvent(
+      new MouseEvent('mousemove', {
+        bubbles: true,
+        clientX: 10,
+        clientY: 90,
+      })
+    )
+    expect(onDragMove).toHaveBeenCalled()
+
+    // Release
+    document.dispatchEvent(
+      new MouseEvent('mouseup', {
+        bubbles: true,
+        clientX: 10,
+        clientY: 90,
+      })
+    )
+
+    // releaseToPlaceholder resolves via WAAPI .finished microtask
+    await Promise.resolve()
+
+    expect(onDragEnd).toHaveBeenCalledWith(
+      expect.objectContaining({ fromIndex: 0, toIndex: expect.any(Number) })
+    )
+    expect(onReorder).toHaveBeenCalledWith(0, expect.any(Number))
+
+    dl.destroy()
+    rectSpy.mockRestore()
+  })
+
+  it('supports horizontal drag', async () => {
+    container.innerHTML = `
+      <div data-draggable data-id="0" style="width:80px;display:inline-block">A</div>
+      <div data-draggable data-id="1" style="width:80px;display:inline-block">B</div>
+      <div data-draggable data-id="2" style="width:80px;display:inline-block">C</div>
+    `
+    const onReorder = vi.fn()
+    const rects: Record<string, { top: number; height: number; left: number; width: number }> = {
+      '0': { top: 0, height: 50, left: 0, width: 80 },
+      '1': { top: 0, height: 50, left: 80, width: 80 },
+      '2': { top: 0, height: 50, left: 160, width: 80 },
+    }
+    const rectSpy = vi
+      .spyOn(Element.prototype, 'getBoundingClientRect')
+      .mockImplementation(function (this: Element) {
+        const id = (this as HTMLElement).dataset.id
+        const r = id ? rects[id] : { top: 0, height: 0, left: 0, width: 0 }
+        return {
+          top: r.top,
+          left: r.left,
+          bottom: r.top + r.height,
+          right: r.left + r.width,
+          width: r.width,
+          height: r.height,
+          x: r.left,
+          y: r.top,
+          toJSON: () => ({}),
+        }
+      })
+
+    const dl = new DraggableList(container, {
+      direction: 'horizontal',
+      onReorder,
+    })
+    const item = container.querySelector('[data-id="0"]') as HTMLElement
+
+    item.dispatchEvent(
+      new MouseEvent('mousedown', {
+        bubbles: true,
+        button: 0,
+        clientX: 10,
+        clientY: 10,
+      })
+    )
+    document.dispatchEvent(
+      new MouseEvent('mousemove', {
+        bubbles: true,
+        clientX: 130,
+        clientY: 10,
+      })
+    )
+    document.dispatchEvent(
+      new MouseEvent('mouseup', {
+        bubbles: true,
+        clientX: 130,
+        clientY: 10,
+      })
+    )
+
+    await Promise.resolve()
+
+    expect(onReorder).toHaveBeenCalled()
+    dl.destroy()
+    rectSpy.mockRestore()
+  })
+
+  it('skips release animation when reducedMotion is true', () => {
+    const onReorder = vi.fn()
+    const dl = new DraggableList(container, {
+      reducedMotion: true,
+      onReorder,
+    })
+    const item = container.querySelector('[data-draggable]') as HTMLElement
+
+    item.dispatchEvent(
+      new MouseEvent('mousedown', {
+        bubbles: true,
+        button: 0,
+        clientX: 10,
+        clientY: 10,
+      })
+    )
+    document.dispatchEvent(
+      new MouseEvent('mousemove', {
+        bubbles: true,
+        clientX: 10,
+        clientY: 120,
+      })
+    )
+    document.dispatchEvent(
+      new MouseEvent('mouseup', {
+        bubbles: true,
+        clientX: 10,
+        clientY: 120,
+      })
+    )
+
+    expect(onReorder).toHaveBeenCalled()
+    dl.destroy()
+  })
+
+  it('cleans up when destroyed mid-drag', () => {
+    const dl = new DraggableList(container)
+    const item = container.querySelector('[data-draggable]') as HTMLElement
+
+    item.dispatchEvent(
+      new MouseEvent('mousedown', {
+        bubbles: true,
+        button: 0,
+        clientX: 10,
+        clientY: 10,
+      })
+    )
+    document.dispatchEvent(
+      new MouseEvent('mousemove', {
+        bubbles: true,
+        clientX: 10,
+        clientY: 80,
+      })
+    )
+
+    expect(() => dl.destroy()).not.toThrow()
+    expect(container.querySelector('[data-draggable]')).not.toBeNull()
+  })
+
+  it('supports touch events', () => {
+    const onDragStart = vi.fn()
+    const dl = new DraggableList(container, { onDragStart })
+    const item = container.querySelector('[data-draggable]') as HTMLElement
+
+    item.dispatchEvent(
+      new TouchEvent('touchstart', {
+        bubbles: true,
+        touches: [new Touch({ identifier: 1, target: item, clientX: 10, clientY: 10 })],
+      })
+    )
+    expect(onDragStart).toHaveBeenCalled()
+
+    document.dispatchEvent(
+      new TouchEvent('touchmove', {
+        bubbles: true,
+        touches: [new Touch({ identifier: 1, target: item, clientX: 10, clientY: 80 })],
+      })
+    )
+    document.dispatchEvent(
+      new TouchEvent('touchend', {
+        bubbles: true,
+        changedTouches: [new Touch({ identifier: 1, target: item, clientX: 10, clientY: 80 })],
+      })
+    )
+
+    dl.destroy()
+  })
 })

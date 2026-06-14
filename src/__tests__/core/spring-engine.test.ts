@@ -1,9 +1,15 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import {
   SpringValue,
+  SpringAnimation,
   parseColor,
   formatColor,
   parseTransformValue,
+  springTo,
+  springFromTo,
+  springSequence,
+  springParallel,
+  springStagger,
 } from '../../core/spring-engine'
 
 // ============================================================================
@@ -298,5 +304,370 @@ describe('parseTransformValue', () => {
   it('extracts rotateX and rotateY', () => {
     expect(parseTransformValue('rotateX(30deg)', 'rotateX')).toBe(30)
     expect(parseTransformValue('rotateY(45deg)', 'rotateY')).toBe(45)
+  })
+})
+
+// ============================================================================
+// SpringAnimation
+// ============================================================================
+
+describe('SpringAnimation', () => {
+  let rafCallbacks: FrameRequestCallback[] = []
+  let rafId = 0
+  let time = 0
+
+  beforeEach(() => {
+    rafCallbacks = []
+    rafId = 0
+    time = performance.now()
+    vi.stubGlobal('requestAnimationFrame', (cb: FrameRequestCallback) => {
+      rafCallbacks.push(cb)
+      return ++rafId
+    })
+    vi.stubGlobal('cancelAnimationFrame', () => {})
+  })
+
+  afterEach(() => {
+    vi.unstubAllGlobals()
+  })
+
+  function flushUntilDone(maxFrames = 500, dt = 16) {
+    for (let i = 0; i < maxFrames; i++) {
+      const callbacks = [...rafCallbacks]
+      rafCallbacks = []
+      if (callbacks.length === 0) return
+      time += dt
+      callbacks.forEach((cb) => cb(time))
+    }
+  }
+
+  it('constructs from an HTMLElement and throws for missing selector target', () => {
+    const el = document.createElement('div')
+    const anim = new SpringAnimation(el, { x: 0 }, { x: 100 })
+    expect(anim).toBeInstanceOf(SpringAnimation)
+
+    expect(
+      () => new SpringAnimation('#nonexistent', { x: 0 }, { x: 100 })
+    ).toThrow('SpringAnimation: target element not found')
+  })
+
+  it('plays and resolves when settled', async () => {
+    const el = document.createElement('div')
+    const onComplete = vi.fn()
+    const onUpdate = vi.fn()
+
+    const anim = new SpringAnimation(
+      el,
+      { x: 0 },
+      { x: 100 },
+      { stiffness: 170, damping: 26, precision: 0.5 }
+    )
+      .onComplete(onComplete)
+      .onUpdate(onUpdate)
+
+    const promise = anim.play()
+    flushUntilDone()
+    await promise
+
+    expect(onComplete).toHaveBeenCalled()
+    expect(onUpdate).toHaveBeenCalled()
+    expect(el.style.transform).toContain('translateX(100px)')
+  })
+
+  it('returns the same promise when already running', async () => {
+    const el = document.createElement('div')
+    const anim = new SpringAnimation(el, { x: 0 }, { x: 100 })
+    const p1 = anim.play()
+    const p2 = anim.play()
+    expect(p1).toBe(p2)
+    flushUntilDone()
+    await p1
+  })
+
+  it('stops animation and resolves promise', async () => {
+    const el = document.createElement('div')
+    const anim = new SpringAnimation(el, { x: 0 }, { x: 100 })
+    const promise = anim.play()
+    anim.stop()
+    await promise
+    expect(el.style.transform).not.toContain('translateX(100px)')
+  })
+
+  it('pauses and resumes', async () => {
+    const el = document.createElement('div')
+    const anim = new SpringAnimation(
+      el,
+      { x: 0 },
+      { x: 100 },
+      { stiffness: 170, damping: 26, precision: 0.5 }
+    )
+    const promise = anim.play()
+    flushUntilDone(20)
+    anim.pause()
+    const pausedTransform = el.style.transform
+
+    anim.resume()
+    flushUntilDone()
+    await promise
+    expect(el.style.transform).toContain('translateX(100px)')
+    expect(el.style.transform).not.toBe(pausedTransform)
+  })
+
+  it('seeks to a specific progress', () => {
+    const el = document.createElement('div')
+    const anim = new SpringAnimation(el, { x: 0 }, { x: 100 })
+    anim.seek(0.5)
+    expect(el.style.transform).toContain('translateX(50px)')
+  })
+
+  it('setTo changes target and plays', async () => {
+    const el = document.createElement('div')
+    const anim = new SpringAnimation(
+      el,
+      { x: 0 },
+      { x: 50 },
+      { stiffness: 170, damping: 26, precision: 0.5 }
+    )
+    const promise = anim.play()
+    flushUntilDone(50)
+    anim.setTo({ x: 100 })
+    flushUntilDone()
+    await promise
+    expect(el.style.transform).toContain('translateX(100px)')
+  })
+
+  it('animates numeric properties like width and opacity', async () => {
+    const el = document.createElement('div')
+    const anim = new SpringAnimation(
+      el,
+      { width: 0, opacity: 0 },
+      { width: 200, opacity: 1 },
+      { stiffness: 170, damping: 26, precision: 0.5 }
+    )
+    const promise = anim.play()
+    flushUntilDone()
+    await promise
+    expect(el.style.width).toBe('200px')
+    expect(el.style.opacity).toBe('1')
+  })
+
+  it('animates background color', async () => {
+    const el = document.createElement('div')
+    const anim = new SpringAnimation(
+      el,
+      { backgroundColor: '#000000' },
+      { backgroundColor: '#ff0000' },
+      { stiffness: 170, damping: 26, precision: 0.5 }
+    )
+    const promise = anim.play()
+    flushUntilDone()
+    await promise
+    expect(el.style.backgroundColor).toContain('rgb')
+  })
+
+  it('ignores unknown properties', async () => {
+    const el = document.createElement('div')
+    const anim = new SpringAnimation(
+      el,
+      { x: 0 },
+      // @ts-expect-error unknown prop on purpose
+      { x: 100, unknownProp: 50 }
+    )
+    const promise = anim.play()
+    flushUntilDone()
+    await promise
+    expect(el.style.transform).toContain('translateX(100px)')
+  })
+
+  it('destroy stops and cleans up', () => {
+    const el = document.createElement('div')
+    const anim = new SpringAnimation(el, { x: 0 }, { x: 100 })
+    anim.play()
+    anim.destroy()
+    expect(() => flushUntilDone(10)).not.toThrow()
+  })
+})
+
+// ============================================================================
+// Convenience functions
+// ============================================================================
+
+describe('springTo / springFromTo', () => {
+  let rafCallbacks: FrameRequestCallback[] = []
+  let rafId = 0
+  let time = 0
+
+  beforeEach(() => {
+    rafCallbacks = []
+    rafId = 0
+    time = performance.now()
+    vi.stubGlobal('requestAnimationFrame', (cb: FrameRequestCallback) => {
+      rafCallbacks.push(cb)
+      return ++rafId
+    })
+    vi.stubGlobal('cancelAnimationFrame', () => {})
+  })
+
+  afterEach(() => {
+    vi.unstubAllGlobals()
+  })
+
+  function flushUntilDone(maxFrames = 500, dt = 16) {
+    for (let i = 0; i < maxFrames; i++) {
+      const callbacks = [...rafCallbacks]
+      rafCallbacks = []
+      if (callbacks.length === 0) return
+      time += dt
+      callbacks.forEach((cb) => cb(time))
+    }
+  }
+
+  it('springTo animates from current value', async () => {
+    const el = document.createElement('div')
+    el.style.transform = 'translateX(10px)'
+    const promise = springTo(
+      el,
+      { x: 100 },
+      { stiffness: 170, damping: 26, precision: 0.5 }
+    )
+    flushUntilDone()
+    await promise
+    expect(el.style.transform).toContain('translateX(100px)')
+  })
+
+  it('springFromTo animates from explicit value', async () => {
+    const el = document.createElement('div')
+    const promise = springFromTo(
+      el,
+      { x: 0 },
+      { x: 100 },
+      { stiffness: 170, damping: 26, precision: 0.5 }
+    )
+    flushUntilDone()
+    await promise
+    expect(el.style.transform).toContain('translateX(100px)')
+  })
+})
+
+describe('springSequence / springParallel / springStagger', () => {
+  let rafCallbacks: FrameRequestCallback[] = []
+  let rafId = 0
+  let time = 0
+
+  beforeEach(() => {
+    rafCallbacks = []
+    rafId = 0
+    time = performance.now()
+    vi.stubGlobal('requestAnimationFrame', (cb: FrameRequestCallback) => {
+      rafCallbacks.push(cb)
+      return ++rafId
+    })
+    vi.stubGlobal('cancelAnimationFrame', () => {})
+  })
+
+  afterEach(() => {
+    vi.unstubAllGlobals()
+  })
+
+  function flushUntilDone(maxFrames = 800, dt = 16) {
+    for (let i = 0; i < maxFrames; i++) {
+      const callbacks = [...rafCallbacks]
+      rafCallbacks = []
+      if (callbacks.length === 0) return
+      time += dt
+      callbacks.forEach((cb) => cb(time))
+    }
+  }
+
+  it('springSequence runs steps in order', async () => {
+    const el = document.createElement('div')
+
+    const promise = springSequence([
+      {
+        target: el,
+        from: { x: 0 },
+        to: { x: 50 },
+        options: { stiffness: 170, damping: 26, precision: 0.5 },
+      },
+      {
+        target: el,
+        from: { x: 50 },
+        to: { x: 100 },
+        options: { stiffness: 170, damping: 26, precision: 0.5 },
+      },
+    ])
+    flushUntilDone()
+    await Promise.resolve()
+    flushUntilDone()
+    await promise
+    expect(el.style.transform).toContain('translateX(100px)')
+  })
+
+  it('springParallel runs steps concurrently', async () => {
+    const a = document.createElement('div')
+    const b = document.createElement('div')
+
+    const promise = springParallel([
+      {
+        target: a,
+        from: { x: 0 },
+        to: { x: 100 },
+        options: { stiffness: 170, damping: 26, precision: 0.5 },
+      },
+      {
+        target: b,
+        from: { x: 0 },
+        to: { x: 200 },
+        options: { stiffness: 170, damping: 26, precision: 0.5 },
+      },
+    ])
+    flushUntilDone()
+    await promise
+    expect(a.style.transform).toContain('translateX(100px)')
+    expect(b.style.transform).toContain('translateX(200px)')
+  })
+
+  it('springStagger animates elements with delay and order', async () => {
+    vi.useFakeTimers()
+    const parent = document.createElement('div')
+    const els = [document.createElement('div'), document.createElement('div')]
+    els.forEach((el) => parent.appendChild(el))
+
+    const promise = springStagger(
+      els,
+      { x: 100 },
+      { delay: 10, stiffness: 170, damping: 26, precision: 0.5 }
+    )
+    flushUntilDone()
+    vi.advanceTimersByTimeAsync(1000)
+    await promise
+    els.forEach((el) => {
+      expect(el.style.transform).toContain('translateX(100px)')
+    })
+    vi.useRealTimers()
+  })
+
+  it('springStagger supports from=center and from=last', async () => {
+    vi.useFakeTimers()
+    const parent = document.createElement('div')
+    const els = [
+      document.createElement('div'),
+      document.createElement('div'),
+      document.createElement('div'),
+    ]
+    els.forEach((el) => parent.appendChild(el))
+
+    const promise = springStagger(
+      els,
+      { x: 100 },
+      { delay: 0, from: 'last', stiffness: 170, damping: 26, precision: 0.5 }
+    )
+    flushUntilDone()
+    vi.advanceTimersByTimeAsync(1000)
+    await promise
+    els.forEach((el) => {
+      expect(el.style.transform).toContain('translateX(100px)')
+    })
+    vi.useRealTimers()
   })
 })

@@ -16,7 +16,7 @@ export class TapRecognizer {
   private startY = 0
   private startTime = 0
   private longPressTimer: ReturnType<typeof setTimeout> | null = null
-  private lastTapTime = 0
+  private lastTapTime = -Infinity
   private moved = false
   private tapThreshold = 10
   private tapTimeThreshold = 300
@@ -62,7 +62,7 @@ export class TapRecognizer {
 
     this.element.addEventListener('pointermove', this.onPointerMove)
     this.element.addEventListener('pointerup', this.onPointerUp)
-    this.element.addEventListener('pointercancel', this.onPointerUp)
+    this.element.addEventListener('pointercancel', this.onPointerCancel)
   }
 
   private onPointerMove = (e: PointerEvent) => {
@@ -86,7 +86,7 @@ export class TapRecognizer {
         now - this.lastTapTime < this.doubleTapWindow &&
         this.options.onDoubleTap
       ) {
-        this.lastTapTime = 0
+        this.lastTapTime = -Infinity
         this.options.onDoubleTap()
       } else {
         this.lastTapTime = now
@@ -106,6 +106,12 @@ export class TapRecognizer {
     this.cleanupPointer()
   }
 
+  private onPointerCancel = (e: PointerEvent) => {
+    if (e.pointerId !== this.pointerId) return
+    this.clearLongPress()
+    this.cleanupPointer()
+  }
+
   private clearLongPress(): void {
     if (this.longPressTimer) {
       clearTimeout(this.longPressTimer)
@@ -120,7 +126,7 @@ export class TapRecognizer {
     }
     this.element.removeEventListener('pointermove', this.onPointerMove)
     this.element.removeEventListener('pointerup', this.onPointerUp)
-    this.element.removeEventListener('pointercancel', this.onPointerUp)
+    this.element.removeEventListener('pointercancel', this.onPointerCancel)
   }
 
   destroy(): void {

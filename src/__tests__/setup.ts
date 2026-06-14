@@ -33,6 +33,36 @@ if (!Element.prototype.animate) {
 HTMLCanvasElement.prototype.getContext = (() =>
   null) as typeof HTMLCanvasElement.prototype.getContext
 
+// jsdom doesn't expose Touch constructor by default
+if (typeof Touch === 'undefined') {
+  class TouchMock {
+    identifier: number
+    target: EventTarget
+    clientX: number
+    clientY: number
+    pageX: number
+    pageY: number
+    screenX: number
+    screenY: number
+
+    constructor(init: TouchInit) {
+      this.identifier = init.identifier ?? 0
+      this.target = init.target ?? null
+      this.clientX = init.clientX ?? 0
+      this.clientY = init.clientY ?? 0
+      this.pageX = init.pageX ?? this.clientX
+      this.pageY = init.pageY ?? this.clientY
+      this.screenX = init.screenX ?? this.clientX
+      this.screenY = init.screenY ?? this.clientY
+    }
+  }
+
+  declare global {
+    var Touch: typeof TouchMock
+  }
+  globalThis.Touch = TouchMock as unknown as typeof Touch
+}
+
 // jsdom doesn't support AnimationEvent by default
 if (typeof AnimationEvent === 'undefined') {
   class AnimationEventMock extends Event {

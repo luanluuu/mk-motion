@@ -172,6 +172,108 @@ describe('gesture/Draggable', () => {
 
     draggable.destroy()
   })
+
+  it('respects y axis option', () => {
+    const el = document.createElement('div')
+    const onDrag = vi.fn()
+
+    const draggable = new Draggable(el, { axis: 'y', onDrag })
+
+    el.dispatchEvent(
+      new PointerEvent('pointerdown', {
+        clientX: 0,
+        clientY: 0,
+        pointerId: 1,
+        bubbles: true,
+      })
+    )
+    el.dispatchEvent(
+      new PointerEvent('pointermove', {
+        clientX: 40,
+        clientY: 20,
+        pointerId: 1,
+        bubbles: true,
+      })
+    )
+
+    expect(onDrag).toHaveBeenCalledWith(0, 20)
+    expect(el.style.transform).toBe('translate3d(0px, 20px, 0)')
+
+    draggable.destroy()
+  })
+
+  it('respects bounds option', () => {
+    const el = document.createElement('div')
+    const bounds = document.createElement('div')
+    document.body.appendChild(bounds)
+
+    vi.spyOn(bounds, 'getBoundingClientRect').mockReturnValue({
+      left: 0,
+      top: 0,
+      right: 100,
+      bottom: 100,
+      width: 100,
+      height: 100,
+      x: 0,
+      y: 0,
+      toJSON: () => ({}),
+    })
+    vi.spyOn(el, 'getBoundingClientRect').mockReturnValue({
+      left: 10,
+      top: 10,
+      right: 30,
+      bottom: 30,
+      width: 20,
+      height: 20,
+      x: 10,
+      y: 10,
+      toJSON: () => ({}),
+    })
+
+    const draggable = new Draggable(el, { bounds })
+
+    el.dispatchEvent(
+      new PointerEvent('pointerdown', {
+        clientX: 15,
+        clientY: 15,
+        pointerId: 1,
+        bubbles: true,
+      })
+    )
+    el.dispatchEvent(
+      new PointerEvent('pointermove', {
+        clientX: 200,
+        clientY: 200,
+        pointerId: 1,
+        bubbles: true,
+      })
+    )
+
+    const transform = el.style.transform
+    expect(transform).toContain('translate3d(')
+    expect(transform).not.toContain('translate3d(190px')
+
+    draggable.destroy()
+    bounds.remove()
+  })
+
+  it('releases pointer capture on destroy', () => {
+    const el = document.createElement('div')
+    const releaseSpy = vi.spyOn(el, 'releasePointerCapture')
+
+    const draggable = new Draggable(el)
+    el.dispatchEvent(
+      new PointerEvent('pointerdown', {
+        clientX: 0,
+        clientY: 0,
+        pointerId: 1,
+        bubbles: true,
+      })
+    )
+    draggable.destroy()
+
+    expect(releaseSpy).toHaveBeenCalledWith(1)
+  })
 })
 
 describe('gesture/TapRecognizer', () => {
@@ -264,5 +366,124 @@ describe('gesture/TapRecognizer', () => {
     expect(onLongPress).not.toHaveBeenCalled()
 
     recognizer.destroy()
+  })
+
+  it('calls onDoubleTap for two quick taps', () => {
+    const el = document.createElement('div')
+    const onDoubleTap = vi.fn()
+    const recognizer = new TapRecognizer(el, { onDoubleTap })
+
+    el.dispatchEvent(
+      new PointerEvent('pointerdown', {
+        clientX: 0,
+        clientY: 0,
+        pointerId: 1,
+        bubbles: true,
+      })
+    )
+    el.dispatchEvent(
+      new PointerEvent('pointerup', {
+        clientX: 0,
+        clientY: 0,
+        pointerId: 1,
+        bubbles: true,
+      })
+    )
+
+    el.dispatchEvent(
+      new PointerEvent('pointerdown', {
+        clientX: 0,
+        clientY: 0,
+        pointerId: 1,
+        bubbles: true,
+      })
+    )
+    el.dispatchEvent(
+      new PointerEvent('pointerup', {
+        clientX: 0,
+        clientY: 0,
+        pointerId: 1,
+        bubbles: true,
+      })
+    )
+
+    expect(onDoubleTap).toHaveBeenCalled()
+    recognizer.destroy()
+  })
+
+  it('delays single tap when double tap handler is set', () => {
+    const el = document.createElement('div')
+    const onTap = vi.fn()
+    const onDoubleTap = vi.fn()
+    const recognizer = new TapRecognizer(el, { onTap, onDoubleTap })
+
+    el.dispatchEvent(
+      new PointerEvent('pointerdown', {
+        clientX: 0,
+        clientY: 0,
+        pointerId: 1,
+        bubbles: true,
+      })
+    )
+    el.dispatchEvent(
+      new PointerEvent('pointerup', {
+        clientX: 0,
+        clientY: 0,
+        pointerId: 1,
+        bubbles: true,
+      })
+    )
+
+    expect(onTap).not.toHaveBeenCalled()
+    vi.advanceTimersByTime(350)
+    expect(onTap).toHaveBeenCalled()
+
+    recognizer.destroy()
+  })
+
+  it('cancels tap on pointercancel', () => {
+    const el = document.createElement('div')
+    const onTap = vi.fn()
+    const recognizer = new TapRecognizer(el, { onTap })
+
+    el.dispatchEvent(
+      new PointerEvent('pointerdown', {
+        clientX: 0,
+        clientY: 0,
+        pointerId: 1,
+        bubbles: true,
+      })
+    )
+    el.dispatchEvent(
+      new PointerEvent('pointercancel', {
+        clientX: 0,
+        clientY: 0,
+        pointerId: 1,
+        bubbles: true,
+      })
+    )
+
+    vi.advanceTimersByTime(350)
+    expect(onTap).not.toHaveBeenCalled()
+
+    recognizer.destroy()
+  })
+
+  it('cleans up listeners on destroy', () => {
+    const el = document.createElement('div')
+    const removeSpy = vi.spyOn(el, 'removeEventListener')
+    const recognizer = new TapRecognizer(el, {})
+
+    el.dispatchEvent(
+      new PointerEvent('pointerdown', {
+        clientX: 0,
+        clientY: 0,
+        pointerId: 1,
+        bubbles: true,
+      })
+    )
+    recognizer.destroy()
+
+    expect(removeSpy).toHaveBeenCalled()
   })
 })
