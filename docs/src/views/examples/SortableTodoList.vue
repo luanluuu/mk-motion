@@ -65,8 +65,8 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, nextTick } from 'vue'
-import { createDraggableList, spring } from 'mk-motion'
-import type { DraggableListOptions } from 'mk-motion'
+import { createDraggableList, spring } from '@luanlu/mk-motion'
+import type { DraggableListOptions } from '@luanlu/mk-motion'
 
 interface Todo {
   id: number

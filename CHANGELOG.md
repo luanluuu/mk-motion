@@ -12,6 +12,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Expand test coverage: `spring-engine`, `Timeline`, `DraggableList`, `Draggable`, and `TapRecognizer`.
 - Add Touch constructor mock to jsdom test environment.
 
+### Changed
+
+- Make `docs/` a standalone deployable sub-project with its own `package.json` and dependency on `@luanlu/mk-motion`.
+- Update documentation imports from `mk-motion` to `@luanlu/mk-motion`.
+- Align entries build CSS output name with package exports (`dist/style.css`).
+
 ### Fixed
 
 - Fix `TapRecognizer` first-tap misdetected as double-tap when `performance.now()` is near zero.

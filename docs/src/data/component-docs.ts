@@ -28,7 +28,7 @@ import {
   createAside,
   createMain,
   createFooter,
-} from 'mk-motion/legacy'
+} from '@luanlu/mk-motion/legacy'
 import {
   MkSelect,
   MkCheckbox,
@@ -36,7 +36,7 @@ import {
   MkRadioGroup,
   MkSlider,
   MkTable,
-} from 'mk-motion/vue'
+} from '@luanlu/mk-motion/vue'
 
 export interface ComponentDoc {
   title: string

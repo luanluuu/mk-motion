@@ -1,4 +1,4 @@
-import { particleBurst, splitText, waveText, glitch } from 'mk-motion'
+import { particleBurst, splitText, waveText, glitch } from '@luanlu/mk-motion'
 
 export function renderEffects(container?: HTMLElement) {
   document.getElementById('toc')!.style.display = 'none'
@@ -42,7 +42,7 @@ export function renderEffects(container?: HTMLElement) {
     </div>
 
     <h2 class="doc-h2">代码示例</h2>
-    <pre class="doc-code-block"><code>import { particleBurst, splitText, waveText, glitch } from 'mk-motion'
+    <pre class="doc-code-block"><code>import { particleBurst, splitText, waveText, glitch } from '@luanlu/mk-motion'
 
 // 粒子爆炸
 particleBurst({ x: 100, y: 100, colors: ['#f56c6c', '#67c23a'] })

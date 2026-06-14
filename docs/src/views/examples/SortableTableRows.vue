@@ -66,8 +66,8 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
-import { createDraggableList } from 'mk-motion'
-import type { DraggableListOptions } from 'mk-motion'
+import { createDraggableList } from '@luanlu/mk-motion'
+import type { DraggableListOptions } from '@luanlu/mk-motion'
 
 interface TableRow {
   id: number

@@ -74,7 +74,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { countUp } from 'mk-motion'
+import { countUp } from '@luanlu/mk-motion'
 
 interface StatItem {
   label: string

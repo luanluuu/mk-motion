@@ -12,8 +12,8 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
-import { MkMenu } from 'mk-motion/vue'
-import type { MenuItem } from 'mk-motion/vue'
+import { MkMenu } from '@luanlu/mk-motion/vue'
+import type { MenuItem } from '@luanlu/mk-motion/vue'
 import { sidebarMenuItems } from '../data/nav.js'
 import { goTo } from '../router.js'
 

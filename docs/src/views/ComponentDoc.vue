@@ -32,7 +32,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, watch, nextTick } from 'vue'
-import { MkTable } from 'mk-motion/vue'
+import { MkTable } from '@luanlu/mk-motion/vue'
 import {
   componentDocs,
   type ComponentDoc,

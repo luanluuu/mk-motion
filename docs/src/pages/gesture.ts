@@ -5,7 +5,7 @@ import {
   PinchRecognizer,
   spring,
   elasticScale,
-} from 'mk-motion'
+} from '@luanlu/mk-motion'
 
 export function renderGesture(container?: HTMLElement) {
   document.getElementById('toc')!.style.display = 'none'
@@ -57,7 +57,7 @@ export function renderGesture(container?: HTMLElement) {
     </div>
 
     <h2 class="doc-h2">代码示例</h2>
-    <pre class="doc-code-block"><code>import { Draggable, TapRecognizer, SwipeRecognizer, PinchRecognizer, elasticScale } from 'mk-motion'
+    <pre class="doc-code-block"><code>import { Draggable, TapRecognizer, SwipeRecognizer, PinchRecognizer, elasticScale } from '@luanlu/mk-motion'
 
 // 拖拽
 const draggable = new Draggable('#box', {

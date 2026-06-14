@@ -76,7 +76,7 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import { flip } from 'mk-motion'
+import { flip } from '@luanlu/mk-motion'
 
 interface PageData {
   id: string

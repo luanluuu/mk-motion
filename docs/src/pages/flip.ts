@@ -4,7 +4,7 @@ import {
   sortGrid,
   shuffleGrid,
   DraggableList,
-} from 'mk-motion'
+} from '@luanlu/mk-motion'
 
 export function renderFlip(container?: HTMLElement) {
   document.getElementById('toc')!.style.display = 'none'
@@ -15,7 +15,7 @@ export function renderFlip(container?: HTMLElement) {
 
     <h2 class="doc-h2">🔄 核心 flip</h2>
     <p class="doc-p">记录元素初始位置 → 应用变化 → 通过 transform 动画回到新位置。</p>
-    <pre class="doc-code-block"><code>import { flip } from 'mk-motion'
+    <pre class="doc-code-block"><code>import { flip } from '@luanlu/mk-motion'
 
 await flip(container, () => {
   // 改变 DOM 顺序或样式
@@ -59,7 +59,7 @@ await flip(container, () => {
     </div>
 
     <h2 class="doc-h2">API 速查</h2>
-    <pre class="doc-code-block"><code>import { flip, filterGrid, sortGrid, shuffleGrid, DraggableList } from 'mk-motion'
+    <pre class="doc-code-block"><code>import { flip, filterGrid, sortGrid, shuffleGrid, DraggableList } from '@luanlu/mk-motion'
 
 // 筛选
 filterGrid(container, '[data-item]', () => {

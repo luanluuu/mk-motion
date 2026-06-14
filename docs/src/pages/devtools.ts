@@ -1,4 +1,4 @@
-import { setupMkMotionDevTools } from 'mk-motion'
+import { setupMkMotionDevTools } from '@luanlu/mk-motion'
 
 export function renderDevTools(container?: HTMLElement) {
   document.getElementById('toc')!.style.display = 'none'
@@ -9,7 +9,7 @@ export function renderDevTools(container?: HTMLElement) {
 
     <h2 class="doc-h2">🚀 启用方式</h2>
     <p class="doc-p">在应用入口调用一次 <code class="doc-code-inline">setupMkMotionDevTools()</code> 即可。</p>
-    <pre class="doc-code-block"><code>import { setupMkMotionDevTools } from 'mk-motion'
+    <pre class="doc-code-block"><code>import { setupMkMotionDevTools } from '@luanlu/mk-motion'
 
 setupMkMotionDevTools()
 </code></pre>

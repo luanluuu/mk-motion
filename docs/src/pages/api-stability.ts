@@ -6,7 +6,7 @@ export function renderApiStability(container?: HTMLElement) {
   const main = container || document.getElementById('main')!
   main.innerHTML = `
     <h1 class="doc-h1">API 稳定性</h1>
-    <p class="doc-p">mk-motion 的所有公开 API 分为三个稳定性级别。选择适合你风险偏好的 API。</p>
+    <p class="doc-p">@luanlu/mk-motion 的所有公开 API 分为三个稳定性级别。选择适合你风险偏好的 API。</p>
 
     <h2 class="doc-h2" id="levels">稳定性级别</h2>
     <div id="stability-levels"></div>

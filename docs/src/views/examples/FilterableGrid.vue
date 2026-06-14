@@ -75,7 +75,7 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import { shuffleGrid, sortGrid } from 'mk-motion'
+import { shuffleGrid, sortGrid } from '@luanlu/mk-motion'
 
 interface Card {
   id: number

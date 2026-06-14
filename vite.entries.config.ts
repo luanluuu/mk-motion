@@ -23,16 +23,10 @@ export default defineConfig({
       },
       formats: ['es'],
       fileName: (_format, entryName) => `${entryName}.js`,
-      cssFileName: 'entries',
+      cssFileName: 'style',
     },
     rollupOptions: {
       external: ['vue', 'vite', '@nuxt/kit'],
-      output: {
-        assetFileNames: (assetInfo) => {
-          if (assetInfo.name === 'style.css') return 'entries.css'
-          return 'assets/[name]-[hash][extname]'
-        },
-      },
     },
     cssCodeSplit: false,
   },

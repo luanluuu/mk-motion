@@ -1,4 +1,4 @@
-import { createButton } from 'mk-motion/legacy'
+import { createButton } from '@luanlu/mk-motion/legacy'
 import {
   Animator,
   withMotion,
@@ -10,7 +10,7 @@ import {
   filterGrid,
   shuffleGrid,
   DraggableList,
-} from 'mk-motion'
+} from '@luanlu/mk-motion'
 
 // ─── Inline: Typewriter ───────────────────────────────────────────
 function typeWrite(el: HTMLElement, text: string, speed = 60) {
