@@ -1,5 +1,6 @@
 name: CI/CD
 
+# Trigger on push/PR to main and master branches
 on:
   push:
     branches:
