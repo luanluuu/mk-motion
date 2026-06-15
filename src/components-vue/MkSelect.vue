@@ -15,6 +15,7 @@ interface Props {
   disabled?: boolean
   clearable?: boolean
   filterable?: boolean
+  size?: 'small' | 'default' | 'large'
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -23,6 +24,7 @@ const props = withDefaults(defineProps<Props>(), {
   multiple: false,
   clearable: false,
   filterable: false,
+  size: 'default',
 })
 
 type ModelValue = string | number | (string | number)[] | undefined
@@ -164,6 +166,7 @@ onUnmounted(() => {
       'is-filterable': filterable,
       'is-open': isOpen,
       'is-disabled': disabled,
+      [`mk-select--${size}`]: true,
     }"
   >
     <div
@@ -403,5 +406,45 @@ onUnmounted(() => {
 .mk-select-fade-leave-to {
   opacity: 0;
   transform: translateY(-4px);
+}
+
+.mk-select--small .mk-select__trigger {
+  height: 28px;
+  padding: 0 28px 0 10px;
+  font-size: 12px;
+}
+
+.mk-select--small .mk-select__search-input {
+  right: 28px;
+  padding: 0 10px;
+  font-size: 12px;
+}
+
+.mk-select--small .mk-select__arrow {
+  right: 8px;
+}
+
+.mk-select--small .mk-select__clear {
+  right: 20px;
+}
+
+.mk-select--large .mk-select__trigger {
+  height: 44px;
+  padding: 0 40px 0 14px;
+  font-size: 14px;
+}
+
+.mk-select--large .mk-select__search-input {
+  right: 40px;
+  padding: 0 14px;
+  font-size: 14px;
+}
+
+.mk-select--large .mk-select__arrow {
+  right: 12px;
+}
+
+.mk-select--large .mk-select__clear {
+  right: 28px;
 }
 </style>

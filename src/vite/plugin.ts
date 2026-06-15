@@ -3,8 +3,13 @@ import type { Plugin } from 'vite'
 export interface MkMotionOptions {
   /** Components to auto-import. Defaults to all. */
   components?: string[]
-  /** Auto-import component CSS */
-  importStyle?: boolean
+  /**
+   * Auto-import component CSS.
+   * - `true` (default): import the full `@luanlu/mk-motion/css`
+   * - `'component'`: import base styles plus each used component's CSS only
+   * - `false`: do not import CSS
+   */
+  importStyle?: boolean | 'component'
   /** Inject composables (useMkTheme, useMkMotion, etc.) */
   composables?: boolean
 }
@@ -70,7 +75,12 @@ const MK_VUE_SOURCE_RE = /@luanlu\/mk-motion\/vue|mk-motion\/vue/
 
 export function mkMotion(options: MkMotionOptions = {}): Plugin {
   const components = options.components || ALL_COMPONENTS
-  const importStyle = options.importStyle !== false
+  const importStyle: boolean | 'component' =
+    options.importStyle === false
+      ? false
+      : options.importStyle === 'component'
+        ? 'component'
+        : true
   const enableComposables = options.composables !== false
 
   return {
@@ -115,18 +125,30 @@ export function mkMotion(options: MkMotionOptions = {}): Plugin {
             code.match(/<script\s+setup[^>]*>/i) || code.match(/<script[^>]*>/i)
           if (scriptMatch) {
             const insertPos = scriptMatch.index! + scriptMatch[0].length
-            // Only add CSS import if not already present
-            const cssImportLine =
+            // Add CSS import(s) if not already present
+            let cssImportLines = ''
+            if (
               importStyle &&
               !code.includes('@luanlu/mk-motion/css') &&
               !code.includes('mk-motion/css')
-                ? `\nimport '@luanlu/mk-motion/css'`
-                : ''
+            ) {
+              if (importStyle === 'component') {
+                cssImportLines = `\nimport '@luanlu/mk-motion/css/base'`
+                for (const name of usedComponents) {
+                  const kebab = name
+                    .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
+                    .toLowerCase()
+                  cssImportLines += `\nimport '@luanlu/mk-motion/css/${kebab}'`
+                }
+              } else {
+                cssImportLines = `\nimport '@luanlu/mk-motion/css'`
+              }
+            }
             transformed =
               transformed.slice(0, insertPos) +
               '\n' +
               importLine +
-              cssImportLine +
+              cssImportLines +
               '\n' +
               transformed.slice(insertPos)
             hasChanges = true

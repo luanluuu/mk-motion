@@ -2,15 +2,15 @@
 import { computed, ref, watch, nextTick } from 'vue'
 import MkPagination from './MkPagination.vue'
 
-export interface TableColumn {
-  key: string
+export interface TableColumn<T extends Record<string, unknown> = Record<string, unknown>> {
+  key: keyof T & string
   title: string
   width?: string
   sortable?: boolean
   editable?: boolean
   render?: (
-    value: unknown,
-    row: Record<string, unknown>,
+    value: T[keyof T],
+    row: T,
     index: number
   ) => HTMLElement | string
 }
@@ -41,13 +41,14 @@ const emit = defineEmits<{
 defineSlots<
   {
     empty?: () => unknown
-  } & {
-    [K in `column-${string}`]?: (props: {
-      value: unknown
-      row: Record<string, unknown>
-      index: number
-    }) => unknown
-  }
+  } & Record<
+      `column-${string}`,
+      (props: {
+        value: unknown
+        row: Record<string, unknown>
+        index: number
+      }) => unknown
+    >
 >()
 
 const currentPageModel = defineModel<number>('currentPage', { default: 1 })

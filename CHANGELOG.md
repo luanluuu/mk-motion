@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- `MkSelect` now supports `size` prop (`small` | `default` | `large`).
+- `MkTable` exports generic `TableColumn<T>` type for typed column definitions.
+- Dev-mode CSS variable check: warns when `--mk-primary`, `--mk-text`, `--mk-border`, or `--mk-surface` are missing.
+- Per-component CSS entries under `dist/css/*` and `mkMotion({ importStyle: 'component' })` for on-demand styles.
+- Semantic color hover/active variables: `--mk-success-hover`, `--mk-success-active`, `--mk-warning-hover`, `--mk-warning-active`, `--mk-danger-hover`, `--mk-danger-active`, `--mk-info-hover`, `--mk-info-active`.
+
+### Changed
+
+- `dist/style.css` now includes the full `:root` theme tokens, so `import '@luanlu/mk-motion/css'` works standalone.
+- `MkButton` default margin changed to `0`; legacy spacing available via `.mk-button--gutter` or CSS variables `--mk-button-margin-x` / `--mk-button-margin-y`.
+- README examples updated to use `MkSelect :options` and `MkTabs :items`.
+- README notes on Vite auto-import: avoid mixing auto-import with explicit imports.
+
 ## [2.0.2] - 2026-06-14
 
 ### Added

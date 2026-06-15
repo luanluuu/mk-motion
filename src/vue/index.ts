@@ -1,5 +1,6 @@
 import type { App, Component, Plugin } from 'vue'
 import * as components from '../components-vue/index.js'
+import '../style.css'
 
 // Vue 3 SFC Components (re-exported from the new declarative layer)
 export {
@@ -63,11 +64,34 @@ const componentEntries = Object.entries(components).filter(([name]) =>
   name.startsWith('Mk')
 )
 
+function checkMkCssVars() {
+  if (typeof window === 'undefined') return
+  const mode = (import.meta as { env?: { MODE?: string } }).env?.MODE
+  if (mode === 'production') return
+  if (typeof document === 'undefined') return
+
+  const required = [
+    '--mk-primary',
+    '--mk-text',
+    '--mk-border',
+    '--mk-surface',
+  ]
+  const style = getComputedStyle(document.documentElement)
+  const missing = required.filter((v) => !style.getPropertyValue(v).trim())
+  if (missing.length) {
+    console.warn(
+      `[mk-motion] Missing CSS variables detected: ${missing.join(', ')}. ` +
+        `Did you forget to import '@luanlu/mk-motion/css'?`
+    )
+  }
+}
+
 export const MkMotionVue: Plugin = {
   install(app: App) {
     for (const [name, component] of componentEntries) {
       app.component(name, component as Component)
     }
+    checkMkCssVars()
   },
 }
 

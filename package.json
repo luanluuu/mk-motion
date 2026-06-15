@@ -21,6 +21,9 @@
       "types": "./dist/types.d.ts",
       "default": "./dist/style.css"
     },
+    "./css/*": {
+      "default": "./dist/css/*"
+    },
     "./motion": {
       "import": {
         "types": "./dist/src/motion-entry.d.ts",
@@ -75,7 +78,7 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build && vite build --config vite.entries.config.ts",
+    "build": "tsc && vite build && vite build --config vite.entries.config.ts && node scripts/gen-css-entries.cjs",
     "preview": "vite preview",
     "docs:install": "cd docs && npm install",
     "docs:dev": "cd docs && npm run dev",

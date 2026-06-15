@@ -1,0 +1,6 @@
+/* MotionKit base styles: tokens, reset and animation keyframes */
+@import '../components/styles/tokens.css';
+@import '../components/styles/variables.css';
+@import '../components/styles/reset.css';
+@import '../styles/animations.css';
+@import '../styles/element-plus.css';

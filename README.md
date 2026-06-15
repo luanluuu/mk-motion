@@ -81,6 +81,16 @@ createApp(App).use(MkMotion).mount('#app')
 <template>
   <MkButton type="primary" @click="visible = true">打开</MkButton>
   <MkDialog v-model="visible" title="确认操作">确定继续吗？</MkDialog>
+
+  <MkSelect v-model="city" :options="[
+    { label: '北京', value: 'beijing' },
+    { label: '上海', value: 'shanghai' },
+  ]" />
+
+  <MkTabs v-model="activeTab" :items="[
+    { key: 'tab1', label: 'Tab 1' },
+    { key: 'tab2', label: 'Tab 2' },
+  ]" />
 </template>
 ```
 
@@ -96,6 +106,8 @@ export default defineConfig({
 ```
 
 配置后无需手动 import 组件，直接在 template 中使用 `<MkButton>`、`<MkTable>` 等。
+
+> 建议二选一：要么完全依赖自动导入，要么完全手动 import。混用会导致组件被重复注册或打包体积冗余。
 
 ### Nuxt 3
 
