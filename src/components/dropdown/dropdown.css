@@ -35,6 +35,7 @@
 }
 
 .mk-dropdown__menu.is-open {
+  display: block;
   opacity: 1;
   transform: scale(1) translateY(0);
 }

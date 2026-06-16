@@ -284,6 +284,7 @@ onUnmounted(() => {
           v-show="isOpen"
           ref="dropdownRef"
           class="mk-select__dropdown"
+          :class="{ 'is-open': isOpen }"
           role="listbox"
           :style="{
             position: 'absolute',

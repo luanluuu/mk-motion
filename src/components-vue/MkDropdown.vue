@@ -140,6 +140,7 @@ watch(visible, (val) => {
           v-show="visible"
           ref="menuRef"
           class="mk-dropdown__menu"
+          :class="{ 'is-open': visible }"
           :style="{ top: `${position.top}px`, left: `${position.left}px` }"
           @mouseenter="onMenuEnter"
           @mouseleave="onMenuLeave"

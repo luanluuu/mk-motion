@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest'
-import { createApp, h } from 'vue'
+import { createApp, h, nextTick } from 'vue'
 import MkSelect from '../../components-vue/MkSelect.vue'
 import MkOption from '../../components-vue/MkOption.vue'
 
@@ -84,5 +84,30 @@ describe('MkSelect', () => {
         },
       }).mount(el)
     }).not.toThrow()
+  })
+
+  it('adds is-open class to the teleported dropdown when opened', async () => {
+    const el = document.createElement('div')
+    document.body.appendChild(el)
+
+    createApp({
+      render() {
+        return h(MkSelect, {
+          modelValue: 'a',
+          options: [{ label: 'A', value: 'a' }],
+          teleport: false,
+        })
+      },
+    }).mount(el)
+
+    const trigger = el.querySelector('.mk-select__trigger') as HTMLElement
+    trigger.focus()
+    trigger.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }))
+    await nextTick()
+    await nextTick()
+    await new Promise((r) => setTimeout(r, 0))
+
+    const dropdown = el.querySelector('.mk-select__dropdown')
+    expect(dropdown?.classList.contains('is-open')).toBe(true)
   })
 })

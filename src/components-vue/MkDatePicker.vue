@@ -182,6 +182,7 @@ onUnmounted(() => {
         <div
           v-if="isOpen"
           class="mk-datepicker__calendar"
+          :class="{ 'is-open': isOpen }"
           :style="calendarStyle"
         >
           <div class="mk-datepicker__header">

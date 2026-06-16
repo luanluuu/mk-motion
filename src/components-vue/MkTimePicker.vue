@@ -147,6 +147,7 @@ onMounted(() => {
           v-show="isOpen"
           ref="panelRef"
           class="mk-timepicker__panel"
+          :class="{ 'is-open': isOpen }"
           :style="{
             position: 'absolute',
             top: `${position.top}px`,
