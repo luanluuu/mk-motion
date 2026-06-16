@@ -6,11 +6,13 @@ interface Props {
   placeholder?: string
   format?: string
   disabled?: boolean
+  teleport?: string | HTMLElement | false
 }
 
 const props = withDefaults(defineProps<Props>(), {
   format: 'YYYY-MM-DD',
   disabled: false,
+  teleport: 'body',
 })
 
 const emit = defineEmits<{
@@ -173,7 +175,7 @@ onUnmounted(() => {
       @click="open"
     />
 
-    <Teleport to="body">
+    <Teleport :to="teleport" :disabled="!teleport">
       <Transition name="mk-datepicker-fade">
         <div
           v-if="isOpen"

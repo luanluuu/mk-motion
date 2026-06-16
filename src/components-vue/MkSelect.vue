@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, watch, nextTick, onUnmounted, type VNode, Fragment } from 'vue'
-import MkOption from './MkOption.vue'
+import { useDropdownPosition } from './composables/useDropdownPosition.js'
 
 export interface SelectOption {
   label: string
@@ -17,6 +17,7 @@ interface Props {
   clearable?: boolean
   filterable?: boolean
   size?: 'small' | 'default' | 'large'
+  teleport?: string | HTMLElement | false
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -27,6 +28,7 @@ const props = withDefaults(defineProps<Props>(), {
   clearable: false,
   filterable: false,
   size: 'default',
+  teleport: 'body',
 })
 
 if (
@@ -58,7 +60,13 @@ const slots = defineSlots<{
 const isOpen = ref(false)
 const searchQuery = ref('')
 const triggerRef = ref<HTMLDivElement | null>(null)
+const dropdownRef = ref<HTMLDivElement | null>(null)
 const searchInputRef = ref<HTMLInputElement | null>(null)
+const { position, update: updateDropdownPosition } = useDropdownPosition(
+  triggerRef,
+  dropdownRef,
+  4
+)
 
 function isMkOption(vnode: VNode): boolean {
   const type = vnode.type
@@ -130,9 +138,12 @@ const displayLabel = computed(() => {
 function open() {
   if (props.disabled) return
   isOpen.value = true
-  if (props.filterable) {
-    nextTick(() => searchInputRef.value?.focus())
-  }
+  nextTick(() => {
+    updateDropdownPosition()
+    if (props.filterable) {
+      searchInputRef.value?.focus()
+    }
+  })
 }
 
 function close() {
@@ -265,32 +276,45 @@ onUnmounted(() => {
       </span>
     </div>
 
-    <Transition name="mk-select-fade">
-      <div v-show="isOpen" class="mk-select__dropdown" role="listbox">
+    <Teleport :to="teleport" :disabled="!teleport">
+      <Transition name="mk-select-fade">
         <div
-          v-for="opt in filteredOptions"
-          :key="opt.value"
-          class="mk-select__option"
-          role="option"
-          :aria-selected="isSelected(opt)"
-          :class="{
-            'is-selected': isSelected(opt),
-            'is-disabled': opt.disabled,
+          v-show="isOpen"
+          ref="dropdownRef"
+          class="mk-select__dropdown"
+          role="listbox"
+          :style="{
+            position: 'absolute',
+            top: `${position.top}px`,
+            left: `${position.left}px`,
+            width: `${position.width}px`,
           }"
-          @click="selectOption(opt)"
         >
-          <slot :option="opt" :selected="isSelected(opt)">
-            <span class="mk-select__check" v-if="multiple && isSelected(opt)"
-              >✓</span
-            >
-            {{ opt.label }}
-          </slot>
+          <div
+            v-for="opt in filteredOptions"
+            :key="opt.value"
+            class="mk-select__option"
+            role="option"
+            :aria-selected="isSelected(opt)"
+            :class="{
+              'is-selected': isSelected(opt),
+              'is-disabled': opt.disabled,
+            }"
+            @click="selectOption(opt)"
+          >
+            <slot :option="opt" :selected="isSelected(opt)">
+              <span class="mk-select__check" v-if="multiple && isSelected(opt)"
+                >✓</span
+              >
+              {{ opt.label }}
+            </slot>
+          </div>
+          <div v-if="!filteredOptions.length" class="mk-select__empty">
+            <slot name="empty">无匹配数据</slot>
+          </div>
         </div>
-        <div v-if="!filteredOptions.length" class="mk-select__empty">
-          <slot name="empty">无匹配数据</slot>
-        </div>
-      </div>
-    </Transition>
+      </Transition>
+    </Teleport>
   </div>
 </template>
 
@@ -372,10 +396,6 @@ onUnmounted(() => {
 }
 
 .mk-select__dropdown {
-  position: absolute;
-  top: calc(100% + 4px);
-  left: 0;
-  right: 0;
   background: var(--mk-surface);
   border: 1px solid var(--mk-border);
   border-radius: var(--mk-radius);

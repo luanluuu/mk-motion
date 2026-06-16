@@ -77,7 +77,7 @@ const resolvedItems = computed(() => {
     key: pane.key ?? index,
     label: pane.label,
     disabled: pane.disabled,
-    content: pane.content,
+    content: undefined as string | undefined,
   }))
   return [...propItems.value, ...panes]
 })
@@ -161,13 +161,7 @@ const isActive = (item: (typeof resolvedItems.value)[number]) =>
         role="tabpanel"
       >
         <slot :name="`panel-${item.key}`">
-          <template v-if="typeof item.content === 'string'">
-            {{ item.content }}
-          </template>
-          <component
-            :is="() => item.content"
-            v-else-if="item.content"
-          />
+          {{ item.content }}
         </slot>
       </div>
       <slot />
@@ -276,6 +270,7 @@ const isActive = (item: (typeof resolvedItems.value)[number]) =>
 }
 
 .mk-tabs__panel {
+  display: none;
   font-size: var(--mk-text-sm);
   color: var(--mk-text-secondary);
   line-height: var(--mk-leading-normal);
@@ -287,6 +282,7 @@ const isActive = (item: (typeof resolvedItems.value)[number]) =>
 }
 
 .mk-tabs__panel.is-active {
+  display: block;
   opacity: 1;
   transform: translateY(0);
 }

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import {
   MkButton,
   MkInput,
@@ -15,7 +15,12 @@ import {
   useMkMotion,
 } from '@luanlu/mk-motion/vue'
 
-const { isDark, toggle } = useMkTheme()
+const { resolvedTheme, setTheme } = useMkTheme()
+const isDarkModel = computed({
+  get: () => resolvedTheme.value === 'dark',
+  set: (value) => setTheme(value ? 'dark' : 'light'),
+})
+
 const { start: startLoading, stop: stopLoading } = useMkLoading()
 const { success, error } = useMkMessage()
 
@@ -27,10 +32,6 @@ const btnLoading = ref(false)
 
 const motionEl = ref<HTMLElement>()
 useMkMotion(motionEl, { hover: 'lift', enter: 'bounceIn', duration: 400 })
-
-onMounted(() => {
-  document.documentElement.setAttribute('data-mk-theme', 'dark')
-})
 
 function handleSubmit() {
   btnLoading.value = true
@@ -68,13 +69,12 @@ function handleError() {
       <template #header>🎨 主题控制</template>
       <div style="display: flex; gap: 12px; align-items: center">
         <MkSwitch
-          v-model="isDark"
+          v-model="isDarkModel"
           active-text="暗色"
           inactive-text="亮色"
-          @change="toggle"
         />
         <span style="color: var(--mk-text-secondary); font-size: 0.875rem">
-          当前：{{ isDark ? '暗色' : '亮色' }}
+          当前：{{ resolvedTheme === 'dark' ? '暗色' : '亮色' }}
         </span>
       </div>
     </MkCard>

@@ -37,7 +37,7 @@ const name = ref('')
 
     <h2 class="doc-h2">🔌 使用 Composables</h2>
     <pre class="doc-code-block"><code>&lt;script setup lang="ts"&gt;
-const { isDark, toggle } = useMkTheme()
+const { theme, resolvedTheme, toggle, setTheme } = useMkTheme()
 const motion = useMkMotion(refEl, { hover: 'lift', enter: 'fadeIn' })
 &lt;/script&gt;
 </code></pre>

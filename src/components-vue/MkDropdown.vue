@@ -17,12 +17,14 @@ export interface DropdownProps {
   trigger?: DropdownTrigger
   placement?: Placement
   disabled?: boolean
+  teleport?: string | HTMLElement | false
 }
 
 const props = withDefaults(defineProps<DropdownProps>(), {
   trigger: 'click',
   placement: 'bottom',
   disabled: false,
+  teleport: 'body',
 })
 
 const emit = defineEmits<{
@@ -132,7 +134,7 @@ watch(visible, (val) => {
       <slot />
     </span>
 
-    <Teleport to="body">
+    <Teleport :to="teleport" :disabled="!teleport">
       <Transition name="mk-dropdown-menu">
         <div
           v-show="visible"

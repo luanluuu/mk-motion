@@ -12,6 +12,7 @@ export interface PopoverProps {
   trigger?: PopoverTrigger
   width?: string | number
   disabled?: boolean
+  teleport?: string | HTMLElement | false
 }
 
 const props = withDefaults(defineProps<PopoverProps>(), {
@@ -20,6 +21,7 @@ const props = withDefaults(defineProps<PopoverProps>(), {
   placement: 'top',
   trigger: 'hover',
   disabled: false,
+  teleport: 'body',
 })
 
 const emit = defineEmits<{
@@ -121,7 +123,7 @@ watch(visible, (val) => {
     <slot />
   </span>
 
-  <Teleport to="body">
+  <Teleport :to="teleport" :disabled="!teleport">
     <Transition name="mk-popover">
       <div
         v-show="visible"

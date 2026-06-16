@@ -1,16 +1,19 @@
 <script setup lang="ts">
 import { ref, computed, watch, onMounted, onUnmounted, nextTick } from 'vue'
+import { useDropdownPosition } from './composables/useDropdownPosition.js'
 
 interface Props {
   modelValue?: string
   placeholder?: string
   format?: string
   disabled?: boolean
+  teleport?: string | HTMLElement | false
 }
 
 const props = withDefaults(defineProps<Props>(), {
   format: 'HH:mm:ss',
   disabled: false,
+  teleport: 'body',
 })
 
 const emit = defineEmits<{
@@ -42,9 +45,16 @@ const parsed = computed(() =>
 
 const isOpen = ref(false)
 const pickerRef = ref<HTMLDivElement | null>(null)
+const panelRef = ref<HTMLDivElement | null>(null)
 const hourListRef = ref<HTMLDivElement | null>(null)
 const minuteListRef = ref<HTMLDivElement | null>(null)
 const secondListRef = ref<HTMLDivElement | null>(null)
+
+const { position, update: updatePanelPosition } = useDropdownPosition(
+  pickerRef,
+  panelRef,
+  4
+)
 
 const showSeconds = computed(() => props.format.includes('ss'))
 const showMinutes = computed(() => props.format.includes('mm'))
@@ -56,7 +66,10 @@ const seconds = Array.from({ length: 60 }, (_, i) => i)
 function open() {
   if (props.disabled) return
   isOpen.value = true
-  nextTick(() => scrollToSelected())
+  nextTick(() => {
+    updatePanelPosition()
+    scrollToSelected()
+  })
 }
 
 function close() {
@@ -126,57 +139,68 @@ onMounted(() => {
       @click="open"
     />
 
-    <Transition name="mk-timepicker-fade">
-      <div v-show="isOpen" class="mk-timepicker__panel">
-        <div class="mk-timepicker__column">
-          <div class="mk-timepicker__column-header">时</div>
-          <div ref="hourListRef" class="mk-timepicker__column-list">
-            <div
-              v-for="h in hours"
-              :key="h"
-              class="mk-timepicker__item"
-              :data-value="h"
-              :class="{ 'is-selected': h === parsed.h }"
-              @click.stop="onSelect('h', h)"
-            >
-              {{ pad(h) }}
+    <Teleport :to="teleport" :disabled="!teleport">
+      <Transition name="mk-timepicker-fade">
+        <div
+          v-show="isOpen"
+          ref="panelRef"
+          class="mk-timepicker__panel"
+          :style="{
+            position: 'absolute',
+            top: `${position.top}px`,
+            left: `${position.left}px`,
+          }"
+        >
+          <div class="mk-timepicker__column">
+            <div class="mk-timepicker__column-header">时</div>
+            <div ref="hourListRef" class="mk-timepicker__column-list">
+              <div
+                v-for="h in hours"
+                :key="h"
+                class="mk-timepicker__item"
+                :data-value="h"
+                :class="{ 'is-selected': h === parsed.h }"
+                @click.stop="onSelect('h', h)"
+              >
+                {{ pad(h) }}
+              </div>
             </div>
           </div>
-        </div>
 
-        <div v-if="showMinutes" class="mk-timepicker__column">
-          <div class="mk-timepicker__column-header">分</div>
-          <div ref="minuteListRef" class="mk-timepicker__column-list">
-            <div
-              v-for="m in minutes"
-              :key="m"
-              class="mk-timepicker__item"
-              :data-value="m"
-              :class="{ 'is-selected': m === parsed.m }"
-              @click.stop="onSelect('m', m)"
-            >
-              {{ pad(m) }}
+          <div v-if="showMinutes" class="mk-timepicker__column">
+            <div class="mk-timepicker__column-header">分</div>
+            <div ref="minuteListRef" class="mk-timepicker__column-list">
+              <div
+                v-for="m in minutes"
+                :key="m"
+                class="mk-timepicker__item"
+                :data-value="m"
+                :class="{ 'is-selected': m === parsed.m }"
+                @click.stop="onSelect('m', m)"
+              >
+                {{ pad(m) }}
+              </div>
             </div>
           </div>
-        </div>
 
-        <div v-if="showSeconds" class="mk-timepicker__column">
-          <div class="mk-timepicker__column-header">秒</div>
-          <div ref="secondListRef" class="mk-timepicker__column-list">
-            <div
-              v-for="s in seconds"
-              :key="s"
-              class="mk-timepicker__item"
-              :data-value="s"
-              :class="{ 'is-selected': s === parsed.s }"
-              @click.stop="onSelect('s', s)"
-            >
-              {{ pad(s) }}
+          <div v-if="showSeconds" class="mk-timepicker__column">
+            <div class="mk-timepicker__column-header">秒</div>
+            <div ref="secondListRef" class="mk-timepicker__column-list">
+              <div
+                v-for="s in seconds"
+                :key="s"
+                class="mk-timepicker__item"
+                :data-value="s"
+                :class="{ 'is-selected': s === parsed.s }"
+                @click.stop="onSelect('s', s)"
+              >
+                {{ pad(s) }}
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </Transition>
+      </Transition>
+    </Teleport>
   </div>
 </template>
 
@@ -221,9 +245,6 @@ onMounted(() => {
 }
 
 .mk-timepicker__panel {
-  position: absolute;
-  top: calc(100% + 4px);
-  left: 0;
   width: 200px;
   height: 200px;
   background: var(--mk-surface);

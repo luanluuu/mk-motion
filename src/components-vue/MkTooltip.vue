@@ -6,12 +6,14 @@ export interface TooltipProps {
   content?: string
   placement?: Placement
   disabled?: boolean
+  teleport?: string | HTMLElement | false
 }
 
 const props = withDefaults(defineProps<TooltipProps>(), {
   content: '',
   placement: 'top',
   disabled: false,
+  teleport: 'body',
 })
 
 const targetRef = ref<HTMLElement | null>(null)
@@ -80,7 +82,7 @@ watch(visible, (val) => {
     <slot />
   </span>
 
-  <Teleport to="body">
+  <Teleport :to="teleport" :disabled="!teleport">
     <Transition name="mk-tooltip">
       <div
         v-show="visible"
