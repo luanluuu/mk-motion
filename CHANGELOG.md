@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+<!-- Unreleased entries will be added during v2.0.13 development. -->
+
+
+## [2.0.12] - 2026-06-16
+
 ### Added
 
 - **Theme system v2.1**: `useMkTheme()` now supports `auto` | `light` | `dark`, persists to `localStorage`, listens to `prefers-color-scheme`, and is SSR-safe.
@@ -14,11 +19,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Floating components (`MkSelect`, `MkDropdown`, `MkTooltip`, `MkPopover`, `MkDatePicker`, `MkTimePicker`) now support a `teleport` prop and default to rendering their popup in `document.body` to avoid clipping.
 - New `MkTeleport` internal component and `useDropdownPosition` composable for body-anchored popups.
 - `MkOption` and `MkTabPane` child-component support for `MkSelect` and `MkTabs`.
-- Expanded test coverage: `MkInput`, `MkButton`, `MkDialog`, `useMkTheme`, and SSR render tests for `MkButton`, `MkInput`, `MkSelect`, `MkDialog`, `MkTabs`, `MkTabPane`.
-- Added SSR safety guards to `MkSelect`, `MkDatePicker`, and `MkTimePicker` document/window access.
+- New `MkOption` component for declarative select options.
+- New `MkTabPane` component for declarative tab panes.
+- `MkSelect` now supports `size` prop (`small` | `default` | `large`) and `<MkOption>` child components in addition to the `:options` prop.
+- `MkTabs` now supports `<MkTabPane>` child components in addition to the `:items` prop.
+- `MkTable` exports generic `TableColumn<T>` type for typed column definitions.
 - Exported prop/composable types from `@luanlu/mk-motion/vue`: `MkTheme`, `UseMkThemeOptions`, `UseMkMotionOptions`, `UseMkLoadingOptions`, `UseMkMessageOptions`, and all shared component prop types.
+- Added SSR safety guards to `MkSelect`, `MkDatePicker`, and `MkTimePicker` document/window access.
 - Added Nuxt module auto-registration for `MkTabPane` and `MkOption`.
 - Vitest coverage reporting (`text`, `lcov`, `html`) and `npm run check` now runs coverage.
+- Per-component CSS entries under `dist/css/*` and `mkMotion({ importStyle: 'component' })` for on-demand styles.
+- Semantic color hover/active variables: `--mk-success-hover`, `--mk-success-active`, `--mk-warning-hover`, `--mk-warning-active`, `--mk-danger-hover`, `--mk-danger-active`, `--mk-info-hover`, `--mk-info-active`.
+- Dev-mode CSS variable check: warns when `--mk-primary`, `--mk-text`, `--mk-border`, or `--mk-surface` are missing.
 - `demo-vue`, `examples/admin-dashboard`, and `examples/landing-page` now include theme toggles.
 - `MkSelect` demo added to `demo-vue` inside an `overflow: hidden` container to verify Teleport anti-clipping.
 
@@ -26,31 +38,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `useMkTheme` API changed from `{ isDark, setTheme(boolean), toggle }` to `{ theme, resolvedTheme, setTheme('auto' | 'light' | 'dark'), toggle }`.
 - Removed default `max-width` from form and floating components (`MkInput`, `MkSelect`, `MkSlider`, `MkDatePicker`, `MkTimePicker`, `MkUpload`, `MkTooltip`, `MkPopover`).
+- `dist/style.css` now includes the full `:root` theme tokens, so `import '@luanlu/mk-motion/css'` works standalone.
+- `MkButton` default margin changed to `0`; legacy spacing available via `.mk-button--gutter` or CSS variables `--mk-button-margin-x` / `--mk-button-margin-y`.
 - Docs site header now uses `useMkTheme` with ☀️/🌙/Auto buttons instead of a manual color-temperature slider.
 - `examples/admin-dashboard` now imports legacy components from `@luanlu/mk-motion/legacy`.
+- README examples updated to use `MkSelect :options` / `<MkOption>` and `MkTabs :items`.
+- README notes on Vite auto-import: avoid mixing auto-import with explicit imports.
 
 ### Fixed
 
 - `MkTabs` panel visibility: inactive panels are now `display: none`, active panels are `display: block`.
 - `MkTabs` TypeScript error when resolving `<MkTabPane>` items.
 - `MkSelect` unused `MkOption` import warning.
-
-- `MkSelect` now supports `size` prop (`small` | `default` | `large`).
-- `MkSelect` now supports `<MkOption>` child components in addition to the `:options` prop.
-- `MkTabs` now supports `<MkTabPane>` child components in addition to the `:items` prop.
-- New `MkOption` component for declarative select options.
-- New `MkTabPane` component for declarative tab panes.
-- `MkTable` exports generic `TableColumn<T>` type for typed column definitions.
-- Dev-mode CSS variable check: warns when `--mk-primary`, `--mk-text`, `--mk-border`, or `--mk-surface` are missing.
-- Per-component CSS entries under `dist/css/*` and `mkMotion({ importStyle: 'component' })` for on-demand styles.
-- Semantic color hover/active variables: `--mk-success-hover`, `--mk-success-active`, `--mk-warning-hover`, `--mk-warning-active`, `--mk-danger-hover`, `--mk-danger-active`, `--mk-info-hover`, `--mk-info-active`.
-
-### Changed
-
-- `dist/style.css` now includes the full `:root` theme tokens, so `import '@luanlu/mk-motion/css'` works standalone.
-- `MkButton` default margin changed to `0`; legacy spacing available via `.mk-button--gutter` or CSS variables `--mk-button-margin-x` / `--mk-button-margin-y`.
-- README examples updated to use `MkSelect :options` / `<MkOption>` and `MkTabs :items`.
-- README notes on Vite auto-import: avoid mixing auto-import with explicit imports.
+- `MkSelect` dropdown now adds the `is-open` class when opened, fixing `opacity: 0` visibility issue.
+- `MkDropdown` menu now uses `display: block` when open.
 
 ## [2.0.2] - 2026-06-14
 
@@ -238,6 +239,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - TypeScript type definitions
 - ESM + UMD dual format build
 
+[2.0.12]: https://github.com/luanluuu/mk-motion/releases/tag/v2.0.12
+[2.0.2]: https://github.com/luanluuu/mk-motion/releases/tag/v2.0.2
+[2.0.1]: https://github.com/luanluuu/mk-motion/releases/tag/v2.0.1
+[2.0.0]: https://github.com/luanluuu/mk-motion/releases/tag/v2.0.0
 [1.2.2]: https://github.com/luanluuu/mk-motion/releases/tag/v1.2.2
 [1.2.1]: https://github.com/luanluuu/mk-motion/releases/tag/v1.2.1
 [1.1.0]: https://github.com/luanluuu/mk-motion/releases/tag/v1.1.0
