@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { computed, provide, ref, useSlots, watch } from 'vue'
+import { collapseContextKey } from './collapse-context.js'
+import MkCollapseItem from './MkCollapseItem.vue'
 
 export interface CollapseItem {
   key?: string | number
@@ -9,14 +11,13 @@ export interface CollapseItem {
 }
 
 export interface CollapseProps {
-  modelValue?: (string | number)[]
   accordion?: boolean
-  items: CollapseItem[]
+  items?: CollapseItem[]
 }
 
 const props = withDefaults(defineProps<CollapseProps>(), {
-  modelValue: () => [],
   accordion: false,
+  items: () => [],
 })
 
 const emit = defineEmits<{
@@ -26,94 +27,127 @@ const emit = defineEmits<{
 
 const model = defineModel<(string | number)[]>({ default: () => [] })
 
-const resolvedItems = computed(() =>
-  props.items.map((item, index) => ({
+const slots = useSlots()
+const hasPropItems = computed(() => (props.items ?? []).length > 0)
+const hasSlotItems = computed(() => !!slots.default)
+
+const isDev = () =>
+  (import.meta as { env?: { DEV?: boolean; MODE?: string } }).env?.DEV ??
+  (import.meta as { env?: { MODE?: string } }).env?.MODE === 'development'
+
+if (isDev() && hasPropItems.value) {
+  console.warn(
+    '[mk-motion] <MkCollapse> `items` prop is deprecated. ' +
+      'Use <MkCollapseItem> child components instead.'
+  )
+}
+
+if (isDev() && hasPropItems.value && hasSlotItems.value) {
+  console.warn(
+    '[mk-motion] <MkCollapse> `items` prop and <MkCollapseItem> slot children ' +
+      'are both provided. The `items` prop takes precedence; slot children will be ignored.'
+  )
+}
+
+const activeNames = computed({
+  get: () => model.value ?? [],
+  set: (value) => {
+    model.value = value
+    emit('update:modelValue', value)
+    emit('change', value)
+  },
+})
+
+function isActive(name: string | number) {
+  return activeNames.value.includes(name)
+}
+
+function toggle(name: string | number, disabled?: boolean) {
+  if (disabled) return
+  const active = isActive(name)
+  let next: (string | number)[]
+  if (props.accordion) {
+    next = active ? [] : [name]
+  } else {
+    next = active
+      ? activeNames.value.filter((n) => n !== name)
+      : [...activeNames.value, name]
+  }
+  activeNames.value = next
+}
+
+const registeredItems = ref<
+  { name: string | number; title?: string; disabled?: boolean }[]
+>(
+  (props.items ?? []).map((item, index) => ({
     ...item,
-    key: item.key ?? index,
+    name: item.key ?? index,
   }))
 )
 
-const contentRefs = ref<Record<string | number, HTMLDivElement | null>>({})
-const innerRefs = ref<Record<string | number, HTMLDivElement | null>>({})
+watch(
+  () => props.items,
+  (items) => {
+    registeredItems.value = (items ?? []).map((item, index) => ({
+      ...item,
+      name: item.key ?? index,
+    }))
+  },
+  { deep: true }
+)
 
-const isActive = (key: string | number) => model.value.includes(key)
-
-const toggle = (key: string | number, disabled?: boolean) => {
-  if (disabled) return
-  const active = isActive(key)
-  let next: (string | number)[]
-  if (props.accordion) {
-    next = active ? [] : [key]
-  } else {
-    next = active ? model.value.filter((k) => k !== key) : [...model.value, key]
+function registerItem(item: {
+  name: string | number
+  title?: string
+  disabled?: boolean
+}) {
+  if (!registeredItems.value.some((i) => i.name === item.name)) {
+    registeredItems.value.push(item)
   }
-  model.value = next
-  emit('update:modelValue', next)
-  emit('change', next)
 }
 
-const maxHeight = (key: string | number) => {
-  if (!isActive(key)) return '0px'
-  const inner = innerRefs.value[key]
-  return inner ? `${inner.scrollHeight}px` : '0px'
+function unregisterItem(name: string | number) {
+  registeredItems.value = registeredItems.value.filter((i) => i.name !== name)
 }
+
+provide(collapseContextKey, {
+  activeNames: computed(() => activeNames.value),
+  accordion: computed(() => props.accordion),
+  registerItem,
+  unregisterItem,
+  toggle,
+  isActive,
+})
+
+const resolvedItems = computed(() =>
+  (props.items ?? []).map((item, index) => ({
+    ...item,
+    name: item.key ?? index,
+  }))
+)
 </script>
 
 <template>
   <div class="mk-collapse">
-    <div
-      v-for="item in resolvedItems"
-      :key="item.key"
-      class="mk-collapse__item"
-      :class="{ 'is-active': isActive(item.key), 'is-disabled': item.disabled }"
-    >
-      <div
-        class="mk-collapse__header"
-        role="button"
-        :tabindex="item.disabled ? -1 : 0"
-        :aria-expanded="isActive(item.key)"
-        @click="toggle(item.key, item.disabled)"
-        @keydown.enter.prevent="toggle(item.key, item.disabled)"
-        @keydown.space.prevent="toggle(item.key, item.disabled)"
+    <template v-if="resolvedItems.length">
+      <MkCollapseItem
+        v-for="item in resolvedItems"
+        :key="item.name"
+        :name="item.name"
+        :title="item.title"
+        :disabled="item.disabled"
       >
-        <span class="mk-collapse__title">
-          <slot name="title" :item="item">{{ item.title }}</slot>
-        </span>
-        <span
-          class="mk-collapse__arrow"
-          :class="{ 'is-expanded': isActive(item.key) }"
-        >
-          <svg
-            width="12"
-            height="12"
-            viewBox="0 0 12 12"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.5"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <path d="M4 2l4 4-4 4" />
-          </svg>
-        </span>
-      </div>
-      <div
-        ref="(el) => { contentRefs[item.key] = el as HTMLDivElement }"
-        class="mk-collapse__content"
-        :style="{ maxHeight: maxHeight(item.key) }"
-      >
-        <div
-          ref="(el) => { innerRefs[item.key] = el as HTMLDivElement }"
-          class="mk-collapse__inner"
-        >
-          <slot name="content" :item="item">{{ item.content }}</slot>
-        </div>
-      </div>
-    </div>
+        <template v-if="$slots.title" #title>
+          <slot name="title" :item="item" />
+        </template>
+        <slot name="content" :item="item">{{ item.content }}</slot>
+      </MkCollapseItem>
+    </template>
+    <slot v-else />
   </div>
 </template>
 
-<style scoped>
+<style>
 .mk-collapse {
   border: 1px solid var(--mk-border);
   border-radius: var(--mk-radius);

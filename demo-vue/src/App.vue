@@ -8,6 +8,8 @@ import {
   MkSelect,
   MkCard,
   MkDialog,
+  MkCollapse,
+  MkCollapseItem,
 } from '@luanlu/mk-motion/vue'
 import {
   useMkTheme,
@@ -154,6 +156,22 @@ function handleError() {
           style="width: 240px"
         />
       </div>
+    </MkCard>
+
+    <!-- Collapse -->
+    <MkCard shadow="hover" style="margin-bottom: 24px">
+      <template #header>📂 折叠面板</template>
+      <MkCollapse accordion>
+        <MkCollapseItem name="1" title="基本信息">
+          折叠面板内容一。
+        </MkCollapseItem>
+        <MkCollapseItem name="2" title="高级设置">
+          折叠面板内容二。
+        </MkCollapseItem>
+        <MkCollapseItem name="3" title="安全选项" disabled>
+          禁用的面板。
+        </MkCollapseItem>
+      </MkCollapse>
     </MkCard>
 
     <!-- Dialog -->

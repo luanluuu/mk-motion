@@ -51,6 +51,7 @@ const ALL_COMPONENTS = [
   'MkLoading',
   'MkMessage',
   'MkCollapse',
+  'MkCollapseItem',
   'MkSelect',
   'MkTable',
   'MkPagination',

@@ -42,6 +42,7 @@ export const sidebarMenuItems = [
   { index: 'component-menu', label: 'Menu 菜单', icon: '📋' },
   { index: 'component-breadcrumb', label: 'Breadcrumb', icon: '🔀' },
   { index: 'component-steps', label: 'Steps 步骤条', icon: '🪜' },
+  { index: 'component-collapse', label: 'Collapse 折叠面板', icon: '📂' },
   { index: 'component-divider-data', label: '—— 数据 ——', disabled: true },
   { index: 'component-table', label: 'Table 表格', icon: '📊' },
   { index: 'component-progress', label: 'Progress 进度', icon: '📈' },

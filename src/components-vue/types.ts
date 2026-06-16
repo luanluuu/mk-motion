@@ -132,10 +132,21 @@ export interface CollapseItem {
   disabled?: boolean
 }
 
+export interface CollapseItemProps {
+  name: string | number
+  title?: string
+  disabled?: boolean
+}
+
 export interface CollapseProps {
   modelValue?: (string | number)[]
   accordion?: boolean
-  items: CollapseItem[]
+  items?: CollapseItem[]
+}
+
+export interface CollapseEmits {
+  'update:modelValue': [value: (string | number)[]]
+  change: [value: (string | number)[]]
 }
 
 /* ===== Data/Form Components Types ===== */

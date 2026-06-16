@@ -39,7 +39,13 @@ export { default as MkMessage } from './MkMessage.vue'
 export type { MessageProps, MessageType } from './types.js'
 
 export { default as MkCollapse } from './MkCollapse.vue'
-export type { CollapseItem, CollapseProps } from './types.js'
+export { default as MkCollapseItem } from './MkCollapseItem.vue'
+export type {
+  CollapseItem,
+  CollapseProps,
+  CollapseEmits,
+  CollapseItemProps,
+} from './types.js'
 
 export { default as MkButton } from './MkButton.vue'
 export { default as MkInput } from './MkInput.vue'

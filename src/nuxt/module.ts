@@ -48,6 +48,7 @@ const ALL_COMPONENTS = [
   'Loading',
   'Message',
   'Collapse',
+  'CollapseItem',
   'Select',
   'Option',
   'Table',

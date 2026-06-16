@@ -36,7 +36,10 @@ import {
   MkRadioGroup,
   MkSlider,
   MkTable,
+  MkCollapse,
+  MkCollapseItem,
 } from '@luanlu/mk-motion/vue'
+import { createApp, h, ref } from 'vue'
 
 export interface ComponentDoc {
   title: string
@@ -772,29 +775,124 @@ export const componentDocs: Record<string, ComponentDoc> = {
   },
   collapse: {
     title: 'Collapse 折叠面板',
-    desc: '折叠面板用于收纳内容。',
+    desc: '折叠面板用于收纳内容。支持 `items` 属性（已废弃，仍兼容）和 `<MkCollapseItem>` 子组件两种写法。',
     demos: [
       {
         title: '基础用法',
-        code: `createCollapse(container, { items: [...] })`,
+        code: `<MkCollapse>\n  <MkCollapseItem name="1" title="面板一">内容一</MkCollapseItem>\n  <MkCollapseItem name="2" title="面板二">内容二</MkCollapseItem>\n</MkCollapse>`,
         init: (el: HTMLElement) => {
-          createCollapse(el, {
-            items: [
-              { title: '面板一', content: '这是第一个面板的内容。' },
-              { title: '面板二', content: '这是第二个面板的内容。' },
-              { title: '面板三', content: '这是第三个面板的内容。' },
-            ],
-          })
+          createApp({
+            render: () =>
+              h(MkCollapse, null, {
+                default: () => [
+                  h(
+                    MkCollapseItem,
+                    { name: '1', title: '面板一' },
+                    () => '这是第一个面板的内容。'
+                  ),
+                  h(
+                    MkCollapseItem,
+                    { name: '2', title: '面板二' },
+                    () => '这是第二个面板的内容。'
+                  ),
+                  h(
+                    MkCollapseItem,
+                    { name: '3', title: '面板三' },
+                    () => '这是第三个面板的内容。'
+                  ),
+                ],
+              }),
+          }).mount(el)
+        },
+      },
+      {
+        title: '手风琴模式',
+        code: `<MkCollapse accordion>\n  <MkCollapseItem name="1" title="面板一">...</MkCollapseItem>\n  <MkCollapseItem name="2" title="面板二">...</MkCollapseItem>\n</MkCollapse>`,
+        init: (el: HTMLElement) => {
+          createApp({
+            render: () =>
+              h(MkCollapse, { accordion: true }, {
+                default: () => [
+                  h(
+                    MkCollapseItem,
+                    { name: 'a', title: '设置项' },
+                    () => '设置项的详细说明。'
+                  ),
+                  h(
+                    MkCollapseItem,
+                    { name: 'b', title: '安全项' },
+                    () => '安全项的详细说明。'
+                  ),
+                  h(
+                    MkCollapseItem,
+                    { name: 'c', title: '通知项' },
+                    () => '通知项的详细说明。'
+                  ),
+                ],
+              }),
+          }).mount(el)
+        },
+      },
+      {
+        title: '受控模式',
+        code: `const active = ref(['1'])\n<MkCollapse v-model="active">\n  <MkCollapseItem name="1" title="受控面板">...</MkCollapseItem>\n</MkCollapse>`,
+        init: (el: HTMLElement) => {
+          createApp({
+            setup() {
+              const active = ref(['1'])
+              return () =>
+                h(
+                  MkCollapse,
+                  {
+                    modelValue: active.value,
+                    'onUpdate:modelValue': (v: string[]) => {
+                      active.value = v
+                    },
+                  },
+                  {
+                    default: () => [
+                      h(
+                        MkCollapseItem,
+                        { name: '1', title: '已选中' },
+                        () => '该面板通过 v-model 控制展开状态。'
+                      ),
+                      h(
+                        MkCollapseItem,
+                        { name: '2', title: '未选中' },
+                        () => '点击标题可切换展开状态。'
+                      ),
+                    ],
+                  }
+                )
+            },
+          }).mount(el)
         },
       },
     ],
     api: [
-      { prop: 'items', type: 'CollapseItem[]', default: '[]', desc: '面板项' },
+      {
+        prop: 'modelValue',
+        type: '(string | number)[]',
+        default: '[]',
+        desc: '当前展开的面板 name 列表',
+      },
       {
         prop: 'accordion',
         type: 'boolean',
         default: 'false',
-        desc: '是否手风琴模式',
+        desc: '是否手风琴模式（同时只展开一个）',
+      },
+      {
+        prop: 'items',
+        type: 'CollapseItem[]',
+        default: '[]',
+        desc: '面板项配置（已废弃，建议使用 <MkCollapseItem>）',
+      },
+      {
+        prop: 'change',
+        type: '(value: (string | number)[]) => void',
+        default: '-',
+        desc: '展开状态变化时触发',
       },
     ],
   },
