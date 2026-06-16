@@ -38,6 +38,7 @@ import {
   MkTable,
   MkCollapse,
   MkCollapseItem,
+  MkInput,
 } from '@luanlu/mk-motion/vue'
 import { createApp, h, ref } from 'vue'
 
@@ -95,7 +96,7 @@ export const componentDocs: Record<string, ComponentDoc> = {
   },
   input: {
     title: 'Input 输入框',
-    desc: '输入框用于接收用户的文本输入。',
+    desc: '输入框用于接收用户的文本输入。支持普通输入框、密码框与多行文本域。',
     demos: [
       {
         title: '基础用法',
@@ -113,12 +114,34 @@ export const componentDocs: Record<string, ComponentDoc> = {
             value: 'Hello',
           }),
       },
+      {
+        title: '多行文本域',
+        code: `<MkInput type="textarea" :rows="4" :autosize="{ minRows: 2, maxRows: 6 }" />`,
+        init: (el: HTMLElement) => {
+          createApp({
+            setup() {
+              const value = ref('这是一段多行文本。\n支持自动高度。')
+              return () =>
+                h(MkInput, {
+                  type: 'textarea',
+                  rows: 4,
+                  autosize: { minRows: 2, maxRows: 6 },
+                  modelValue: value.value,
+                  'onUpdate:modelValue': (v: string) => {
+                    value.value = v
+                  },
+                })
+            },
+          }).mount(el)
+        },
+      },
     ],
     api: [
+      { prop: 'modelValue', type: 'string', default: "''", desc: '当前值' },
       { prop: 'placeholder', type: 'string', default: "''", desc: '占位文本' },
       {
         prop: 'type',
-        type: "'text' | 'password'",
+        type: "'text' | 'password' | 'textarea'",
         default: "'text'",
         desc: '输入框类型',
       },
@@ -133,6 +156,18 @@ export const componentDocs: Record<string, ComponentDoc> = {
         type: 'boolean',
         default: 'false',
         desc: '是否显示切换密码图标',
+      },
+      {
+        prop: 'rows',
+        type: 'number',
+        default: '2',
+        desc: 'textarea 行数',
+      },
+      {
+        prop: 'autosize',
+        type: '{ minRows?: number; maxRows?: number }',
+        default: '-',
+        desc: 'textarea 自动高度',
       },
     ],
   },

@@ -8,6 +8,17 @@ export interface DialogProps {
   beforeClose?: (done: () => void) => void
 }
 
+export interface InputProps {
+  modelValue?: string
+  placeholder?: string
+  type?: string
+  disabled?: boolean
+  clearable?: boolean
+  showPassword?: boolean
+  rows?: number
+  autosize?: { minRows?: number; maxRows?: number }
+}
+
 export interface DrawerProps {
   modelValue?: boolean
   title?: string

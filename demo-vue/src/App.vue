@@ -132,6 +132,25 @@ function handleError() {
               font-size: 0.875rem;
             "
           >
+            备注（textarea）
+          </label>
+          <MkInput
+            v-model="name"
+            type="textarea"
+            :rows="3"
+            :autosize="{ minRows: 2, maxRows: 6 }"
+            placeholder="请输入备注"
+          />
+        </div>
+        <div>
+          <label
+            style="
+              display: block;
+              margin-bottom: 6px;
+              color: var(--mk-text-secondary);
+              font-size: 0.875rem;
+            "
+          >
             音量：{{ volume }}
           </label>
           <MkSlider v-model="volume" :min="0" :max="100" :step="1" />

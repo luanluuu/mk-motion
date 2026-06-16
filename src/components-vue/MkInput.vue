@@ -12,10 +12,13 @@ const props = withDefaults(
     showPassword?: boolean
     validate?: (value: string) => string | null
     motion?: MotionOptions
+    rows?: number
+    autosize?: { minRows?: number; maxRows?: number }
   }>(),
   {
     modelValue: '',
     type: 'text',
+    rows: 2,
   }
 )
 
@@ -25,7 +28,7 @@ const emit = defineEmits<{
   enter: [value: string]
 }>()
 
-const inputRef = ref<HTMLInputElement | null>(null)
+const inputRef = ref<HTMLInputElement | HTMLTextAreaElement | null>(null)
 const errorMsg = ref('')
 const isSuccess = ref(false)
 const showPwd = ref(false)
@@ -38,6 +41,27 @@ const inputType = computed(() => {
   }
   return props.type
 })
+
+const isTextarea = computed(() => props.type === 'textarea')
+const textareaHeight = ref<string | undefined>(undefined)
+
+function resizeTextarea() {
+  if (!isTextarea.value || !inputRef.value || !props.autosize) return
+  const el = inputRef.value as HTMLTextAreaElement
+  const { minRows, maxRows } = props.autosize
+  const style = getComputedStyle(el)
+  const lineHeight = parseFloat(style.lineHeight) || 20
+
+  el.style.height = 'auto'
+  let height = el.scrollHeight
+  if (minRows !== undefined) {
+    height = Math.max(height, minRows * lineHeight)
+  }
+  if (maxRows !== undefined) {
+    height = Math.min(height, maxRows * lineHeight)
+  }
+  textareaHeight.value = `${height}px`
+}
 
 const wrapperClass = computed(() => {
   return [
@@ -52,6 +76,9 @@ function onInput() {
   emit('update:modelValue', value)
   emit('input', value)
   clearError()
+  if (isTextarea.value) {
+    resizeTextarea()
+  }
 }
 
 function onKeydown(e: KeyboardEvent) {
@@ -110,6 +137,9 @@ watch(
     if (inputRef.value && inputRef.value.value !== v) {
       inputRef.value.value = v ?? ''
     }
+    if (isTextarea.value) {
+      resizeTextarea()
+    }
   }
 )
 
@@ -119,6 +149,9 @@ onMounted(() => {
       inputRef.value,
       props.motion || { focus: 'ring', enter: 'fadeIn', duration: 200 }
     )
+  }
+  if (isTextarea.value) {
+    resizeTextarea()
   }
 })
 
@@ -131,14 +164,18 @@ defineExpose({ focus, validate, showError, showSuccess, clearError })
 
 <template>
   <div :class="wrapperClass">
-    <input
+    <component
+      :is="isTextarea ? 'textarea' : 'input'"
       :id="inputId"
       ref="inputRef"
-      :type="inputType"
+      :type="isTextarea ? undefined : inputType"
       class="mk-input"
+      :class="{ 'mk-input--textarea': isTextarea }"
       :placeholder="placeholder"
       :disabled="disabled"
       :value="modelValue"
+      :rows="isTextarea ? rows : undefined"
+      :style="isTextarea && autosize ? { height: textareaHeight } : undefined"
       :aria-invalid="errorMsg ? 'true' : undefined"
       :aria-describedby="errorMsg ? `${inputId}-error` : undefined"
       @input="onInput"
@@ -200,6 +237,14 @@ defineExpose({ focus, validate, showError, showSuccess, clearError })
 
 .mk-input:focus {
   border-color: var(--mk-primary);
+}
+
+.mk-input--textarea {
+  resize: vertical;
+  min-height: 64px;
+  height: auto;
+  padding: 8px 12px;
+  line-height: 1.6;
 }
 
 .mk-input-wrapper.is-error .mk-input {

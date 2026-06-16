@@ -49,6 +49,7 @@ export type {
 
 export { default as MkButton } from './MkButton.vue'
 export { default as MkInput } from './MkInput.vue'
+export type { InputProps } from './types.js'
 export { default as MkSelect } from './MkSelect.vue'
 export { default as MkOption } from './MkOption.vue'
 export type { SelectOption } from './types.js'

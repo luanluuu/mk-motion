@@ -2,6 +2,10 @@ import { describe, it, expect, vi } from 'vitest'
 import { createApp, h, nextTick } from 'vue'
 import MkInput from '../../components-vue/MkInput.vue'
 
+function mount(el: HTMLElement, component: ReturnType<typeof h>) {
+  createApp({ render: () => component }).mount(el)
+}
+
 describe('MkInput', () => {
   it('renders with modelValue', () => {
     const el = document.createElement('div')
@@ -71,5 +75,70 @@ describe('MkInput', () => {
 
     expect(el.querySelector('.mk-input-wrapper')?.classList.contains('is-error')).toBe(true)
     expect(el.textContent).toContain('至少 3 个字符')
+  })
+
+  it('renders textarea when type="textarea"', () => {
+    const el = document.createElement('div')
+    document.body.appendChild(el)
+
+    mount(el, h(MkInput, { modelValue: 'hello', type: 'textarea' }))
+
+    const textarea = el.querySelector('.mk-input--textarea')
+    expect(textarea).not.toBeNull()
+    expect(textarea?.tagName.toLowerCase()).toBe('textarea')
+    expect((textarea as HTMLTextAreaElement).value).toBe('hello')
+  })
+
+  it('sets rows attribute on textarea', () => {
+    const el = document.createElement('div')
+    document.body.appendChild(el)
+
+    mount(el, h(MkInput, { type: 'textarea', rows: 4 }))
+
+    const textarea = el.querySelector('textarea') as HTMLTextAreaElement
+    expect(textarea.rows).toBe(4)
+  })
+
+  it('emits update:modelValue from textarea input', async () => {
+    const el = document.createElement('div')
+    document.body.appendChild(el)
+
+    let value = ''
+    mount(
+      el,
+      h(MkInput, {
+        type: 'textarea',
+        modelValue: value,
+        'onUpdate:modelValue': (v: string) => {
+          value = v
+        },
+      })
+    )
+
+    const textarea = el.querySelector('textarea') as HTMLTextAreaElement
+    textarea.value = 'world'
+    textarea.dispatchEvent(new Event('input'))
+    await nextTick()
+
+    expect(value).toBe('world')
+  })
+
+  it('adjusts textarea height with autosize', async () => {
+    const el = document.createElement('div')
+    document.body.appendChild(el)
+
+    mount(
+      el,
+      h(MkInput, {
+        type: 'textarea',
+        modelValue: 'line1',
+        autosize: { minRows: 2, maxRows: 6 },
+      })
+    )
+
+    await nextTick()
+
+    const textarea = el.querySelector('textarea') as HTMLTextAreaElement
+    expect(textarea.style.height).not.toBe('')
   })
 })
