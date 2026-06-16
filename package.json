@@ -1,6 +1,6 @@
 {
   "name": "@luanlu/mk-motion",
-  "version": "2.0.8",
+  "version": "2.0.9",
   "description": "A lightweight, modern frontend animation library",
   "type": "module",
   "main": "./dist/mk-motion.umd.cjs",
