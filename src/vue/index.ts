@@ -42,6 +42,7 @@ export {
   MkMessage,
   MkCollapse,
   MkSelect,
+  MkOption,
   MkTable,
   MkPagination,
   MkTree,

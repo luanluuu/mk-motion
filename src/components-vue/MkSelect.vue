@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { ref, computed, watch, nextTick, onUnmounted } from 'vue'
+import { ref, computed, watch, nextTick, onUnmounted, type VNode, Fragment } from 'vue'
+import MkOption from './MkOption.vue'
 
 export interface SelectOption {
   label: string
@@ -34,7 +35,7 @@ if (
 ) {
   console.warn(
     '[mk-motion] <MkSelect> expects `options` to be an array. ' +
-      'This component only supports the `:options` prop, not <MkOption> child components.'
+      'Child <MkOption> components are also supported.'
   )
 }
 
@@ -48,7 +49,7 @@ const emit = defineEmits<{
 
 const modelValue = defineModel<ModelValue>('modelValue')
 
-defineSlots<{
+const slots = defineSlots<{
   default?: (props: { option: SelectOption; selected: boolean }) => unknown
   empty?: () => unknown
   prefix?: () => unknown
@@ -59,7 +60,42 @@ const searchQuery = ref('')
 const triggerRef = ref<HTMLDivElement | null>(null)
 const searchInputRef = ref<HTMLInputElement | null>(null)
 
-const allOptions = computed(() => props.options)
+function isMkOption(vnode: VNode): boolean {
+  const type = vnode.type
+  return (
+    typeof type === 'object' &&
+    type !== null &&
+    '__name' in type &&
+    (type as Record<string, unknown>).__name === 'MkOption'
+  )
+}
+
+function extractSlotOptions(vnodes: VNode[]): SelectOption[] {
+  const result: SelectOption[] = []
+  for (const vnode of vnodes) {
+    if (!vnode) continue
+    if (isMkOption(vnode)) {
+      const p = (vnode.props ?? {}) as Record<string, unknown>
+      result.push({
+        label: String(p.label ?? ''),
+        value: p.value as string | number,
+        disabled: Boolean(p.disabled),
+      })
+    } else if (vnode.type === Fragment && Array.isArray(vnode.children)) {
+      result.push(...extractSlotOptions(vnode.children as VNode[]))
+    } else if (Array.isArray(vnode.children)) {
+      result.push(...extractSlotOptions(vnode.children as VNode[]))
+    }
+  }
+  return result
+}
+
+const slotOptions = computed(() => extractSlotOptions(slots.default?.() ?? []))
+
+const allOptions = computed(() => [
+  ...(props.options ?? []),
+  ...slotOptions.value,
+])
 
 const filteredOptions = computed(() => {
   if (!props.filterable || !searchQuery.value) return allOptions.value

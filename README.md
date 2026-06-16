@@ -86,7 +86,12 @@ createApp(App).use(MkMotion).mount('#app')
     { label: '北京', value: 'beijing' },
     { label: '上海', value: 'shanghai' },
   ]" />
-  <!-- MkSelect only supports the :options prop; <MkOption> child components are not supported. -->
+
+  <!-- or use MkOption children -->
+  <MkSelect v-model="city">
+    <MkOption label="北京" value="beijing" />
+    <MkOption label="上海" value="shanghai" />
+  </MkSelect>
 
   <MkTabs v-model="activeTab" :items="[
     { key: 'tab1', label: 'Tab 1' },
@@ -178,7 +183,7 @@ export default defineNuxtConfig({
 
 ### Vue 3 组件 (`@luanlu/mk-motion/vue`)
 
-**基础** — `MkButton`, `MkInput`, `MkSelect` (`:options` only), `MkSwitch`, `MkRadio/Group`, `MkCheckbox/Group`, `MkSlider`
+**基础** — `MkButton`, `MkInput`, `MkSelect` (`:options` or `<MkOption>`), `MkSwitch`, `MkRadio/Group`, `MkCheckbox/Group`, `MkSlider`
 
 **数据展示** — `MkTable` (虚拟滚动 + 排序 + 过滤), `MkPagination`, `MkTree` (懒加载 + 搜索), `MkTag`, `MkCard`, `MkAvatar`, `MkEmpty`, `MkProgress`
 

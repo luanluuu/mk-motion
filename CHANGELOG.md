@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - `MkSelect` now supports `size` prop (`small` | `default` | `large`).
+- `MkSelect` now supports `<MkOption>` child components in addition to the `:options` prop.
+- New `MkOption` component for declarative select options.
 - `MkTable` exports generic `TableColumn<T>` type for typed column definitions.
 - Dev-mode CSS variable check: warns when `--mk-primary`, `--mk-text`, `--mk-border`, or `--mk-surface` are missing.
 - Per-component CSS entries under `dist/css/*` and `mkMotion({ importStyle: 'component' })` for on-demand styles.
@@ -19,7 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `dist/style.css` now includes the full `:root` theme tokens, so `import '@luanlu/mk-motion/css'` works standalone.
 - `MkButton` default margin changed to `0`; legacy spacing available via `.mk-button--gutter` or CSS variables `--mk-button-margin-x` / `--mk-button-margin-y`.
-- README examples updated to use `MkSelect :options` and `MkTabs :items`.
+- README examples updated to use `MkSelect :options` / `<MkOption>` and `MkTabs :items`.
 - README notes on Vite auto-import: avoid mixing auto-import with explicit imports.
 
 ## [2.0.2] - 2026-06-14
