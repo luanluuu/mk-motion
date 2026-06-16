@@ -4,6 +4,8 @@ import { Animator } from '../../core/animator.js'
 import type { AnimationName, AnimationOptions } from '../../core/utils.js'
 import type { MotionOptions } from '../../motion/component-motion.js'
 
+export type UseMkMotionOptions = MotionOptions
+
 export function useMkMotion(
   elRef: Ref<HTMLElement | undefined>,
   _options?: MotionOptions

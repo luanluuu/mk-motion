@@ -1,4 +1,8 @@
 export { useMkTheme } from './useTheme.js'
+export type { MkTheme, UseMkThemeOptions } from './useTheme.js'
 export { useMkMotion } from './useMotion.js'
+export type { UseMkMotionOptions } from './useMotion.js'
 export { useMkLoading } from './useLoading.js'
+export type { UseMkLoadingOptions } from './useLoading.js'
 export { useMkMessage } from './useMessage.js'
+export type { UseMkMessageOptions } from './useMessage.js'

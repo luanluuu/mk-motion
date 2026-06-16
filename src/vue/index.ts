@@ -61,6 +61,16 @@ export {
   useMkLoading,
   useMkMessage,
 } from './composables/index.js'
+export type {
+  MkTheme,
+  UseMkThemeOptions,
+  UseMkMotionOptions,
+  UseMkLoadingOptions,
+  UseMkMessageOptions,
+} from './composables/index.js'
+
+// Shared component prop types
+export type * from '../components-vue/types.js'
 
 const componentEntries = Object.entries(components).filter(([name]) =>
   name.startsWith('Mk')

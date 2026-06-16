@@ -205,6 +205,7 @@ function onKeydown(e: KeyboardEvent) {
 }
 
 watch(isOpen, (openValue) => {
+  if (typeof document === 'undefined') return
   if (openValue) {
     document.addEventListener('click', onClickOutside, { capture: true })
     emit('focus')
@@ -214,6 +215,7 @@ watch(isOpen, (openValue) => {
 })
 
 onUnmounted(() => {
+  if (typeof document === 'undefined') return
   document.removeEventListener('click', onClickOutside, { capture: true })
 })
 </script>

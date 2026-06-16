@@ -17,31 +17,33 @@
     </div>
     <div class="doc-header-right">
       <div class="theme-wrap">
-        <span class="theme-icon" title="暗色" @click="sliderValue = 0">🌙</span>
-        <MkSlider
-          v-model="sliderValue"
-          :min="0"
-          :max="100"
-          :step="1"
-          :show-value="false"
-          class="slider-container"
-          @change="onSliderChange"
-        />
-        <span class="theme-icon" title="亮色" @click="sliderValue = 100"
-          >☀️</span
+        <MkButton
+          v-for="mode in themeModes"
+          :key="mode.value"
+          type="text"
+          :class="{ 'is-active': theme === mode.value }"
+          @click="setThemeWithTransition(mode.value)"
         >
+          {{ mode.label }}
+        </MkButton>
       </div>
     </div>
   </header>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { watch } from 'vue'
 import { headerNavItems } from '../data/nav.js'
 import { goTo } from '../router.js'
-import { setColorTemp } from '../shared/theme-interpolator.js'
+import { useMkTheme, type MkTheme } from '@luanlu/mk-motion/vue'
 
-const sliderValue = ref(0)
+const { theme, resolvedTheme, setTheme } = useMkTheme()
+
+const themeModes: { value: MkTheme; label: string }[] = [
+  { value: 'light', label: '☀️' },
+  { value: 'dark', label: '🌙' },
+  { value: 'auto', label: 'Auto' },
+]
 
 function startTransition() {
   document.documentElement.setAttribute('data-mk-theme-transitioning', '')
@@ -53,11 +55,15 @@ function endTransition() {
   }, 250)
 }
 
-function onSliderChange(value: number) {
+function setThemeWithTransition(value: MkTheme) {
   startTransition()
-  setColorTemp(value / 100)
+  setTheme(value)
   endTransition()
 }
+
+watch(resolvedTheme, () => {
+  endTransition()
+})
 </script>
 
 <style scoped>

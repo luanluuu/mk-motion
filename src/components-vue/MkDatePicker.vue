@@ -149,12 +149,14 @@ function onClickOutside(e: MouseEvent) {
 }
 
 watch(isOpen, (openValue) => {
+  if (typeof document === 'undefined') return
   if (openValue)
     document.addEventListener('click', onClickOutside, { capture: true })
   else document.removeEventListener('click', onClickOutside, { capture: true })
 })
 
 onUnmounted(() => {
+  if (typeof document === 'undefined') return
   document.removeEventListener('click', onClickOutside, { capture: true })
 })
 </script>

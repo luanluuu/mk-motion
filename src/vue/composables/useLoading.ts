@@ -4,6 +4,8 @@ import {
 } from '../../components/loading/loading.js'
 import type { LoadingOptions } from '../../components/loading/loading.js'
 
+export type UseMkLoadingOptions = LoadingOptions
+
 export function useMkLoading() {
   let cleanup: (() => void) | null = null
 

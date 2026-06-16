@@ -83,7 +83,7 @@
     "docs:install": "cd docs && npm install",
     "docs:dev": "cd docs && npm run dev",
     "build:docs": "cd docs && npm run build",
-    "check": "npm run test && npm run build && npm run build:docs",
+    "check": "npm run test:coverage && npm run build && npm run build:docs",
     "pack:check": "npm --cache /tmp/mk-motion-npm-cache pack --dry-run",
     "prepublishOnly": "npm run check && npm run pack:check",
     "test": "vitest run",

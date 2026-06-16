@@ -86,3 +86,6 @@ export { default as MkCol } from './MkCol.vue'
 export { default as MkSpace } from './MkSpace.vue'
 export { default as MkDivider } from './MkDivider.vue'
 export { default as MkMenuItem } from './MkMenuItem.vue'
+
+// Shared prop/composable types
+export type * from './types.js'
