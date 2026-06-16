@@ -33,6 +33,7 @@ export {
   MkMenu,
   MkMenuItem,
   MkTabs,
+  MkTabPane,
   MkPopover,
   MkDropdown,
   MkTooltip,

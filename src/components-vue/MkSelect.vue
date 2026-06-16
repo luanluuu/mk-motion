@@ -90,7 +90,9 @@ function extractSlotOptions(vnodes: VNode[]): SelectOption[] {
   return result
 }
 
-const slotOptions = computed(() => extractSlotOptions(slots.default?.() ?? []))
+const slotOptions = computed(() =>
+  extractSlotOptions(((slots.default as unknown as (() => VNode[]))?.() ?? []) as VNode[])
+)
 
 const allOptions = computed(() => [
   ...(props.options ?? []),

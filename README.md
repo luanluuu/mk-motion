@@ -97,6 +97,12 @@ createApp(App).use(MkMotion).mount('#app')
     { key: 'tab1', label: 'Tab 1' },
     { key: 'tab2', label: 'Tab 2' },
   ]" />
+
+  <!-- or use MkTabPane children -->
+  <MkTabs v-model="activeTab">
+    <MkTabPane name="tab1" label="Tab 1">Content 1</MkTabPane>
+    <MkTabPane name="tab2" label="Tab 2">Content 2</MkTabPane>
+  </MkTabs>
 </template>
 ```
 
@@ -191,7 +197,7 @@ export default defineNuxtConfig({
 
 **布局** — `MkContainer`, `MkLayout`, `MkHeader`, `MkAside`, `MkMain`, `MkFooter`, `MkRow`, `MkCol`, `MkSpace`, `MkDivider`
 
-**导航** — `MkMenu`, `MkMenuItem`, `MkTabs`, `MkBreadcrumb`, `MkSteps`, `MkPagination`
+**导航** — `MkMenu`, `MkMenuItem`, `MkTabs` (`:items` or `<MkTabPane>`), `MkBreadcrumb`, `MkSteps`, `MkPagination`
 
 **反馈** — `MkDialog`, `MkDrawer`, `MkPopover`, `MkDropdown`, `MkTooltip`, `MkMessage`, `MkLoading`, `MkAlert`, `MkCollapse`
 

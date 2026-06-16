@@ -201,7 +201,7 @@ export const componentDocs: Record<string, ComponentDoc> = {
   },
   tabs: {
     title: 'Tabs 标签页',
-    desc: '标签页用于在同一区域切换不同内容。',
+    desc: '标签页用于在同一区域切换不同内容。支持通过 `items` 属性传入标签，也支持 `<MkTabPane>` 子组件写法。',
     demos: [
       {
         title: '线型',

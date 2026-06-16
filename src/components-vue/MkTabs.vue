@@ -1,5 +1,13 @@
 <script setup lang="ts">
-import { computed, ref, watch, nextTick, onMounted } from 'vue'
+import {
+  computed,
+  ref,
+  watch,
+  nextTick,
+  onMounted,
+  provide,
+} from 'vue'
+import { tabsContextKey, type TabPaneInfo } from './tabs-context.js'
 
 export interface TabItem {
   key?: string | number
@@ -12,14 +20,25 @@ export type TabsType = 'default' | 'card'
 
 export interface TabsProps {
   modelValue?: string | number
-  items: TabItem[]
+  items?: TabItem[]
   type?: TabsType
 }
 
 const props = withDefaults(defineProps<TabsProps>(), {
   modelValue: undefined,
+  items: () => [],
   type: 'default',
 })
+
+if (
+  (import.meta as { env?: { MODE?: string } }).env?.MODE === 'development' &&
+  !Array.isArray(props.items)
+) {
+  console.warn(
+    '[mk-motion] <MkTabs> expects `items` to be an array. ' +
+      'Child <MkTabPane> components are also supported.'
+  )
+}
 
 const emit = defineEmits<{
   'update:modelValue': [value: string | number]
@@ -28,15 +47,43 @@ const emit = defineEmits<{
 
 const model = defineModel<string | number>()
 
-const resolvedItems = computed(() =>
-  props.items.map((item, index) => ({
+const registeredPanes = ref<TabPaneInfo[]>([])
+
+function registerPane(pane: TabPaneInfo) {
+  if (!registeredPanes.value.some((p) => p.key === pane.key)) {
+    registeredPanes.value.push(pane)
+  }
+}
+
+function unregisterPane(key: string | number) {
+  registeredPanes.value = registeredPanes.value.filter((p) => p.key !== key)
+}
+
+provide(tabsContextKey, {
+  activeKey: computed(() => activeKey.value),
+  registerPane,
+  unregisterPane,
+})
+
+const propItems = computed(() =>
+  (props.items ?? []).map((item, index) => ({
     ...item,
     key: item.key ?? index,
   }))
 )
 
+const resolvedItems = computed(() => {
+  const panes = registeredPanes.value.map((pane, index) => ({
+    key: pane.key ?? index,
+    label: pane.label,
+    disabled: pane.disabled,
+    content: pane.content,
+  }))
+  return [...propItems.value, ...panes]
+})
+
 const activeKey = computed({
-  get: () => model.value ?? props.items[0]?.key ?? 0,
+  get: () => model.value ?? resolvedItems.value[0]?.key ?? 0,
   set: (val: string | number) => {
     model.value = val
     emit('update:modelValue', val)
@@ -114,7 +161,13 @@ const isActive = (item: (typeof resolvedItems.value)[number]) =>
         role="tabpanel"
       >
         <slot :name="`panel-${item.key}`">
-          {{ item.content }}
+          <template v-if="typeof item.content === 'string'">
+            {{ item.content }}
+          </template>
+          <component
+            :is="() => item.content"
+            v-else-if="item.content"
+          />
         </slot>
       </div>
       <slot />

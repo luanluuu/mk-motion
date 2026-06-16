@@ -11,7 +11,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `MkSelect` now supports `size` prop (`small` | `default` | `large`).
 - `MkSelect` now supports `<MkOption>` child components in addition to the `:options` prop.
+- `MkTabs` now supports `<MkTabPane>` child components in addition to the `:items` prop.
 - New `MkOption` component for declarative select options.
+- New `MkTabPane` component for declarative tab panes.
 - `MkTable` exports generic `TableColumn<T>` type for typed column definitions.
 - Dev-mode CSS variable check: warns when `--mk-primary`, `--mk-text`, `--mk-border`, or `--mk-surface` are missing.
 - Per-component CSS entries under `dist/css/*` and `mkMotion({ importStyle: 'component' })` for on-demand styles.

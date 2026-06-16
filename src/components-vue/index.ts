@@ -8,6 +8,7 @@ export { default as MkMenu } from './MkMenu.vue'
 export type { MenuItem, MenuMode, MenuProps } from './types.js'
 
 export { default as MkTabs } from './MkTabs.vue'
+export { default as MkTabPane } from './MkTabPane.vue'
 export type { TabItem, TabsType, TabsProps } from './types.js'
 
 export { default as MkPopover } from './MkPopover.vue'
