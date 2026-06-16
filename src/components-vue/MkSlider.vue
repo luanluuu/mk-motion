@@ -165,7 +165,6 @@ function onKeydown(e: KeyboardEvent) {
   align-items: center;
   gap: 12px;
   width: 100%;
-  max-width: 320px;
 }
 
 .mk-slider__track {

@@ -6,13 +6,23 @@
     <title>mk-motion — 动画驱动的现代前端 UI 系统</title>
     <link rel="stylesheet" href="../../dist/style.css" />
     <style>
-      :root {
+      :root,
+      [data-landing-theme="dark"] {
         --bg-primary: #0a0a0f;
         --bg-secondary: #12121a;
         --text-primary: #ffffff;
         --text-secondary: #a1a1aa;
         --accent: #38bdf8;
         --accent-glow: rgba(56, 189, 248, 0.3);
+      }
+
+      [data-landing-theme="light"] {
+        --bg-primary: #f8fafc;
+        --bg-secondary: #ffffff;
+        --text-primary: #0f172a;
+        --text-secondary: #475569;
+        --accent: #0ea5e9;
+        --accent-glow: rgba(14, 165, 233, 0.2);
       }
 
       * {
@@ -699,6 +709,30 @@
     <!-- Particle Canvas -->
     <canvas id="particle-canvas"></canvas>
 
+    <button
+      id="theme-toggle"
+      aria-label="Toggle theme"
+      style="
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 10002;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        border: 1px solid var(--text-secondary);
+        background: var(--bg-secondary);
+        color: var(--text-primary);
+        cursor: pointer;
+        font-size: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      "
+    >
+      🌙
+    </button>
+
     <!-- Hero Section -->
     <section class="hero">
       <div class="hero-glow"></div>
@@ -1214,6 +1248,18 @@
             })
           }
         })
+      })
+
+      // ============================================
+      // Theme toggle
+      // ============================================
+      document.documentElement.setAttribute('data-landing-theme', 'dark')
+      const themeToggle = document.getElementById('theme-toggle')
+      themeToggle.addEventListener('click', () => {
+        const current = document.documentElement.getAttribute('data-landing-theme')
+        const next = current === 'light' ? 'dark' : 'light'
+        document.documentElement.setAttribute('data-landing-theme', next)
+        themeToggle.textContent = next === 'light' ? '☀️' : '🌙'
       })
     </script>
   </body>

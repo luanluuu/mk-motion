@@ -1,7 +1,39 @@
 # mk-motion 发展路线图
 
 > 目标：从"基础组件库"进化为"动画驱动的现代前端 UI 系统"
-> 更新日期：2026-06-09
+> 更新日期：2026-06-14
+
+---
+
+## 当前执行阶段（2026-06-14）
+
+基于「P0 修复 → P1 补齐 → 工程化 → 发布」四阶段计划推进。
+
+### Phase 1 — P0 热修复 ✅
+
+- [x] Tabs 面板 `display` 修复，支持 `MkTabPane` 子组件
+- [x] 浮层组件统一 `teleport` 到 body，防止被父容器裁剪
+- [x] 主题系统重构：`light/dark/auto` 三态，`useMkTheme` SSR 安全，默认 light
+- [x] 移除表单/浮层组件默认 `max-width`
+
+### Phase 2 — P1 能力补齐 + 文档/示例 🚧
+
+- [ ] 补充核心组件测试（Input、Button、Dialog、useMkTheme 等）
+- [ ] 更新 `MIGRATION.md` 与 `ROADMAP.md`
+- [ ] 示例项目支持主题切换，验证下拉框/弹窗不被裁剪
+
+### Phase 3 — 工程化与开发者体验
+
+- [ ] 完善 TypeScript 类型导出
+- [ ] SSR/Nuxt 3 适配验证
+- [ ] 文档站点组件化并接入新主题切换
+- [ ] 构建产物校验、测试覆盖率门槛
+
+### Phase 4 — 发布收尾
+
+- [ ] 最终验收：build / typecheck / test / lint
+- [ ] 整理 `CHANGELOG.md` 并发布版本
+- [ ] 验证示例项目主题切换与浮层定位
 
 ---
 

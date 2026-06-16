@@ -1,9 +1,6 @@
-import { ref, onMounted, onUnmounted, type Ref } from 'vue'
+import { ref, onMounted, onUnmounted, type Ref, computed } from 'vue'
 
 export type MkTheme = 'auto' | 'light' | 'dark'
-
-const storedTheme = ref<MkTheme>('auto')
-let mediaQuery: MediaQueryList | null = null
 
 function getSystemIsDark(): boolean {
   if (typeof window === 'undefined') return false
@@ -36,7 +33,6 @@ function writeStoredTheme(theme: MkTheme) {
 
 export interface UseMkThemeOptions {
   defaultTheme?: MkTheme
-  storageKey?: string
 }
 
 export function useMkTheme(options: UseMkThemeOptions = {}): {
@@ -47,16 +43,16 @@ export function useMkTheme(options: UseMkThemeOptions = {}): {
 } {
   const { defaultTheme = 'auto' } = options
 
-  const theme = ref<MkTheme>(storedTheme.value === 'auto' ? defaultTheme : storedTheme.value)
-  const resolvedTheme = ref<'light' | 'dark'>(getResolvedTheme(theme.value))
+  const theme = ref<MkTheme>(defaultTheme)
+  const resolvedTheme = computed<'light' | 'dark'>(() =>
+    getResolvedTheme(theme.value)
+  )
 
   const update = () => {
-    resolvedTheme.value = getResolvedTheme(theme.value)
     setDOMTheme(theme.value)
   }
 
   const setTheme = (value: MkTheme) => {
-    storedTheme.value = value
     writeStoredTheme(value)
     theme.value = value
     update()
@@ -67,25 +63,35 @@ export function useMkTheme(options: UseMkThemeOptions = {}): {
   }
 
   onMounted(() => {
-    const initial = readStoredTheme()
-    if (initial !== 'auto') {
-      theme.value = initial
-      storedTheme.value = initial
+    const stored = readStoredTheme()
+    if (stored !== 'auto') {
+      theme.value = stored
     }
     update()
 
-    if (!mediaQuery) {
-      mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
-      const handler = () => {
-        if (storedTheme.value === 'auto') {
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
+    const systemChangeHandler = () => {
+      if (theme.value === 'auto') {
+        update()
+      }
+    }
+    mediaQuery.addEventListener('change', systemChangeHandler)
+
+    const storageHandler = (e: StorageEvent) => {
+      if (e.key === 'mk-theme' && e.newValue) {
+        const value = e.newValue as MkTheme
+        if (['auto', 'light', 'dark'].includes(value)) {
+          theme.value = value
           update()
         }
       }
-      mediaQuery.addEventListener('change', handler)
-      onUnmounted(() => {
-        mediaQuery?.removeEventListener('change', handler)
-      })
     }
+    window.addEventListener('storage', storageHandler)
+
+    onUnmounted(() => {
+      mediaQuery.removeEventListener('change', systemChangeHandler)
+      window.removeEventListener('storage', storageHandler)
+    })
   })
 
   return { theme, resolvedTheme, setTheme, toggle }

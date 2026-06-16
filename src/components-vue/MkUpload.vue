@@ -287,7 +287,6 @@ watch(
   display: inline-flex;
   flex-direction: column;
   width: 100%;
-  max-width: 360px;
 }
 
 .mk-upload__input {

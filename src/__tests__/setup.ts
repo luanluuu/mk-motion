@@ -1,4 +1,20 @@
 // Global test setup for jsdom environment
+
+// jsdom doesn't support matchMedia by default
+Object.defineProperty(window, 'matchMedia', {
+  writable: true,
+  value: (query: string) => ({
+    matches: query.includes('prefers-color-scheme: dark') ? false : false,
+    media: query,
+    onchange: null,
+    addListener: () => {},
+    removeListener: () => {},
+    addEventListener: () => {},
+    removeEventListener: () => {},
+    dispatchEvent: () => false,
+  }),
+})
+
 // jsdom doesn't support Web Animations API by default
 if (!Element.prototype.animate) {
   Element.prototype.animate = function () {

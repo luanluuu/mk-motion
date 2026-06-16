@@ -5,6 +5,7 @@ import {
   MkInput,
   MkSlider,
   MkSwitch,
+  MkSelect,
   MkCard,
   MkDialog,
 } from '@luanlu/mk-motion/vue'
@@ -29,6 +30,12 @@ const volume = ref(50)
 const enabled = ref(false)
 const showDialog = ref(false)
 const btnLoading = ref(false)
+const selected = ref('')
+const selectOptions = [
+  { label: '选项一', value: '1' },
+  { label: '选项二', value: '2' },
+  { label: '选项三', value: '3' },
+]
 
 const motionEl = ref<HTMLElement>()
 useMkMotion(motionEl, { hover: 'lift', enter: 'bounceIn', duration: 400 })
@@ -133,6 +140,19 @@ function handleError() {
             状态：{{ enabled ? '已开启' : '已关闭' }}
           </span>
         </div>
+      </div>
+    </MkCard>
+
+    <!-- Select（Teleport 演示：外层 overflow:hidden 也不会裁剪下拉框） -->
+    <MkCard shadow="hover" style="margin-bottom: 24px">
+      <template #header>🔽 下拉选择（Teleport）</template>
+      <div style="overflow: hidden; padding: 4px">
+        <MkSelect
+          v-model="selected"
+          :options="selectOptions"
+          placeholder="请选择"
+          style="width: 240px"
+        />
       </div>
     </MkCard>
 

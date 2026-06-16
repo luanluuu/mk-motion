@@ -163,7 +163,6 @@ watch(visible, (val) => {
   background: var(--mk-surface-raised);
   border: 1px solid var(--mk-border-hover);
   border-radius: var(--mk-radius-md);
-  max-width: 320px;
   pointer-events: auto;
   z-index: var(--mk-z-popover);
 }

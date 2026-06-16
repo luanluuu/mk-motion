@@ -67,6 +67,45 @@ The main entry no longer imports CSS automatically. Add the CSS import explicitl
 import '@luanlu/mk-motion/css'
 ```
 
+## From v2.0.x to v2.1.0
+
+### Theme system overhaul
+
+v2.1.0 introduces a first-class light/dark/auto theme system and changes the default theme from dark to light.
+
+| Change | v2.0.x | v2.1.0 |
+|--------|--------|--------|
+| Default theme | dark | light |
+| `useMkTheme` API | `{ isDark, setTheme(dark: boolean), toggle }` | `{ theme, resolvedTheme, setTheme('auto' \| 'light' \| 'dark'), toggle }` |
+| Theme attribute | `data-mk-theme="light" \| "dark"` | same, plus `auto` resolves to system preference |
+| Storage key | none | `mk-theme` in `localStorage` |
+
+Update your theme toggle code:
+
+```ts
+// v2.0.x
+const { isDark, toggle } = useMkTheme()
+
+// v2.1.0
+const { resolvedTheme, setTheme, toggle } = useMkTheme()
+// resolvedTheme: 'light' | 'dark'
+setTheme('dark')
+toggle()
+```
+
+### Popover/floating components now teleport to body by default
+
+`MkSelect`, `MkDropdown`, `MkTooltip`, `MkPopover`, `MkDatePicker`, and `MkTimePicker` now render their popup layer into `document.body` by default via `<Teleport>`, preventing clipping by `overflow: hidden` ancestors. You can disable this with `:teleport="false"`.
+
+### Default max-width removed
+
+Form and floating components no longer ship with a fixed `max-width`. Their width is now controlled by their container or by your own CSS:
+
+- `MkInput`, `MkSelect`, `MkSlider`, `MkDatePicker`, `MkTimePicker`, `MkUpload`
+- `MkTooltip`, `MkPopover`
+
+If you relied on the previous defaults, add explicit widths in your app styles.
+
 ### Automated migration tips
 
 You can use the following search/replace patterns in your editor or with `sed`:

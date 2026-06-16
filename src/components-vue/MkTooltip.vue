@@ -109,7 +109,6 @@ watch(visible, (val) => {
     opacity var(--mk-duration-fast) var(--mk-ease-default),
     transform var(--mk-duration-fast) var(--mk-ease-out);
   filter: drop-shadow(var(--mk-shadow-md));
-  max-width: 280px;
   z-index: var(--mk-z-tooltip);
 }
 
