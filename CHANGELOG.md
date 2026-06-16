@@ -9,6 +9,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Theme system v2.1**: `useMkTheme()` now supports `auto` | `light` | `dark`, persists to `localStorage`, listens to `prefers-color-scheme`, and is SSR-safe.
+- Light theme is now the default; `tokens.css` has been split into `:root` neutral tokens + `[data-mk-theme="light"]` / `[data-mk-theme="dark"]` full semantic palettes.
+- Floating components (`MkSelect`, `MkDropdown`, `MkTooltip`, `MkPopover`, `MkDatePicker`, `MkTimePicker`) now support a `teleport` prop and default to rendering their popup in `document.body` to avoid clipping.
+- New `MkTeleport` internal component and `useDropdownPosition` composable for body-anchored popups.
+- `MkOption` and `MkTabPane` child-component support for `MkSelect` and `MkTabs`.
+- Expanded test coverage: `MkInput`, `MkButton`, `MkDialog`, `useMkTheme`, and SSR render tests for `MkButton`, `MkInput`, `MkSelect`, `MkDialog`, `MkTabs`, `MkTabPane`.
+- Added SSR safety guards to `MkSelect`, `MkDatePicker`, and `MkTimePicker` document/window access.
+- Exported prop/composable types from `@luanlu/mk-motion/vue`: `MkTheme`, `UseMkThemeOptions`, `UseMkMotionOptions`, `UseMkLoadingOptions`, `UseMkMessageOptions`, and all shared component prop types.
+- Added Nuxt module auto-registration for `MkTabPane` and `MkOption`.
+- Vitest coverage reporting (`text`, `lcov`, `html`) and `npm run check` now runs coverage.
+- `demo-vue`, `examples/admin-dashboard`, and `examples/landing-page` now include theme toggles.
+- `MkSelect` demo added to `demo-vue` inside an `overflow: hidden` container to verify Teleport anti-clipping.
+
+### Changed
+
+- `useMkTheme` API changed from `{ isDark, setTheme(boolean), toggle }` to `{ theme, resolvedTheme, setTheme('auto' | 'light' | 'dark'), toggle }`.
+- Removed default `max-width` from form and floating components (`MkInput`, `MkSelect`, `MkSlider`, `MkDatePicker`, `MkTimePicker`, `MkUpload`, `MkTooltip`, `MkPopover`).
+- Docs site header now uses `useMkTheme` with ☀️/🌙/Auto buttons instead of a manual color-temperature slider.
+- `examples/admin-dashboard` now imports legacy components from `@luanlu/mk-motion/legacy`.
+
+### Fixed
+
+- `MkTabs` panel visibility: inactive panels are now `display: none`, active panels are `display: block`.
+- `MkTabs` TypeScript error when resolving `<MkTabPane>` items.
+- `MkSelect` unused `MkOption` import warning.
+
 - `MkSelect` now supports `size` prop (`small` | `default` | `large`).
 - `MkSelect` now supports `<MkOption>` child components in addition to the `:options` prop.
 - `MkTabs` now supports `<MkTabPane>` child components in addition to the `:items` prop.
