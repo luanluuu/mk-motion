@@ -416,7 +416,7 @@ export const componentDocs: Record<string, ComponentDoc> = {
   },
   select: {
     title: 'Select 选择器',
-    desc: '下拉选择器用于从多个选项中选择一个。',
+    desc: '下拉选择器用于从多个选项中选择一个。仅支持通过 `options` 属性传入选项，不支持 `<MkOption>` 子组件写法。',
     demos: [
       {
         title: '基础用法',

@@ -9,7 +9,7 @@ export interface SelectOption {
 
 interface Props {
   modelValue?: string | number | string[] | number[]
-  options: SelectOption[]
+  options?: SelectOption[]
   multiple?: boolean
   placeholder?: string
   disabled?: boolean
@@ -20,12 +20,23 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   placeholder: '请选择',
+  options: () => [],
   disabled: false,
   multiple: false,
   clearable: false,
   filterable: false,
   size: 'default',
 })
+
+if (
+  (import.meta as { env?: { MODE?: string } }).env?.MODE === 'development' &&
+  !Array.isArray(props.options)
+) {
+  console.warn(
+    '[mk-motion] <MkSelect> expects `options` to be an array. ' +
+      'This component only supports the `:options` prop, not <MkOption> child components.'
+  )
+}
 
 type ModelValue = string | number | (string | number)[] | undefined
 
