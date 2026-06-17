@@ -42,6 +42,7 @@ export {
   MkLoading,
   MkMessage,
   MkCollapse,
+  MkCollapseItem,
   MkSelect,
   MkOption,
   MkTable,

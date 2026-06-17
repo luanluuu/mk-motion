@@ -31,6 +31,7 @@ import {
 } from '@luanlu/mk-motion/legacy'
 import {
   MkSelect,
+  MkOption,
   MkCheckbox,
   MkRadio,
   MkRadioGroup,
@@ -39,13 +40,19 @@ import {
   MkCollapse,
   MkCollapseItem,
   MkInput,
+  MkTabs,
+  MkTabPane,
 } from '@luanlu/mk-motion/vue'
 import { createApp, h, ref } from 'vue'
 
 export interface ComponentDoc {
   title: string
   desc: string
-  demos: { title: string; code: string; init: (el: HTMLElement) => void }[]
+  demos: {
+    title: string
+    code: string
+    init: (el: HTMLElement) => { unmount: () => void } | void
+  }[]
   api: { prop: string; type: string; default: string; desc: string }[]
 }
 
@@ -239,44 +246,117 @@ export const componentDocs: Record<string, ComponentDoc> = {
   },
   tabs: {
     title: 'Tabs 标签页',
-    desc: '标签页用于在同一区域切换不同内容。支持通过 `items` 属性传入标签，也支持 `<MkTabPane>` 子组件写法。',
+    desc: '标签页用于在同一区域切换不同内容。支持 `items` 属性传入标签，也支持 `<MkTabPane>` 子组件写法。',
     demos: [
       {
         title: '线型',
-        code: `createTabs(container, { type: 'line', items: [...] })`,
+        code: `<MkTabs v-model="active" :items="items" />`,
         init: (el: HTMLElement) => {
-          createTabs(el, {
-            type: 'line',
-            items: [
-              { label: 'Tab 1', content: '内容一' },
-              { label: 'Tab 2', content: '内容二' },
-            ],
-          })
+          return createApp({
+            setup() {
+              const active = ref('1')
+              return () =>
+                h(MkTabs, {
+                  modelValue: active.value,
+                  'onUpdate:modelValue': (v: string | number) => {
+                    active.value = v as string
+                  },
+                  items: [
+                    { key: '1', label: '基础信息', content: '这是基础信息内容。' },
+                    { key: '2', label: '配置项', content: '这是配置项内容。' },
+                    { key: '3', label: '日志', content: '这是日志内容。' },
+                  ],
+                })
+            },
+          }).mount(el)
         },
       },
       {
         title: '卡片',
-        code: `createTabs(container, { type: 'card', items: [...] })`,
+        code: `<MkTabs v-model="active" type="card" :items="items" />`,
         init: (el: HTMLElement) => {
-          createTabs(el, {
-            type: 'card',
-            items: [
-              { label: 'Tab A', content: '卡片内容 A' },
-              { label: 'Tab B', content: '卡片内容 B' },
-            ],
-          })
+          return createApp({
+            setup() {
+              const active = ref('a')
+              return () =>
+                h(MkTabs, {
+                  modelValue: active.value,
+                  'onUpdate:modelValue': (v: string | number) => {
+                    active.value = v as string
+                  },
+                  type: 'card',
+                  items: [
+                    { key: 'a', label: 'Tab A', content: '卡片内容 A' },
+                    { key: 'b', label: 'Tab B', content: '卡片内容 B' },
+                  ],
+                })
+            },
+          }).mount(el)
+        },
+      },
+      {
+        title: 'MkTabPane 子组件',
+        code: `<MkTabs v-model="active">\n  <MkTabPane label="面板一" name="1">内容一</MkTabPane>\n  <MkTabPane label="面板二" name="2">内容二</MkTabPane>\n</MkTabs>`,
+        init: (el: HTMLElement) => {
+          return createApp({
+            setup() {
+              const active = ref('1')
+              return () =>
+                h(
+                  MkTabs,
+                  {
+                    modelValue: active.value,
+                    'onUpdate:modelValue': (v: string | number) => {
+                      active.value = v as string
+                    },
+                  },
+                  {
+                    default: () => [
+                      h(MkTabPane, { label: '面板一', name: '1' }, () =>
+                        '这是通过 MkTabPane 声明的面板内容。'
+                      ),
+                      h(MkTabPane, { label: '面板二', name: '2' }, () =>
+                        '支持更复杂的插槽与样式。'
+                      ),
+                    ],
+                  }
+                )
+            },
+          }).mount(el)
         },
       },
     ],
     api: [
       {
+        prop: 'modelValue',
+        type: 'string | number',
+        default: '-',
+        desc: '当前激活标签的 key/name',
+      },
+      {
         prop: 'type',
-        type: "'line' | 'card' | 'pill'",
-        default: "'line'",
+        type: "'default' | 'card'",
+        default: "'default'",
         desc: '标签页类型',
       },
-      { prop: 'items', type: 'TabItem[]', default: '[]', desc: '标签项' },
-      { prop: 'activeIndex', type: 'number', default: '0', desc: '当前激活项' },
+      {
+        prop: 'items',
+        type: 'TabItem[]',
+        default: '[]',
+        desc: '标签项配置（已废弃，建议使用 <MkTabPane>）',
+      },
+      {
+        prop: 'tabClick',
+        type: '(value: string | number, item: TabItem) => void',
+        default: '-',
+        desc: '点击标签时触发',
+      },
+      {
+        prop: 'update:modelValue',
+        type: '(value: string | number) => void',
+        default: '-',
+        desc: '激活项变化时触发',
+      },
     ],
   },
   table: {
@@ -454,136 +534,145 @@ export const componentDocs: Record<string, ComponentDoc> = {
   },
   select: {
     title: 'Select 选择器',
-    desc: '下拉选择器用于从多个选项中选择一个。支持通过 `options` 属性传入选项，也支持 `<MkOption>` 子组件写法。',
+    desc: '下拉选择器用于从多个选项中选择一个。支持 `options` 属性，也支持 `<MkOption>` 子组件写法；默认通过 `teleport` 渲染到 body 以避免被父容器裁剪。',
     demos: [
       {
         title: '基础用法',
-        code: `new MkSelect(container, { options: [...] })`,
+        code: `<MkSelect v-model="city" :options="options" placeholder="请选择城市" />`,
         init: (el: HTMLElement) => {
-          new MkSelect(el, {
-            placeholder: '请选择城市',
-            options: [
-              { label: '北京', value: 'beijing' },
-              { label: '上海', value: 'shanghai' },
-              { label: '广州', value: 'guangzhou' },
-              { label: '深圳', value: 'shenzhen' },
-            ],
-          })
+          return createApp({
+            setup() {
+              const city = ref('')
+              return () =>
+                h(MkSelect, {
+                  modelValue: city.value,
+                  'onUpdate:modelValue': (v: string | number) => {
+                    city.value = v as string
+                  },
+                  placeholder: '请选择城市',
+                  options: [
+                    { label: '北京', value: 'beijing' },
+                    { label: '上海', value: 'shanghai' },
+                    { label: '广州', value: 'guangzhou' },
+                    { label: '深圳', value: 'shenzhen' },
+                  ],
+                })
+            },
+          }).mount(el)
         },
       },
       {
         title: '默认选中',
-        code: `new MkSelect(container, { value: 'shanghai', options: [...] })`,
+        code: `<MkSelect v-model="city" :options="options" />`,
         init: (el: HTMLElement) => {
-          new MkSelect(el, {
-            value: 'shanghai',
-            options: [
-              { label: '北京', value: 'beijing' },
-              { label: '上海', value: 'shanghai' },
-              { label: '广州', value: 'guangzhou' },
-              { label: '深圳', value: 'shenzhen' },
-            ],
-          })
+          return createApp({
+            setup() {
+              const city = ref('shanghai')
+              return () =>
+                h(MkSelect, {
+                  modelValue: city.value,
+                  'onUpdate:modelValue': (v: string | number) => {
+                    city.value = v as string
+                  },
+                  options: [
+                    { label: '北京', value: 'beijing' },
+                    { label: '上海', value: 'shanghai' },
+                    { label: '广州', value: 'guangzhou' },
+                    { label: '深圳', value: 'shenzhen' },
+                  ],
+                })
+            },
+          }).mount(el)
         },
       },
       {
-        title: '禁用状态',
-        code: `new MkSelect(container, { disabled: true })`,
+        title: '禁用状态与禁用选项',
+        code: `<MkSelect v-model="city" :options="options" disabled />`,
         init: (el: HTMLElement) => {
-          new MkSelect(el, {
-            disabled: true,
-            value: 'beijing',
-            options: [
-              { label: '北京', value: 'beijing' },
-              { label: '上海', value: 'shanghai' },
-            ],
-          })
-        },
-      },
-      {
-        title: '禁用选项',
-        code: `new MkSelect(container, { options: [{ disabled: true, ... }] })`,
-        init: (el: HTMLElement) => {
-          new MkSelect(el, {
-            placeholder: '请选择',
-            options: [
-              { label: '北京', value: 'beijing' },
-              { label: '上海', value: 'shanghai', disabled: true },
-              { label: '广州', value: 'guangzhou' },
-              { label: '深圳', value: 'shenzhen', disabled: true },
-            ],
-          })
+          return createApp({
+            setup() {
+              const city = ref('beijing')
+              return () =>
+                h(MkSelect, {
+                  modelValue: city.value,
+                  'onUpdate:modelValue': (v: string | number) => {
+                    city.value = v as string
+                  },
+                  disabled: true,
+                  options: [
+                    { label: '北京', value: 'beijing' },
+                    { label: '上海', value: 'shanghai', disabled: true },
+                    { label: '广州', value: 'guangzhou' },
+                  ],
+                })
+            },
+          }).mount(el)
         },
       },
       {
         title: '本地搜索',
-        code: `new MkSelect(container, { filterable: true, options: [...] })`,
+        code: `<MkSelect v-model="city" :options="options" filterable placeholder="搜索城市" />`,
         init: (el: HTMLElement) => {
-          new MkSelect(el, {
-            filterable: true,
-            placeholder: '搜索城市',
-            options: [
-              { label: '北京', value: 'beijing' },
-              { label: '上海', value: 'shanghai' },
-              { label: '广州', value: 'guangzhou' },
-              { label: '深圳', value: 'shenzhen' },
-              { label: '杭州', value: 'hangzhou' },
-              { label: '南京', value: 'nanjing' },
-              { label: '成都', value: 'chengdu' },
-              { label: '武汉', value: 'wuhan' },
-            ],
-          })
-        },
-      },
-      {
-        title: '远程搜索',
-        code: `new MkSelect(container, { remote: true, remoteMethod: async (q) => [...] })`,
-        init: (el: HTMLElement) => {
-          const allCities = [
-            { label: '北京', value: 'beijing' },
-            { label: '上海', value: 'shanghai' },
-            { label: '广州', value: 'guangzhou' },
-            { label: '深圳', value: 'shenzhen' },
-            { label: '杭州', value: 'hangzhou' },
-            { label: '南京', value: 'nanjing' },
-            { label: '成都', value: 'chengdu' },
-            { label: '武汉', value: 'wuhan' },
-            { label: '西安', value: 'xian' },
-            { label: '重庆', value: 'chongqing' },
-          ]
-          new MkSelect(el, {
-            remote: true,
-            placeholder: '输入搜索城市',
-            options: allCities,
-            remoteMethod: (query: string) => {
-              return new Promise((resolve) => {
-                setTimeout(() => {
-                  const result = allCities.filter((c) =>
-                    c.label.includes(query)
-                  )
-                  resolve(result)
-                }, 400)
-              })
+          return createApp({
+            setup() {
+              const city = ref('')
+              return () =>
+                h(MkSelect, {
+                  modelValue: city.value,
+                  'onUpdate:modelValue': (v: string | number) => {
+                    city.value = v as string
+                  },
+                  filterable: true,
+                  placeholder: '搜索城市',
+                  options: [
+                    { label: '北京', value: 'beijing' },
+                    { label: '上海', value: 'shanghai' },
+                    { label: '广州', value: 'guangzhou' },
+                    { label: '深圳', value: 'shenzhen' },
+                    { label: '杭州', value: 'hangzhou' },
+                    { label: '成都', value: 'chengdu' },
+                  ],
+                })
             },
-          })
+          }).mount(el)
         },
       },
       {
-        title: '大量选项（虚拟滚动）',
-        code: `new MkSelect(container, { options: Array.from({length:10000}), virtualThreshold:50 })`,
+        title: 'MkOption 子组件',
+        code: `<MkSelect v-model="city">\n  <MkOption label="北京" value="beijing" />\n  <MkOption label="上海" value="shanghai" />\n</MkSelect>`,
         init: (el: HTMLElement) => {
-          new MkSelect(el, {
-            placeholder: '从 10000 项中选择',
-            virtualThreshold: 50,
-            options: Array.from({ length: 10000 }, (_, i) => ({
-              label: '选项 ' + (i + 1),
-              value: i + 1,
-            })),
-          })
+          return createApp({
+            setup() {
+              const city = ref('')
+              return () =>
+                h(
+                  MkSelect,
+                  {
+                    modelValue: city.value,
+                    'onUpdate:modelValue': (v: string | number) => {
+                      city.value = v as string
+                    },
+                  },
+                  {
+                    default: () => [
+                      h(MkOption, { label: '北京', value: 'beijing' }),
+                      h(MkOption, { label: '上海', value: 'shanghai' }),
+                      h(MkOption, { label: '广州', value: 'guangzhou' }),
+                    ],
+                  }
+                )
+            },
+          }).mount(el)
         },
       },
     ],
     api: [
+      {
+        prop: 'modelValue',
+        type: 'string | number | (string | number)[]',
+        default: '-',
+        desc: '当前值',
+      },
       {
         prop: 'placeholder',
         type: 'string',
@@ -596,12 +685,23 @@ export const componentDocs: Record<string, ComponentDoc> = {
         default: '[]',
         desc: '选项列表',
       },
-      { prop: 'value', type: 'string | number', default: '-', desc: '当前值' },
+      {
+        prop: 'multiple',
+        type: 'boolean',
+        default: 'false',
+        desc: '是否多选',
+      },
       {
         prop: 'disabled',
         type: 'boolean',
         default: 'false',
         desc: '是否禁用整个选择器',
+      },
+      {
+        prop: 'clearable',
+        type: 'boolean',
+        default: 'false',
+        desc: '是否可清空',
       },
       {
         prop: 'filterable',
@@ -610,34 +710,34 @@ export const componentDocs: Record<string, ComponentDoc> = {
         desc: '是否可搜索（本地过滤）',
       },
       {
-        prop: 'remote',
-        type: 'boolean',
-        default: 'false',
-        desc: '是否启用远程搜索',
+        prop: 'size',
+        type: "'small' | 'default' | 'large'",
+        default: "'default'",
+        desc: '尺寸',
       },
       {
-        prop: 'remoteMethod',
-        type: '(query: string) => Promise<SelectOption[]> | SelectOption[]',
+        prop: 'teleport',
+        type: "string | HTMLElement | false",
+        default: "'body'",
+        desc: '弹出层挂载目标',
+      },
+      {
+        prop: 'change',
+        type: '(value: string | number | (string | number)[]) => void',
         default: '-',
-        desc: '远程搜索方法',
+        desc: '选中变化时触发',
       },
       {
-        prop: 'debounce',
-        type: 'number',
-        default: '300',
-        desc: '搜索防抖延迟（ms）',
-      },
-      {
-        prop: 'virtualThreshold',
-        type: 'number',
-        default: '50',
-        desc: '启用虚拟滚动的选项阈值',
-      },
-      {
-        prop: 'onChange',
-        type: '(value: string | number) => void',
+        prop: 'focus',
+        type: '() => void',
         default: '-',
-        desc: '选中变化回调',
+        desc: '打开下拉框时触发',
+      },
+      {
+        prop: 'blur',
+        type: '() => void',
+        default: '-',
+        desc: '关闭下拉框时触发',
       },
     ],
   },

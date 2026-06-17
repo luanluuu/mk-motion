@@ -42,6 +42,7 @@ const props = defineProps<{ name: string }>()
 
 const doc = computed(() => componentDocs[props.name])
 const stageRefs = ref<Record<number, HTMLElement | null>>({})
+const subApps = ref<Record<number, { unmount: () => void } | null>>({})
 const copiedIndex = ref<number | null>(null)
 
 const apiColumns = [
@@ -80,8 +81,13 @@ function renderDemos() {
     doc.value.demos.forEach((demo: ComponentDoc['demos'][number], i: number) => {
       const el = stageRefs.value[i]
       if (el) {
+        subApps.value[i]?.unmount()
+        subApps.value[i] = null
         el.innerHTML = ''
-        demo.init(el)
+        const app = demo.init(el)
+        if (app && typeof app.unmount === 'function') {
+          subApps.value[i] = app as { unmount: () => void }
+        }
       }
     })
     if (window.Prism) Prism.highlightAll()
