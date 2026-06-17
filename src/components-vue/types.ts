@@ -1,24 +1,5 @@
 export type DrawerPlacement = 'left' | 'right' | 'top' | 'bottom'
 
-export interface DialogProps {
-  modelValue?: boolean
-  title?: string
-  width?: string | number
-  showClose?: boolean
-  beforeClose?: (done: () => void) => void
-}
-
-export interface InputProps {
-  modelValue?: string
-  placeholder?: string
-  type?: string
-  disabled?: boolean
-  clearable?: boolean
-  showPassword?: boolean
-  rows?: number
-  autosize?: { minRows?: number; maxRows?: number }
-}
-
 export interface DrawerProps {
   modelValue?: boolean
   title?: string
@@ -55,8 +36,19 @@ export type TabsType = 'default' | 'card'
 
 export interface TabsProps {
   modelValue?: string | number
-  items: TabItem[]
+  items?: TabItem[]
   type?: TabsType
+}
+
+export interface TabsEmits {
+  'update:modelValue': [value: string | number]
+  tabClick: [value: string | number, item: TabItem]
+}
+
+export interface TabsSlots {
+  default?: () => unknown
+  tabBarExtraContent?: () => unknown
+  [key: `panel-${string | number}`]: () => unknown
 }
 
 export type PopoverTrigger = 'click' | 'hover'
@@ -185,6 +177,76 @@ export interface SelectOption {
   label: string
   value: string | number
   disabled?: boolean
+}
+
+export interface SelectProps {
+  modelValue?: string | number | (string | number)[]
+  options?: SelectOption[]
+  multiple?: boolean
+  placeholder?: string
+  disabled?: boolean
+  clearable?: boolean
+  filterable?: boolean
+  size?: 'small' | 'default' | 'large'
+  teleport?: string | HTMLElement | false
+}
+
+export interface SelectEmits {
+  'update:modelValue': [value: string | number | (string | number)[]]
+  change: [value: string | number | (string | number)[]]
+  focus: []
+  blur: []
+}
+
+export interface SelectSlots {
+  default?: (props: { option: SelectOption; selected: boolean }) => unknown
+  empty?: () => unknown
+  prefix?: () => unknown
+}
+
+export interface InputProps {
+  modelValue?: string
+  placeholder?: string
+  type?: string
+  disabled?: boolean
+  clearable?: boolean
+  showPassword?: boolean
+  rows?: number
+  autosize?: { minRows?: number; maxRows?: number }
+}
+
+export interface InputEmits {
+  'update:modelValue': [value: string]
+  input: [value: string]
+  change: [value: string]
+  focus: [evt: FocusEvent]
+  blur: [evt: FocusEvent]
+}
+
+export interface InputSlots {
+  prefix?: () => unknown
+  suffix?: () => unknown
+}
+
+export interface DialogProps {
+  modelValue?: boolean
+  title?: string
+  width?: string | number
+  showClose?: boolean
+  beforeClose?: (done: () => void) => void
+}
+
+export interface DialogEmits {
+  'update:modelValue': [value: boolean]
+  open: []
+  close: []
+  confirm: []
+}
+
+export interface DialogSlots {
+  default?: () => unknown
+  title?: () => unknown
+  footer?: () => unknown
 }
 
 export interface UploadFile {

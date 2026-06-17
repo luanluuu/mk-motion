@@ -174,4 +174,29 @@ describe('MkSelect', () => {
 
     expect(el.querySelector('.mk-select__dropdown')?.classList.contains('is-open')).toBe(false)
   })
+
+  it('warns when options prop and MkOption slot children are both provided', () => {
+    const el = document.createElement('div')
+    document.body.appendChild(el)
+
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+
+    createApp({
+      render: () =>
+        h(
+          MkSelect,
+          {
+            options: [{ label: 'A', value: 'a' }],
+          },
+          {
+            default: () => [h(MkOption, { label: 'B', value: 'b' })],
+          }
+        ),
+    }).mount(el)
+
+    expect(warn).toHaveBeenCalledWith(
+      expect.stringContaining('`options` prop and <MkOption> slot children')
+    )
+    warn.mockRestore()
+  })
 })

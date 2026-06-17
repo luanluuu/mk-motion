@@ -1,5 +1,5 @@
 export { default as MkDialog } from './MkDialog.vue'
-export type { DialogProps } from './types.js'
+export type { DialogProps, DialogEmits, DialogSlots } from './types.js'
 
 export { default as MkDrawer } from './MkDrawer.vue'
 export type { DrawerProps, DrawerPlacement } from './types.js'
@@ -9,7 +9,7 @@ export type { MenuItem, MenuMode, MenuProps } from './types.js'
 
 export { default as MkTabs } from './MkTabs.vue'
 export { default as MkTabPane } from './MkTabPane.vue'
-export type { TabItem, TabsType, TabsProps } from './types.js'
+export type { TabItem, TabsType, TabsProps, TabsEmits, TabsSlots } from './types.js'
 
 export { default as MkPopover } from './MkPopover.vue'
 export type { PopoverProps, PopoverTrigger } from './types.js'
@@ -49,10 +49,15 @@ export type {
 
 export { default as MkButton } from './MkButton.vue'
 export { default as MkInput } from './MkInput.vue'
-export type { InputProps } from './types.js'
+export type { InputProps, InputEmits, InputSlots } from './types.js'
 export { default as MkSelect } from './MkSelect.vue'
 export { default as MkOption } from './MkOption.vue'
-export type { SelectOption } from './types.js'
+export type {
+  SelectOption,
+  SelectProps,
+  SelectEmits,
+  SelectSlots,
+} from './types.js'
 export { default as MkCheckbox } from './MkCheckbox.vue'
 export { default as MkCheckboxGroup } from './MkCheckboxGroup.vue'
 export { default as MkRadio } from './MkRadio.vue'

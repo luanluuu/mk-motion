@@ -35,7 +35,7 @@ const isDev = () =>
   (import.meta as { env?: { DEV?: boolean; MODE?: string } }).env?.DEV ??
   (import.meta as { env?: { MODE?: string } }).env?.MODE === 'development'
 
-if (isDev() && !Array.isArray(props.options)) {
+if (isDev() && props.options && !Array.isArray(props.options)) {
   console.warn(
     '[mk-motion] <MkSelect> expects `options` to be an array. ' +
       'Child <MkOption> components are also supported.'
@@ -142,6 +142,13 @@ function extractSlotOptions(vnodes: VNode[]): SelectOption[] {
 const slotOptions = computed(() =>
   extractSlotOptions(((slots.default as unknown as (() => VNode[]))?.() ?? []) as VNode[])
 )
+
+if (isDev() && props.options.length > 0 && slotOptions.value.length > 0) {
+  console.warn(
+    '[mk-motion] <MkSelect> `options` prop and <MkOption> slot children are both provided. ' +
+      'The `options` prop takes precedence; slot children will be ignored.'
+  )
+}
 
 const allOptions = computed(() => [
   ...(props.options ?? []),
