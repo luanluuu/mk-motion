@@ -76,4 +76,52 @@ describe('MkDialog', () => {
     expect(onConfirm).toHaveBeenCalled()
     expect(visible).toBe(false)
   })
+
+  it('closes on Escape', async () => {
+    const el = document.createElement('div')
+    document.body.appendChild(el)
+
+    let visible = true
+    createApp({
+      render() {
+        return h(MkDialog, {
+          modelValue: visible,
+          'onUpdate:modelValue': (v: boolean) => {
+            visible = v
+          },
+        })
+      },
+    }).mount(el)
+
+    await nextTick()
+    const overlay = findOverlay()
+    overlay?.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }))
+    await nextTick()
+
+    expect(visible).toBe(false)
+  })
+
+  it('traps Tab focus inside the dialog', async () => {
+    const el = document.createElement('div')
+    document.body.appendChild(el)
+
+    createApp({
+      render() {
+        return h(MkDialog, { modelValue: true })
+      },
+    }).mount(el)
+
+    await nextTick()
+    const overlay = findOverlay()
+    const focusable = overlay?.querySelectorAll(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    ) as NodeListOf<HTMLElement>
+    expect(focusable.length).toBeGreaterThanOrEqual(2)
+
+    focusable[focusable.length - 1].focus()
+    overlay?.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab', bubbles: true }))
+    await nextTick()
+
+    expect(document.activeElement).toBe(focusable[0])
+  })
 })

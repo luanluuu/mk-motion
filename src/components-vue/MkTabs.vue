@@ -1,3 +1,8 @@
+<script lang="ts">
+let tabsCounter = 0
+export default { name: 'MkTabs' }
+</script>
+
 <script setup lang="ts">
 import {
   computed,
@@ -30,10 +35,11 @@ const props = withDefaults(defineProps<TabsProps>(), {
   type: 'default',
 })
 
-if (
-  (import.meta as { env?: { MODE?: string } }).env?.MODE === 'development' &&
-  !Array.isArray(props.items)
-) {
+const isDev = () =>
+  (import.meta as { env?: { DEV?: boolean; MODE?: string } }).env?.DEV ??
+  (import.meta as { env?: { MODE?: string } }).env?.MODE === 'development'
+
+if (isDev() && !Array.isArray(props.items)) {
   console.warn(
     '[mk-motion] <MkTabs> expects `items` to be an array. ' +
       'Child <MkTabPane> components are also supported.'
@@ -46,6 +52,8 @@ const emit = defineEmits<{
 }>()
 
 const model = defineModel<string | number>()
+
+const tabsId = `mk-tabs-${++tabsCounter}`
 
 const registeredPanes = ref<TabPaneInfo[]>([])
 
@@ -60,6 +68,7 @@ function unregisterPane(key: string | number) {
 }
 
 provide(tabsContextKey, {
+  tabsId,
   activeKey: computed(() => activeKey.value),
   registerPane,
   unregisterPane,
@@ -72,15 +81,16 @@ const propItems = computed(() =>
   }))
 )
 
-const resolvedItems = computed(() => {
-  const panes = registeredPanes.value.map((pane, index) => ({
+const paneItems = computed(() =>
+  registeredPanes.value.map((pane, index) => ({
     key: pane.key ?? index,
     label: pane.label,
     disabled: pane.disabled,
     content: undefined as string | undefined,
   }))
-  return [...propItems.value, ...panes]
-})
+)
+
+const resolvedItems = computed(() => [...propItems.value, ...paneItems.value])
 
 const activeKey = computed({
   get: () => model.value ?? resolvedItems.value[0]?.key ?? 0,
@@ -119,13 +129,68 @@ const setActive = (item: (typeof resolvedItems.value)[number]) => {
 
 const isActive = (item: (typeof resolvedItems.value)[number]) =>
   activeKey.value === item.key
+
+function getTabId(key: string | number) {
+  return `mk-tab-${tabsId}-tab-${key}`
+}
+
+function getPanelId(key: string | number) {
+  return `mk-tab-${tabsId}-panel-${key}`
+}
+
+function focusTab(index: number) {
+  const item = resolvedItems.value[index]
+  if (!item) return
+  const btn = itemRefs.value[item.key]
+  if (btn) btn.focus()
+}
+
+function onKeydown(e: KeyboardEvent) {
+  const items = resolvedItems.value
+  if (!items.length) return
+
+  let current = items.findIndex(
+    (item) => document.activeElement === itemRefs.value[item.key]
+  )
+  if (current < 0) {
+    current = items.findIndex((item) => item.key === activeKey.value)
+  }
+  if (current < 0) current = 0
+
+  let next = current
+  if (e.key === 'ArrowRight') {
+    next = (current + 1) % items.length
+  } else if (e.key === 'ArrowLeft') {
+    next = (current - 1 + items.length) % items.length
+  } else if (e.key === 'Home') {
+    next = 0
+  } else if (e.key === 'End') {
+    next = items.length - 1
+  } else if (e.key === 'Enter' || e.key === ' ') {
+    e.preventDefault()
+    setActive(items[current])
+    return
+  } else {
+    return
+  }
+
+  e.preventDefault()
+  focusTab(next)
+  setActive(items[next])
+}
 </script>
 
 <template>
   <div class="mk-tabs" :class="`mk-tabs--${type}`">
-    <div ref="headerRef" class="mk-tabs__header" role="tablist">
+    <div
+      ref="headerRef"
+      class="mk-tabs__header"
+      role="tablist"
+      @keydown="onKeydown"
+    >
       <button
         v-for="item in resolvedItems"
+        :id="getTabId(item.key)"
         :key="item.key"
         :ref="
           (el) => {
@@ -137,6 +202,7 @@ const isActive = (item: (typeof resolvedItems.value)[number]) =>
         :class="{ 'is-active': isActive(item), 'is-disabled': item.disabled }"
         role="tab"
         :aria-selected="isActive(item)"
+        :aria-controls="getPanelId(item.key)"
         :tabindex="isActive(item) ? 0 : -1"
         @click="setActive(item)"
       >
@@ -153,12 +219,14 @@ const isActive = (item: (typeof resolvedItems.value)[number]) =>
     </div>
     <div class="mk-tabs__content">
       <div
-        v-for="item in resolvedItems"
+        v-for="item in propItems"
         v-show="isActive(item)"
+        :id="getPanelId(item.key)"
         :key="`panel-${item.key}`"
         class="mk-tabs__panel"
         :class="{ 'is-active': isActive(item) }"
         role="tabpanel"
+        :aria-labelledby="getTabId(item.key)"
       >
         <slot :name="`panel-${item.key}`">
           {{ item.content }}

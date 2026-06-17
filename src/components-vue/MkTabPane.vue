@@ -17,6 +17,13 @@ const context = inject(tabsContextKey, null)
 const paneKey = computed(() => props.name ?? props.label)
 const isActive = computed(() => context?.activeKey.value === paneKey.value)
 
+const tabId = computed(
+  () => (context ? `mk-tab-${context.tabsId}-tab-${paneKey.value}` : undefined)
+)
+const panelId = computed(
+  () => (context ? `mk-tab-${context.tabsId}-panel-${paneKey.value}` : undefined)
+)
+
 onMounted(() => {
   context?.registerPane({
     key: paneKey.value,
@@ -31,7 +38,13 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div v-show="isActive" class="mk-tabs__panel" role="tabpanel">
+  <div
+    :id="panelId"
+    v-show="isActive"
+    class="mk-tabs__panel"
+    role="tabpanel"
+    :aria-labelledby="tabId"
+  >
     <slot />
   </div>
 </template>

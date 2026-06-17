@@ -156,4 +156,32 @@ describe('MkCollapse', () => {
     await nextTick()
     expect(el.querySelector('.mk-collapse__item.is-active')).toBeNull()
   })
+
+  it('exposes aria-expanded and aria-controls on headers', async () => {
+    const el = document.createElement('div')
+    document.body.appendChild(el)
+
+    mount(
+      el,
+      h(
+        MkCollapse,
+        { modelValue: ['b'] },
+        {
+          default: () => [
+            h(MkCollapseItem, { name: 'a', title: 'A' }, () => 'x'),
+            h(MkCollapseItem, { name: 'b', title: 'B' }, () => 'y'),
+          ],
+        }
+      )
+    )
+
+    await nextTick()
+    const headers = el.querySelectorAll('.mk-collapse__header')
+    expect(headers[0].getAttribute('aria-expanded')).toBe('false')
+    expect(headers[1].getAttribute('aria-expanded')).toBe('true')
+
+    const controls = headers[1].getAttribute('aria-controls')
+    expect(controls).toBeTruthy()
+    expect(el.querySelector(`#${controls}`)).not.toBeNull()
+  })
 })

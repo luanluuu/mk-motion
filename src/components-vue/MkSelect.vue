@@ -31,10 +31,11 @@ const props = withDefaults(defineProps<Props>(), {
   teleport: 'body',
 })
 
-if (
-  (import.meta as { env?: { MODE?: string } }).env?.MODE === 'development' &&
-  !Array.isArray(props.options)
-) {
+const isDev = () =>
+  (import.meta as { env?: { DEV?: boolean; MODE?: string } }).env?.DEV ??
+  (import.meta as { env?: { MODE?: string } }).env?.MODE === 'development'
+
+if (isDev() && !Array.isArray(props.options)) {
   console.warn(
     '[mk-motion] <MkSelect> expects `options` to be an array. ' +
       'Child <MkOption> components are also supported.'
@@ -62,11 +63,51 @@ const searchQuery = ref('')
 const triggerRef = ref<HTMLDivElement | null>(null)
 const dropdownRef = ref<HTMLDivElement | null>(null)
 const searchInputRef = ref<HTMLInputElement | null>(null)
+const activeIndex = ref(-1)
 const { position, update: updateDropdownPosition } = useDropdownPosition(
   triggerRef,
   dropdownRef,
   4
 )
+
+function getOptionId(opt: SelectOption, index: number): string {
+  return `mk-select-option-${String(opt.value ?? opt.label ?? index)}`
+}
+
+function moveActive(step: number) {
+  const opts = filteredOptions.value
+  if (!opts.length) return
+  let idx = activeIndex.value
+  if (idx < 0) idx = step > 0 ? -1 : opts.length
+  let next = idx + step
+  while (next >= 0 && next < opts.length && opts[next].disabled) {
+    next += step
+  }
+  if (next >= 0 && next < opts.length) activeIndex.value = next
+}
+
+function onListKeydown(e: KeyboardEvent) {
+  if (e.key === 'ArrowDown') {
+    e.preventDefault()
+    if (!isOpen.value) open()
+    else moveActive(1)
+  } else if (e.key === 'ArrowUp') {
+    e.preventDefault()
+    if (!isOpen.value) open()
+    else moveActive(-1)
+  } else if (e.key === 'Enter') {
+    e.preventDefault()
+    if (!isOpen.value) {
+      open()
+    } else {
+      const opt = filteredOptions.value[activeIndex.value]
+      if (opt) selectOption(opt)
+      else close()
+    }
+  } else if (e.key === 'Escape') {
+    close()
+  }
+}
 
 function isMkOption(vnode: VNode): boolean {
   const type = vnode.type
@@ -135,11 +176,20 @@ const displayLabel = computed(() => {
   return selected?.label ?? props.placeholder
 })
 
+const activeDescendantId = computed(() => {
+  if (!isOpen.value || activeIndex.value < 0) return undefined
+  const opt = filteredOptions.value[activeIndex.value]
+  return opt ? getOptionId(opt, activeIndex.value) : undefined
+})
+
 function open() {
   if (props.disabled) return
   isOpen.value = true
   nextTick(() => {
     updateDropdownPosition()
+    const opts = filteredOptions.value
+    const selectedIndex = opts.findIndex((opt) => isSelected(opt))
+    activeIndex.value = selectedIndex >= 0 ? selectedIndex : opts.length ? 0 : -1
     if (props.filterable) {
       searchInputRef.value?.focus()
     }
@@ -149,6 +199,7 @@ function open() {
 function close() {
   isOpen.value = false
   searchQuery.value = ''
+  activeIndex.value = -1
   emit('blur')
 }
 
@@ -193,15 +244,7 @@ function onClickOutside(e: MouseEvent) {
 }
 
 function onKeydown(e: KeyboardEvent) {
-  if (e.key === 'Enter') {
-    e.preventDefault()
-    toggle()
-  } else if (e.key === 'Escape') {
-    close()
-  } else if (e.key === 'ArrowDown') {
-    e.preventDefault()
-    if (!isOpen.value) open()
-  }
+  onListKeydown(e)
 }
 
 watch(isOpen, (openValue) => {
@@ -237,6 +280,7 @@ onUnmounted(() => {
       role="combobox"
       aria-haspopup="listbox"
       :aria-expanded="isOpen"
+      :aria-activedescendant="activeDescendantId"
       :tabindex="disabled ? -1 : 0"
       @click="onTriggerClick"
       @keydown="onKeydown"
@@ -261,7 +305,7 @@ onUnmounted(() => {
         :placeholder="displayLabel"
         :style="{ display: isOpen ? 'block' : 'none' }"
         @click.stop
-        @keydown.esc="close"
+        @keydown="onListKeydown"
       />
       <span class="mk-select__arrow">▼</span>
       <span
@@ -294,16 +338,20 @@ onUnmounted(() => {
           }"
         >
           <div
-            v-for="opt in filteredOptions"
+            v-for="(opt, index) in filteredOptions"
+            :id="getOptionId(opt, index)"
             :key="opt.value"
             class="mk-select__option"
             role="option"
             :aria-selected="isSelected(opt)"
+            :aria-disabled="opt.disabled || undefined"
             :class="{
               'is-selected': isSelected(opt),
               'is-disabled': opt.disabled,
+              'is-active': index === activeIndex,
             }"
             @click="selectOption(opt)"
+            @mouseenter="activeIndex = index"
           >
             <slot :option="opt" :selected="isSelected(opt)">
               <span class="mk-select__check" v-if="multiple && isSelected(opt)"
@@ -418,7 +466,8 @@ onUnmounted(() => {
   gap: 8px;
 }
 
-.mk-select__option:hover {
+.mk-select__option:hover,
+.mk-select__option.is-active {
   background: var(--mk-surface-hover);
 }
 

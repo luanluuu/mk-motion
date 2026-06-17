@@ -7,6 +7,7 @@ export interface TabPaneInfo {
 }
 
 export interface TabsContext {
+  tabsId: string
   activeKey: Ref<string | number>
   registerPane: (pane: TabPaneInfo) => void
   unregisterPane: (key: string | number) => void

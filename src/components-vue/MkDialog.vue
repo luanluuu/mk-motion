@@ -27,6 +27,33 @@ const model = defineModel<boolean>({ default: false })
 const overlayRef = ref<HTMLDivElement | null>(null)
 const visible = ref(false)
 
+const focusableSelector =
+  'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+
+function getFocusable(): HTMLElement[] {
+  if (!overlayRef.value) return []
+  return Array.from(
+    overlayRef.value.querySelectorAll(focusableSelector)
+  ).filter((el) => {
+    const htmlEl = el as HTMLElement
+    return (
+      !htmlEl.hasAttribute('disabled') &&
+      htmlEl.getAttribute('aria-hidden') !== 'true'
+    )
+  }) as HTMLElement[]
+}
+
+function focusFirst() {
+  nextTick(() => {
+    const list = getFocusable()
+    if (list.length) {
+      list[0].focus()
+    } else {
+      overlayRef.value?.focus()
+    }
+  })
+}
+
 watch(
   model,
   async (val) => {
@@ -34,6 +61,7 @@ watch(
       visible.value = true
       await nextTick()
       emit('open')
+      focusFirst()
     } else {
       visible.value = false
       emit('close')
@@ -60,7 +88,31 @@ const onOverlayClick = (e: MouseEvent) => {
 }
 
 const onKeydown = (e: KeyboardEvent) => {
-  if (e.key === 'Escape') doClose()
+  if (e.key === 'Escape') {
+    doClose()
+    return
+  }
+  if (e.key !== 'Tab') return
+
+  const list = getFocusable()
+  if (list.length === 0) {
+    e.preventDefault()
+    return
+  }
+
+  const first = list[0]
+  const last = list[list.length - 1]
+  if (e.shiftKey) {
+    if (document.activeElement === first) {
+      e.preventDefault()
+      last.focus()
+    }
+  } else {
+    if (document.activeElement === last) {
+      e.preventDefault()
+      first.focus()
+    }
+  }
 }
 
 const onConfirm = () => {
