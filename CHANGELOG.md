@@ -5,10 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [2.0.13] - 2026-06-17
 
-<!-- Unreleased entries will be added during v2.0.13 development. -->
+### Added
 
+- New `<MkCollapseItem>` child component for `MkCollapse` with required `name` prop.
+- `MkCollapse` now supports `v-model="(string | number)[]"`, `accordion` mode, and `<MkCollapseItem>` slot children.
+- `MkInput` now supports `type="textarea"`, `rows`, and `autosize` with `minRows` / `maxRows`.
+- Keyboard navigation and ARIA improvements for `MkSelect`, `MkTabs`, `MkCollapse`, and `MkDialog`.
+- Exported `Props` / `Emits` / `Slots` types for core components (`Select`, `Input`, `Dialog`, `Tabs`, `Collapse`).
+- Dev warnings: `MkCollapseItem` missing `name`; `MkSelect` mixing `options` prop and `<MkOption>` children.
+
+### Changed
+
+- `MkCollapse` `items` prop is deprecated but remains compatible with a console warning.
+- `MkTabs` `items` prop is now optional when using `<MkTabPane>` children.
+
+### Fixed
+
+- Docs site demo Vue apps are now unmounted correctly when switching pages.
 
 ## [2.0.12] - 2026-06-16
 
